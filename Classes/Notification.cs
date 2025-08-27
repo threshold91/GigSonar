@@ -6,7 +6,7 @@ public class Notification
     private string _message;
     private string _timestamp;
     private string _status;
-    //public int eventId;
+    private Event _eventData;
 
     public int Id
     {
@@ -30,5 +30,11 @@ public class Notification
     {
         get { return _status; }
         set { _status = value; }
+    }
+
+    public Event EventData
+    {
+        get { return _eventData; }
+        set { _eventData = value; }
     }
 }
