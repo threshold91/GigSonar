@@ -4,7 +4,7 @@ public class Artist
 {
     private int _id;
     private string _name;
-    private string _genre;
+    private Genre _artistGenre;
     private string _spotifyLink;
 
     public int Id
@@ -19,10 +19,10 @@ public class Artist
         set { _name = value; }
     }
 
-    public string Genre
+    public Genre ArtistGenre
     {
-        get { return _genre; }
-        set { _genre = value; }
+        get { return _artistGenre; }
+        set { _artistGenre = value; }
     }
 
     public string SpotifyLink

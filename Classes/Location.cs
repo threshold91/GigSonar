@@ -7,6 +7,7 @@ public class Location
     private string _countryCode;
     private string _city;
     private string _address;
+    private string _postalCode;
     
     public double Latitude
     {
@@ -36,5 +37,11 @@ public class Location
     {
         get { return _address; }
         set { _address = value; }
+    }
+
+    public string PostalCode
+    {
+        get { return _postalCode; }
+        set { _postalCode = value; }
     }
 }
