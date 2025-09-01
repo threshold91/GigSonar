@@ -1,10 +1,12 @@
+using GigSonar.Enums;
+
 namespace GigSonar;
 
 public class Event
 {
     private int _id;
     private string _name;
-    private string _type;
+    private EventType _type;
     private string _artist;
     private Genre _eventGenre;
     private string _venue;
@@ -26,7 +28,7 @@ public class Event
         set { _name = value; }
     }
 
-    public string Type
+    public EventType Type
     {
         get { return _type; }
         set { _type = value; }
