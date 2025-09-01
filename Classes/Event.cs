@@ -8,7 +8,7 @@ public class Event
     private string _name;
     private EventType _type;
     private string _artist;
-    private Genre _eventGenre;
+    private Genre _genre;
     private string _venue;
     private DateTime _starts;
     private DateTime _ends;
@@ -34,10 +34,10 @@ public class Event
         set { _type = value; }
     }
 
-    public Genre EventGenre
+    public Genre Genre
     {
-        get { return _eventGenre; }
-        set { _eventGenre = value; }
+        get { return _genre; }
+        set { _genre = value; }
     }
 
     public string Artist
