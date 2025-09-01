@@ -10,8 +10,8 @@ public class Event
     private string _artist;
     private Genre _eventGenre;
     private string _venue;
-    private string _startsAt;
-    private string _endsAt;
+    private DateTime _starts;
+    private DateTime _ends;
     private double _priceMin;
     private double _priceMax;
     private string _currency;
@@ -52,16 +52,16 @@ public class Event
         set { _venue = value; }
     }
 
-    public string StartsAt
+    public DateTime Starts
     {
-        get { return _startsAt; }
-        set { _startsAt = value; }
+        get { return _starts; }
+        set { _starts = value; }
     }
 
-    public string EndsAt
+    public DateTime Ends
     {
-        get { return _endsAt; }
-        set { _endsAt = value; }
+        get { return _ends; }
+        set { _ends = value; }
     }
 
     public double PriceMin
