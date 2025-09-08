@@ -1,5 +1,3 @@
-using GigSonar.Enums;
-
 namespace GigSonar;
 
 public class Event

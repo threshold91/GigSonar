@@ -1,4 +1,4 @@
-namespace GigSonar.Enums;
+namespace GigSonar;
 
 public enum EventType
 {
