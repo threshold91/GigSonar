@@ -7,7 +7,7 @@ public class Event
     private EventType _type;
     private string _artistName;
     private Genre _genre;
-    private string _venue;
+    private Venue _venue;
     private DateTime _start;
     private DateTime _end;
     private double _priceMin;
@@ -44,7 +44,7 @@ public class Event
         set { _artistName = value; }
     }
 
-    public string Venue
+    public Venue Venue
     {
         get { return _venue; }
         set { _venue = value; }
