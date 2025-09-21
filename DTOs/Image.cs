@@ -1,0 +1,10 @@
+namespace GigSonar.DTOs;
+
+public record Image
+{
+    public string ratio { get; init; }
+    public string url { get; init; }
+    public int width { get; init; }
+    public int height { get; init; }
+    public bool fallback { get; init; }
+}
