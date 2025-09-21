@@ -2,20 +2,20 @@ namespace GigSonar;
 
 public class Location
 {
-    private double _latitude;
-    private double _longitude;
+    private string _latitude;
+    private string _longitude;
     private string _countryCode;
     private string _city;
     private string _address;
     private string _postalCode;
     
-    public double Latitude
+    public string Latitude
     {
         get { return _latitude; }
         set { _latitude = value; }
     }
 
-    public double Longitude
+    public string Longitude
     {
         get { return _longitude; }
         set { _longitude = value; }
