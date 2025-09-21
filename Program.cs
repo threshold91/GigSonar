@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace GigSonar;
 
@@ -8,23 +9,32 @@ class Program
     
     static async Task Main()
     {
-        // Call asynchronous network methods in a try/catch block to handle exceptions.
         try
         {
-            using HttpResponseMessage response = await client.GetAsync("https://app.ticketmaster.com/discovery/v2/venues.json?apikey=DJDMqT8iBpI0dcivxf4TS0ketQfQv6Tp&countryCode=AT&latlong=48.2082,16.3738&unit=km&locale=en");
-            response.EnsureSuccessStatusCode();
-            string responseBody = await response.Content.ReadAsStringAsync();
-            // Above three lines can be replaced with new helper method below
-            // string responseBody = await client.GetStringAsync(uri);
+            // Load config from appsettings.json
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("Configurations/appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
 
-            List<Venue> venues = JsonSerializer.Deserialize<List<Venue>>(responseBody);
-            
-            Console.WriteLine(responseBody);
+            string ticketmasterKey = config["ApiKeys:Ticketmaster"];
+
+            string url = "https://app.ticketmaster.com/discovery/v2/venues.json"
+                         + "?apikey=" + ticketmasterKey
+                         + "&countryCode=AT&latlong=48.2082,16.3738&unit=km&locale=en";
+
+            using (HttpResponseMessage response = await client.GetAsync(url))
+            {
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                Console.WriteLine(responseBody);
+            }
         }
-        catch (HttpRequestException e)
+        catch (Exception e)
         {
             Console.WriteLine("\nException Caught!");
-            Console.WriteLine("Message :{0} ", e.Message);
+            Console.WriteLine("Message: " + e.Message);
         }
     }
 }
