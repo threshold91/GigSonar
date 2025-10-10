@@ -8,7 +8,6 @@ public class VenueMapper
     {
         return new Venue
         {
-            Id = venueDto.id,
             Name = venueDto.name,
             Url = venueDto.url,
         };
