@@ -3,6 +3,7 @@ namespace GigSonar;
 public class Venue
 {
     private int _id;
+    private string _externalId;
     private string _name;
     private string _url;
     private Location _LocationData;
@@ -11,6 +12,12 @@ public class Venue
     {
         get { return _id; }
         set { _id = value; }
+    }
+
+    public string ExternalId
+    {
+        get { return _externalId; }
+        set { _externalId = value; }
     }
 
     public string Name

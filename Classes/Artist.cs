@@ -3,6 +3,7 @@ namespace GigSonar;
 public class Artist
 {
     private int _id;
+    private string _externalId;
     private string _name;
     private Genre _artistGenre;
     private string _spotifyLink;
@@ -11,6 +12,12 @@ public class Artist
     {
         get { return _id; }
         set { _id = value; }
+    }
+
+    public string ExternalId
+    {
+        get { return _externalId; }
+        set { _externalId = value; }
     }
 
     public string Name

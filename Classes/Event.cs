@@ -3,6 +3,7 @@ namespace GigSonar;
 public class Event
 {
     private int _id;
+    private string _externalId;
     private string _name;
     private EventType _type;
     private string _artistName;
@@ -20,6 +21,12 @@ public class Event
         set { _id = value; }
     }
 
+    public string ExternalId
+    {
+        get { return _externalId; }
+        set { _externalId = value; }
+    }
+    
     public string Name
     {
         get { return _name; }
