@@ -7,6 +7,9 @@ public class Artist
     private string _name;
     private Genre _artistGenre;
     private string _spotifyLink;
+    private string _facebookLink;
+    private string _instagramLink;
+    private string _artistHomepage;
 
     public int Id
     {
@@ -36,5 +39,23 @@ public class Artist
     {
         get { return _spotifyLink; }
         set { _spotifyLink = value; }
+    }
+
+    public string FacebookLink
+    {
+        get { return _facebookLink; }
+        set { _facebookLink = value; }
+    }
+
+    public string InstagramLink
+    {
+        get { return _instagramLink; }
+        set { _instagramLink = value; }
+    }
+    
+    public string ArtistHomepage
+    {
+        get { return _artistHomepage; }
+        set { _artistHomepage = value; }
     }
 }
