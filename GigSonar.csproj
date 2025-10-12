@@ -22,7 +22,6 @@
 
     <ItemGroup>
       <Folder Include="DTOs\Geocode_DTOs\Forward_geocode_DTOs\" />
-      <Folder Include="Mappers\Geocode_Mappers\" />
     </ItemGroup>
 
 </Project>
