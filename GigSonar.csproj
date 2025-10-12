@@ -20,8 +20,4 @@
       </None>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="DTOs\Geocode_DTOs\Forward_geocode_DTOs\" />
-    </ItemGroup>
-
 </Project>
