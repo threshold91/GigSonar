@@ -1,4 +1,5 @@
 using GigSonar.DTOs.Ticketmaster_DTOs;
+using GigSonar.DTOs.Ticketmaster_DTOs.Search_events;
 
 namespace GigSonar.Mappers.Ticketmaster_Mappers;
 
