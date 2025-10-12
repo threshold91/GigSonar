@@ -1,6 +1,6 @@
 using GigSonar.DTOs.Ticketmaster_DTOs;
 
-namespace GigSonar.Mappers;
+namespace GigSonar.Mappers.Ticketmaster_Mappers;
 
 public class VenueMapper
 {

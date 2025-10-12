@@ -20,4 +20,8 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Mappers\Geocode_Mappers\" />
+    </ItemGroup>
+
 </Project>
