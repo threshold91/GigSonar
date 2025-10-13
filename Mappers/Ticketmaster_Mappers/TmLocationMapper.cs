@@ -4,17 +4,17 @@ namespace GigSonar.Mappers.Ticketmaster_Mappers;
 
 public class TmLocationMapper
 {
-    public static Location Convert(LocationDto locationDto, CountryDto countryDto, CityDto cityDto, 
-        AddressDto addressDto, VenueDto venueDto)
+    public static Location Convert(Location location, CountryDto country, CityDto city, 
+        AddressDto address, VenueDto venue)
     {
         return new Location
         {
-            Latitude = locationDto.latitude,
-            Longitude = locationDto.longitude,
-            CountryCode = countryDto.countryCode,
-            City = cityDto.name,
-            Address = addressDto.line1,
-            PostalCode =venueDto.postalCode,
+            Latitude = location.Latitude,
+            Longitude = location.Longitude,
+            CountryCode = country.countryCode,
+            City = city.name,
+            Address = address.line1,
+            PostalCode = venue.postalCode,
         };
     }
 }
