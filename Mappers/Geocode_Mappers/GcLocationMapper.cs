@@ -1,5 +1,5 @@
-using GigSonar.DTOs.Geocode_DTOs.Reverse_geocode_DTOs;
-using RootDto = GigSonar.DTOs.Geocode_DTOs.Forward_geocode_DTOs.RootDto;
+using GigSonar.DTOs.Geocode.Reverse;
+using RootDto = GigSonar.DTOs.Geocode.Forward.RootDto;
 
 namespace GigSonar.Mappers.Geocode_Mappers;
 

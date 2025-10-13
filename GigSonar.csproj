@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="DTOs\Ticketmaster_DTOs\Search_attractions\" />
+      <Folder Include="DTOs\Ticketmaster\Search_attractions\" />
     </ItemGroup>
 
 </Project>
