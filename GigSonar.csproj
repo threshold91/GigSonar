@@ -20,4 +20,8 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="DTOs\Ticketmaster\Search_attractions\" />
+    </ItemGroup>
+
 </Project>
