@@ -1,4 +1,4 @@
-namespace GigSonar;
+namespace GigSonar.Classes;
 
 public class Genre
 {

@@ -1,15 +1,15 @@
-namespace GigSonar;
+namespace GigSonar.Classes;
 
 public class Artist
 {
     private int _id;
     private string _externalId;
     private string _name;
-    private Genre _artistGenre;
+    private Genre _genre;
     private string _spotifyLink;
     private string _facebookLink;
     private string _instagramLink;
-    private string _artistHomepage;
+    private string _homepage;
 
     public int Id
     {
@@ -31,8 +31,8 @@ public class Artist
 
     public Genre ArtistGenre
     {
-        get { return _artistGenre; }
-        set { _artistGenre = value; }
+        get { return _genre; }
+        set { _genre = value; }
     }
 
     public string SpotifyLink
@@ -55,7 +55,7 @@ public class Artist
     
     public string ArtistHomepage
     {
-        get { return _artistHomepage; }
-        set { _artistHomepage = value; }
+        get { return _homepage; }
+        set { _homepage = value; }
     }
 }

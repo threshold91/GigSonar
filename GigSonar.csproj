@@ -23,10 +23,10 @@
     <ItemGroup>
       <Folder Include="DTOs\Geocode\Forward\" />
       <Folder Include="DTOs\Geocode\Reverse\" />
-      <Folder Include="DTOs\Ticketmaster\Search_attractions\" />
-      <Folder Include="DTOs\Ticketmaster\Search_events\" />
-      <Folder Include="Mappers\Geocode_Mappers\" />
-      <Folder Include="Mappers\Ticketmaster_Mappers\" />
+      <Folder Include="DTOs\Ticketmaster\SearchAttractions\" />
+      <Folder Include="DTOs\Ticketmaster\SearchEvents\" />
+      <Folder Include="Mappers\Geocode\" />
+      <Folder Include="Mappers\Ticketmaster\" />
     </ItemGroup>
 
 </Project>
