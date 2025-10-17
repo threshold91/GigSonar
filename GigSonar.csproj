@@ -26,7 +26,6 @@
       <Folder Include="DTOs\Ticketmaster\SearchAttractions\" />
       <Folder Include="DTOs\Ticketmaster\SearchEvents\" />
       <Folder Include="Mappers\Geocode\" />
-      <Folder Include="Mappers\Ticketmaster\" />
     </ItemGroup>
 
 </Project>

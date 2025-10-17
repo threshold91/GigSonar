@@ -1,5 +1,9 @@
 ﻿using System.Text.Json;
+using GigSonar.DTOs.Ticketmaster.SearchVenues;
+using GigSonar.Mappers.Ticketmaster;
 using Microsoft.Extensions.Configuration;
+using Location = GigSonar.Classes.Location;
+using Venue = GigSonar.Classes.Venue;
 
 namespace GigSonar;
 
@@ -28,6 +32,10 @@ class Program
                 response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
 
+                var testTmResponse = JsonSerializer.Deserialize<Root>(responseBody);
+                
+                Venue test = MapVenue.ConvertVenue(testTmResponse._embedded.venues.First());
+                
                 Console.WriteLine(responseBody);
             }
         }
@@ -37,4 +45,27 @@ class Program
             Console.WriteLine("Message: " + e.Message);
         }
     }
+/*
+    public static Venue ConvertVenue(DTOs.Ticketmaster.SearchVenues.Venue tmVenue)
+    {
+        Venue venue = new Venue();
+        venue.ExternalId = tmVenue.id;
+        venue.Name = tmVenue.name;
+        venue.Url = tmVenue.url;
+        venue.LocationData = ConvertLocation(tmVenue);
+        return venue;
+    }
+
+    private static Classes.Location ConvertLocation(DTOs.Ticketmaster.SearchVenues.Venue tmVenue)
+    {
+        var location = new Location();
+        location.Latitude = tmVenue.location.latitude;
+        location.Longitude = tmVenue.location.longitude;
+        location.CountryCode = tmVenue.country.countryCode;
+        location.City = tmVenue.city.name;
+        location.Address = tmVenue.address.line1;
+        location.PostalCode = tmVenue.postalCode;
+        return location;
+    }
+    */
 }
