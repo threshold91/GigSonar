@@ -23,7 +23,6 @@
     <ItemGroup>
       <Folder Include="DTOs\Geocode\Forward\" />
       <Folder Include="DTOs\Geocode\Reverse\" />
-      <Folder Include="DTOs\Ticketmaster\SearchAttractions\" />
       <Folder Include="DTOs\Ticketmaster\SearchEvents\" />
       <Folder Include="Mappers\Geocode\" />
     </ItemGroup>
