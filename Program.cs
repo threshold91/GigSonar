@@ -38,8 +38,7 @@ class Program
 
                 var testTmResponse = JsonSerializer.Deserialize<Root>(responseBody);
                 
-                Artist test = ConvertArtist(testTmResponse._embedded.attractions.First(), 
-                    testTmResponse._embedded.attractions.First().classifications.First());
+                Artist test = ConvertArtist(testTmResponse._embedded.attractions.First());
                 
                 Console.WriteLine(responseBody);
             }
@@ -51,22 +50,24 @@ class Program
         }
     }
 
-    public static Artist ConvertArtist(DTOs.Ticketmaster.SearchAttractions.Attraction tmAttraction, 
-        DTOs.Ticketmaster.SearchAttractions.Classification tmClassification)
+    public static Artist ConvertArtist(DTOs.Ticketmaster.SearchAttractions.Attraction tmAttraction)
     {
         Artist artist = new Artist();
         artist.ExternalId = tmAttraction.id;
         artist.Name = tmAttraction.name;
-        //artist.SpotifyLink = tmAttraction.externalLinks.spotify;
-        artist.ArtistGenre = ConvertGenre(tmClassification);
+        artist.SpotifyLink = tmAttraction.externalLinks.spotify.First().url;
+        artist.FacebookLink = tmAttraction.externalLinks.facebook.First().url;
+        artist.InstagramLink = tmAttraction.externalLinks.instagram.First().url;
+        artist.ArtistHomepage = tmAttraction.externalLinks.homepage.First().url;
+        artist.ArtistGenre = ConvertGenre(tmAttraction);
         return artist;
     }
 
-    private static Genre ConvertGenre(DTOs.Ticketmaster.SearchAttractions.Classification tmClassification)
+    private static Genre ConvertGenre(DTOs.Ticketmaster.SearchAttractions.Attraction tmClassification)
     {
         var genre = new Genre();
-        genre.ExternalId = tmClassification.genre.id;
-        genre.Name = tmClassification.genre.name;
+        genre.ExternalId = tmClassification.classifications.First().genre.id;
+        genre.Name = tmClassification.classifications.First().genre.name;
         return genre;
     }
     
