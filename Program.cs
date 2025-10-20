@@ -38,7 +38,7 @@ class Program
 
                 var testTmResponse = JsonSerializer.Deserialize<Root>(responseBody);
                 
-                Artist test = ConvertArtist(testTmResponse._embedded.attractions.First());
+                Artist test = MapArtist.ConvertArtist(testTmResponse._embedded.attractions.First());
                 
                 Console.WriteLine(responseBody);
             }
@@ -49,7 +49,7 @@ class Program
             Console.WriteLine("Message: " + e.Message);
         }
     }
-
+/*
     public static Artist ConvertArtist(DTOs.Ticketmaster.SearchAttractions.Attraction tmAttraction)
     {
         Artist artist = new Artist();
@@ -70,7 +70,7 @@ class Program
         genre.Name = tmClassification.classifications.First().genre.name;
         return genre;
     }
-    
+   */ 
 /*
     public static Venue ConvertVenue(DTOs.Ticketmaster.SearchVenues.Venue tmVenue)
     {
