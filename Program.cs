@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using GigSonar.Classes;
 using GigSonar.DTOs.Ticketmaster.SearchAttractions;
+using GigSonar.DTOs.Ticketmaster.SearchEvents;
 using GigSonar.DTOs.Ticketmaster.SearchVenues;
 using GigSonar.Mappers.Ticketmaster;
 using Microsoft.Extensions.Configuration;
@@ -37,9 +38,9 @@ class Program
                 response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
 
-                var testTmResponse = JsonSerializer.Deserialize<Root>(responseBody);
+                var testTmResponse = JsonSerializer.Deserialize<SearchEvents.Root>(responseBody);
                 
-                Artist test = MapArtist.ConvertArtist(testTmResponse._embedded.attractions.First());
+                Event test = ConvertEvent(testTmResponse._embedded.events.First());
                 
                 Console.WriteLine(responseBody);
             }
@@ -49,6 +50,23 @@ class Program
             Console.WriteLine("\nException Caught!");
             Console.WriteLine("Message: " + e.Message);
         }
+    }
+
+    public static Event ConvertEvent(DTOs.Ticketmaster.SearchEvents.SearchEvents.Event tmEvent)
+    {
+        var eventObject = new Event();
+        eventObject.ExternalId = tmEvent.id;
+        eventObject.Name = tmEvent.name;
+        //event type
+        //artist name
+        //genre
+        //venue
+        //starts
+        //ends
+        //priceMin
+        //priceMax
+        //currency
+        return eventObject;
     }
 /*
     public static Artist ConvertArtist(DTOs.Ticketmaster.SearchAttractions.Attraction tmAttraction)
