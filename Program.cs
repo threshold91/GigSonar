@@ -27,10 +27,11 @@ class Program
 
             string ticketmasterKey = config["ApiKeys:Ticketmaster"];
 
-            string url = "https://app.ticketmaster.com/discovery/v2/attractions.json"
-                         + "?apikey=" + ticketmasterKey;
+            string url = "https://app.ticketmaster.com/discovery/v2/events.json"
+                         + "?apikey=" + ticketmasterKey
+                         + "&latlong=48.2082,16.3738&countryCode=AT&unit=km";
                          //+ "&countryCode=AT&latlong=48.2082,16.3738&unit=km&locale=en"//;
-
+                         
             using (HttpResponseMessage response = await client.GetAsync(url))
             {
                 response.EnsureSuccessStatusCode();
