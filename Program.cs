@@ -57,15 +57,16 @@ class Program
         var eventObject = new Event();
         eventObject.ExternalId = tmEvent.id;
         eventObject.Name = tmEvent.name;
-        //event type
-        //artist name
-        //genre
-        //venue
-        //starts
-        //ends
+        //event type - no such property in api response that would map to EventType enum
+        eventObject.ArtistName = tmEvent._embedded.attractions.First().name;
+        //genre - same as below
+        //eventObject.Venue = ConvertVenue(tmEvent._embedded.venues.First()); is it possible te reuse already existing
+        //mappers?
+        eventObject.Start = tmEvent.dates.start.dateTime;
+        //ends - festivals are represented as single objects that appear multiple times with  different start.dateTime
         //priceMin
         //priceMax
-        //currency
+        //currency - price and currency is removed from ticketmaster discover api
         return eventObject;
     }
 /*
