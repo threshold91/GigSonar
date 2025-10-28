@@ -32,7 +32,6 @@ class Program
                          + "?apikey=" + ticketmasterKey
                          + "&latlong=48.2082,16.3738&countryCode=AT&unit=km";
                          //+ "&countryCode=AT&latlong=48.2082,16.3738&unit=km&locale=en"//;
-                         
             using (HttpResponseMessage response = await client.GetAsync(url))
             {
                 response.EnsureSuccessStatusCode();
@@ -57,17 +56,25 @@ class Program
         var eventObject = new Event();
         eventObject.ExternalId = tmEvent.id;
         eventObject.Name = tmEvent.name;
-        //event type - no such property in api response that would map to EventType enum
         eventObject.ArtistName = tmEvent._embedded.attractions.First().name;
-        //genre - same as below
+        eventObject.Genre = ConvertEventGenre(tmEvent.classifications.First());
         eventObject.Venue = ConvertEventVenue(tmEvent._embedded.venues.First());
-        //mappers?
         eventObject.Start = tmEvent.dates.start.dateTime;
+        //below properties not yet mapped due to api limitations
+        //event type - no such property in api response that would map to EventType enum
         //ends - festivals are represented as single objects that appear multiple times with  different start.dateTime
         //priceMin
         //priceMax
         //currency - price and currency is removed from ticketmaster discover api
         return eventObject;
+    }
+    
+    private static Genre ConvertEventGenre(DTOs.Ticketmaster.SearchEvents.SearchEvents.Classification tmEventClassification)
+    {
+        var genre = new Genre();
+        genre.ExternalId = tmEventClassification.genre.id;
+        genre.Name = tmEventClassification.genre.name;
+        return genre;
     }
 
     public static Venue ConvertEventVenue(DTOs.Ticketmaster.SearchEvents.SearchEvents.Venue tmEventLocation)
