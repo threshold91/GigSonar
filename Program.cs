@@ -60,7 +60,7 @@ class Program
         //event type - no such property in api response that would map to EventType enum
         eventObject.ArtistName = tmEvent._embedded.attractions.First().name;
         //genre - same as below
-        //eventObject.Venue = ConvertVenue(tmEvent._embedded.venues.First()); is it possible te reuse already existing
+        eventObject.Venue = ConvertEventVenue(tmEvent._embedded.venues.First());
         //mappers?
         eventObject.Start = tmEvent.dates.start.dateTime;
         //ends - festivals are represented as single objects that appear multiple times with  different start.dateTime
@@ -68,6 +68,28 @@ class Program
         //priceMax
         //currency - price and currency is removed from ticketmaster discover api
         return eventObject;
+    }
+
+    public static Venue ConvertEventVenue(DTOs.Ticketmaster.SearchEvents.SearchEvents.Venue tmEventLocation)
+    {
+        var eventVenue = new Venue();
+        eventVenue.ExternalId = tmEventLocation.id;
+        eventVenue.Name = tmEventLocation.name;
+        eventVenue.Url = tmEventLocation.url;
+        eventVenue.LocationData = ConvertLocation(tmEventLocation);
+        return eventVenue;
+    }
+    
+    private static Classes.Location ConvertLocation(DTOs.Ticketmaster.SearchEvents.SearchEvents.Venue tmVenue)
+    {
+        var location = new Location();
+        location.Latitude = tmVenue.location.latitude;
+        location.Longitude = tmVenue.location.longitude;
+        location.CountryCode = tmVenue.country.countryCode;
+        location.City = tmVenue.city.name;
+        location.Address = tmVenue.address.line1;
+        location.PostalCode = tmVenue.postalCode;
+        return location;
     }
 /*
     public static Artist ConvertArtist(DTOs.Ticketmaster.SearchAttractions.Attraction tmAttraction)
