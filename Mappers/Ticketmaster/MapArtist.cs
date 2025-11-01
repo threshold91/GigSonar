@@ -7,7 +7,7 @@ public class MapArtist
 {
     public static Artist ConvertArtist(DTOs.Ticketmaster.SearchAttractions.Attraction tmAttraction)
     {
-        Artist artist = new Artist();
+        var artist = new Artist();
         artist.ExternalId = tmAttraction.id;
         artist.Name = tmAttraction.name;
         artist.SpotifyLink = tmAttraction.externalLinks.spotify.First().url;

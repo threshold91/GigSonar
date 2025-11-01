@@ -5,6 +5,7 @@ public class Genre
     private int _id;
     private string _externalId;
     private string _name;
+    public Genre SubGenre { get; set; }
 
     public int Id
     {

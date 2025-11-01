@@ -10,7 +10,9 @@ public class Artist
     private string _facebookLink;
     private string _instagramLink;
     private string _homepage;
-
+    
+    
+ 
     public int Id
     {
         get { return _id; }

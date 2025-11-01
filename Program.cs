@@ -7,7 +7,7 @@ using GigSonar.Mappers.Ticketmaster;
 using Microsoft.Extensions.Configuration;
 using Genre = GigSonar.Classes.Genre;
 using Location = GigSonar.Classes.Location;
-using Root = GigSonar.DTOs.Ticketmaster.SearchAttractions.Root;
+using Root = GigSonar.DTOs.Ticketmaster.SearchEvents.SearchEvents.Root;
 using Venue = GigSonar.Classes.Venue;
 
 namespace GigSonar;
@@ -39,7 +39,15 @@ class Program
 
                 var testTmResponse = JsonSerializer.Deserialize<SearchEvents.Root>(responseBody);
                 
-                Event test = ConvertEvent(testTmResponse._embedded.events.First());
+                Event test = MapEvent.ConvertEvent(testTmResponse._embedded.events.First());
+                
+                var Events = new List<Event>();
+                
+                /*
+                foreach(var e in Events)
+                    if (!e.Validate())
+                        ;
+                   */ 
                 
                 Console.WriteLine(responseBody);
             }

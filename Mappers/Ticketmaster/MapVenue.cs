@@ -6,7 +6,7 @@ public class MapVenue
 {
     public static Venue ConvertVenue(DTOs.Ticketmaster.SearchVenues.Venue tmVenue)
     {
-        Venue venue = new Venue();
+        var venue = new Venue();
         venue.ExternalId = tmVenue.id;
         venue.Name = tmVenue.name;
         venue.Url = tmVenue.url;
