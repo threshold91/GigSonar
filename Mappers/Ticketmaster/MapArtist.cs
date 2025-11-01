@@ -14,15 +14,24 @@ public class MapArtist
         artist.FacebookLink = tmAttraction.externalLinks.facebook.First().url;
         artist.InstagramLink = tmAttraction.externalLinks.instagram.First().url;
         artist.ArtistHomepage = tmAttraction.externalLinks.homepage.First().url;
-        artist.ArtistGenre = ConvertGenre(tmAttraction);
+        artist.ArtistGenre = ConvertArtistGenre(tmAttraction);
         return artist;
     }
 
-    private static Genre ConvertGenre(DTOs.Ticketmaster.SearchAttractions.Attraction tmClassification)
+    private static Genre ConvertArtistGenre(DTOs.Ticketmaster.SearchAttractions.Attraction tmClassification)
     {
         var genre = new Genre();
         genre.ExternalId = tmClassification.classifications.First().genre.id;
         genre.Name = tmClassification.classifications.First().genre.name;
+        genre.SubGenre = ConvertArtistSubGenre(tmClassification);
         return genre;
+    }
+
+    private static Genre ConvertArtistSubGenre(DTOs.Ticketmaster.SearchAttractions.Attraction tmClassification)
+    {
+        var subGenre = new Genre();
+        subGenre.ExternalId = tmClassification.classifications.First().subGenre.id;
+        subGenre.Name = tmClassification.classifications.First().subGenre.name;
+        return subGenre;
     }
 }
