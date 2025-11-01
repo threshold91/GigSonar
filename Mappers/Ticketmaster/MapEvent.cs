@@ -27,7 +27,17 @@ public class MapEvent
         var genre = new Genre();
         genre.ExternalId = tmEventClassification.genre.id;
         genre.Name = tmEventClassification.genre.name;
+        genre.SubGenre = ConvertEventSubGenre(tmEventClassification);
         return genre;
+    }
+
+    private static Genre ConvertEventSubGenre(
+        DTOs.Ticketmaster.SearchEvents.SearchEvents.Classification tmEventSubGenre)
+    {
+        var subGenre = new Genre();
+        subGenre.ExternalId = tmEventSubGenre.subGenre.id;
+        subGenre.Name = tmEventSubGenre.subGenre.name;
+        return subGenre;
     }
 
     public static Venue ConvertEventVenue(DTOs.Ticketmaster.SearchEvents.SearchEvents.Venue tmEventLocation)

@@ -41,7 +41,7 @@ class Program
                 
                 Event test = MapEvent.ConvertEvent(testTmResponse._embedded.events.First());
                 
-                var Events = new List<Event>();
+                //var Events = new List<Event>();
                 
                 /*
                 foreach(var e in Events)

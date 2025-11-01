@@ -8,6 +8,7 @@ public class Event
     private EventType _type;
     private string _artistName;
     private Genre _genre;
+    private Genre _subGenre;
     private Venue _venue;
     private DateTime _start;
     private DateTime _end;
@@ -44,7 +45,7 @@ public class Event
         get { return _genre; }
         set { _genre = value; }
     }
-
+    
     public string ArtistName
     {
         get { return _artistName; }
