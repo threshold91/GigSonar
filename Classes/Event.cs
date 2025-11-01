@@ -16,6 +16,32 @@ public class Event
     private double _priceMax;
     private string _currency;
 
+    public bool Validate(out List<string> errors)
+    {
+        errors = new();
+        if (string.IsNullOrWhiteSpace(_name))
+        {
+            errors.Add("Event name is required!");
+        }
+
+        if (string.IsNullOrWhiteSpace(_artistName))
+        {
+            errors.Add("Artist name is required!");
+        }
+
+        if (Venue is null)
+        {
+            errors.Add("Venue is null!");
+        }
+
+        if (Start == default)
+        {
+            errors.Add("Start is required!");
+        }
+
+        return errors.Count == 0;
+    }
+
     public int Id
     {
         get { return _id; }
