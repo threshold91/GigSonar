@@ -1,15 +1,17 @@
-﻿using System.Text.Json;
-using GigSonar.Classes;
+﻿using GigSonar.Classes;
 using GigSonar.DTOs.Ticketmaster.SearchAttractions;
 using GigSonar.DTOs.Ticketmaster.SearchEvents;
 using GigSonar.DTOs.Ticketmaster.SearchVenues;
 using GigSonar.Mappers.Ticketmaster;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Genre = GigSonar.Classes.Genre;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 using Location = GigSonar.Classes.Location;
 using Root = GigSonar.DTOs.Ticketmaster.SearchEvents.SearchEvents.Root;
 using Venue = GigSonar.Classes.Venue;
 
+using DtoEvent = GigSonar.DTOs.Ticketmaster.SearchEvents.SearchEvents.Event;
 namespace GigSonar;
 
 class Program
@@ -38,8 +40,51 @@ class Program
                 string responseBody = await response.Content.ReadAsStringAsync();
 
                 var testTmResponse = JsonSerializer.Deserialize<SearchEvents.Root>(responseBody);
+
+                var json = await response.Content.ReadAsStringAsync();
                 
-                Event test = MapEvent.ConvertEvent(testTmResponse._embedded.events.First());
+                var testRoot = JsonConvert.DeserializeObject<SearchEvents.Root>(json);
+
+                //Get dto events from api, add them to list
+                List<DtoEvent> dtoEvents = new List<DtoEvent>();
+                if (testRoot != null)
+                {
+                    if (testRoot._embedded != null)
+                    {
+                        foreach (var dtoEvent in testRoot._embedded.events)
+                        {
+                            if (dtoEvent != null)
+                            {
+                                dtoEvents.Add(dtoEvent);
+                            }
+                        }
+                    }
+                }
+                //
+                List<Event> nonValidEvents = new List<Event>();
+                //Convert dtoEvents to mappedEvents, add them to list
+                List<Event> mappedEvents = new List<Event>();
+                foreach (var dtoEvent in dtoEvents)
+                {
+                    Event mappedEvent = MapEvent.ConvertEvent(dtoEvent);
+                    if (mappedEvent != null)
+                    {
+                        if (Event.Validate(mappedEvent))
+                        {
+                            mappedEvents.Add(mappedEvent);
+                        }
+                        else
+                        {
+                            nonValidEvents.Add(mappedEvent);
+                        }
+                    }
+                }
+                
+                Console.WriteLine($"Number of non valid events is: {nonValidEvents.Count}!");
+
+                
+                
+                //Event test = MapEvent.ConvertEvent(testTmResponse._embedded.events.First());
                 
                 //var Events = new List<Event>();
                 
@@ -49,7 +94,7 @@ class Program
                         ;
                    */ 
                 
-                Console.WriteLine(responseBody);
+                //Console.WriteLine(responseBody);
             }
         }
         catch (Exception e)
