@@ -16,7 +16,7 @@ public class Event
     private double _priceMax;
     private string _currency;
 
-    public bool Validate(Event mappedEvent)
+    public bool Validate()
     {
         
         if (string.IsNullOrWhiteSpace(_name))

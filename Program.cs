@@ -20,6 +20,9 @@ class Program
     
     static async Task Main()
     {
+        //declare lists here so it is visible in both try & catch part
+        List<Event> nonValidEvents = new List<Event>();
+        List<Event> mappedEvents = new List<Event>();
         try
         {
             // Load config from appsettings.json
@@ -61,28 +64,22 @@ class Program
                     }
                 }
                 //
-                List<Event> nonValidEvents = new List<Event>();
+                
                 //Convert dtoEvents to mappedEvents, add them to list
-                List<Event> mappedEvents = new List<Event>();
+                
                 foreach (var dtoEvent in dtoEvents)
                 {
                     Event mappedEvent = MapEvent.ConvertEvent(dtoEvent);
-                    if (mappedEvent != null)
+                    //mappedEvent.ArtistName = ""; // for testing purposes
+                    if (mappedEvent != null && mappedEvent.Validate())
                     {
-                        if (Event.Validate(mappedEvent))
-                        {
-                            mappedEvents.Add(mappedEvent);
-                        }
-                        else
-                        {
-                            nonValidEvents.Add(mappedEvent);
-                        }
+                        mappedEvents.Add(mappedEvent);
+                    }
+                    else
+                    {
+                        nonValidEvents.Add(mappedEvent);
                     }
                 }
-                
-                Console.WriteLine($"Number of non valid events is: {nonValidEvents.Count}!");
-
-                
                 
                 //Event test = MapEvent.ConvertEvent(testTmResponse._embedded.events.First());
                 
@@ -101,6 +98,8 @@ class Program
         {
             Console.WriteLine("\nException Caught!");
             Console.WriteLine("Message: " + e.Message);
+            Console.WriteLine($"Number of valid events is: {mappedEvents.Count}");
+            Console.WriteLine($"Number of non valid events is: {nonValidEvents.Count}!");
         }
     }
 
