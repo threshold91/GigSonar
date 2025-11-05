@@ -7,6 +7,22 @@ public class Genre
     private string _name;
     private Genre _subGenre;
 
+    public bool Validate()
+    {
+        
+        if (string.IsNullOrWhiteSpace(_name))
+        {
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(_externalId))
+        {
+            return false;
+        }
+
+        return true;
+    }
+    
     public int Id
     {
         get { return _id; }
