@@ -11,7 +11,21 @@ public class Artist
     private string _instagramLink;
     private string _homepage;
     
-    
+    public bool Validate()
+    {
+        
+        if (string.IsNullOrWhiteSpace(_name))
+        {
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(_genre.ToString()))
+        {
+            return false;
+        }
+
+        return true;
+    }
  
     public int Id
     {
