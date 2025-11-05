@@ -9,6 +9,22 @@ public class Location
     private string _address;
     private string _postalCode;
     
+    public bool Validate()
+    {
+        
+        if (string.IsNullOrWhiteSpace(_latitude))
+        {
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(_longitude))
+        {
+            return false;
+        }
+
+        return true;
+    }
+    
     public string Latitude
     {
         get { return _latitude; }
