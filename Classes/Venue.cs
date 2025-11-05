@@ -7,7 +7,28 @@ public class Venue
     private string _name;
     private string _url;
     private Location _LocationData;
+    
+    public bool Validate()
+    {
+        
+        if (string.IsNullOrWhiteSpace(_name))
+        {
+            return false;
+        }
 
+        if (string.IsNullOrWhiteSpace(_externalId))
+        {
+            return false;
+        }
+        
+        if (string.IsNullOrWhiteSpace(_LocationData.ToString()))
+        {
+            return false;
+        }
+
+        return true;
+    }
+    
     public int Id
     {
         get { return _id; }
