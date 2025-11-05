@@ -35,7 +35,7 @@ class Program
 
             string url = "https://app.ticketmaster.com/discovery/v2/events.json"
                          + "?apikey=" + ticketmasterKey
-                         + "&latlong=48.2082,16.3738&countryCode=AT&unit=km";
+                         + "&latlong=48.2082,16.3738&countryCode=AT&unit=km&size=199";
                          //+ "&countryCode=AT&latlong=48.2082,16.3738&unit=km&locale=en"//;
             using (HttpResponseMessage response = await client.GetAsync(url))
             {
@@ -71,7 +71,7 @@ class Program
                 {
                     Event mappedEvent = MapEvent.ConvertEvent(dtoEvent);
                     //mappedEvent.ArtistName = ""; // for testing purposes
-                    if (mappedEvent != null && mappedEvent.Validate())
+                    if (mappedEvent != null)
                     {
                         mappedEvents.Add(mappedEvent);
                     }
@@ -102,7 +102,7 @@ class Program
             Console.WriteLine($"Number of non valid events is: {nonValidEvents.Count}!");
         }
     }
-
+    /*
     public static Event ConvertEvent(DTOs.Ticketmaster.SearchEvents.SearchEvents.Event tmEvent)
     {
         var eventObject = new Event();
@@ -150,7 +150,7 @@ class Program
         location.PostalCode = tmVenue.postalCode;
         return location;
     }
-/*
+
     public static Artist ConvertArtist(DTOs.Ticketmaster.SearchAttractions.Attraction tmAttraction)
     {
         Artist artist = new Artist();
@@ -171,8 +171,7 @@ class Program
         genre.Name = tmClassification.classifications.First().genre.name;
         return genre;
     }
-   */ 
-/*
+    
     public static Venue ConvertVenue(DTOs.Ticketmaster.SearchVenues.Venue tmVenue)
     {
         Venue venue = new Venue();
