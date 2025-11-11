@@ -69,15 +69,23 @@ class Program
                 
                 foreach (var dtoEvent in dtoEvents)
                 {
-                    Event mappedEvent = MapEvent.ConvertEvent(dtoEvent);
-                    //mappedEvent.ArtistName = ""; // for testing purposes
-                    if (mappedEvent != null)
+                    try
                     {
-                        mappedEvents.Add(mappedEvent);
+                        Event mappedEvent = MapEvent.ConvertEvent(dtoEvent);
+                        //mappedEvent.ArtistName = ""; // for testing purposes
+                        if (mappedEvent != null)
+                        {
+                            mappedEvents.Add(mappedEvent);
+                        }
+                        else
+                        {
+                            nonValidEvents.Add(mappedEvent);
+                        }
                     }
-                    else
+                    catch (Exception e)
                     {
-                        nonValidEvents.Add(mappedEvent);
+                        Console.WriteLine(e);
+                        throw;
                     }
                 }
                 
