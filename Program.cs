@@ -23,8 +23,7 @@ class Program
         //declare lists here so it is visible in both try & catch part
         List<Event> nonValidEvents = new List<Event>();
         List<Event> mappedEvents = new List<Event>();
-        try
-        {
+        
             // Load config from appsettings.json
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -85,7 +84,8 @@ class Program
                     catch (Exception e)
                     {
                         Console.WriteLine(e);
-                        throw;
+                        nonValidEvents.Add(null);
+                        continue;
                     }
                 }
                 
@@ -101,15 +101,11 @@ class Program
                 
                 //Console.WriteLine(responseBody);
             }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine("\nException Caught!");
-            Console.WriteLine("Message: " + e.Message);
             Console.WriteLine($"Number of valid events is: {mappedEvents.Count}");
             Console.WriteLine($"Number of non valid events is: {nonValidEvents.Count}!");
         }
-    }
+            
+    
     /*
     public static Event ConvertEvent(DTOs.Ticketmaster.SearchEvents.SearchEvents.Event tmEvent)
     {
