@@ -103,6 +103,7 @@ class Program
             }
             Console.WriteLine($"Number of valid events is: {mappedEvents.Count}");
             Console.WriteLine($"Number of non valid events is: {nonValidEvents.Count}!");
+            Console.WriteLine($"13th event artist name is {mappedEvents[12].ArtistName}");
         }
             
     

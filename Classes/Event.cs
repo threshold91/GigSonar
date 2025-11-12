@@ -19,12 +19,7 @@ public class Event
     public bool Validate()
     {
         
-        if (string.IsNullOrWhiteSpace(_name))
-        {
-            return false;
-        }
-
-        if (string.IsNullOrWhiteSpace(_artistName))
+        if (string.IsNullOrWhiteSpace(_name) && string.IsNullOrWhiteSpace(_artistName))
         {
             return false;
         }
