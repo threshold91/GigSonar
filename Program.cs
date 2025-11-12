@@ -72,7 +72,7 @@ class Program
                     {
                         Event mappedEvent = MapEvent.ConvertEvent(dtoEvent);
                         //mappedEvent.ArtistName = ""; // for testing purposes
-                        if (mappedEvent != null)
+                        if (mappedEvent != null && mappedEvent.Validate())
                         {
                             mappedEvents.Add(mappedEvent);
                         }
