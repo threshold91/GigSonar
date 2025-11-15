@@ -9,7 +9,7 @@ public class MapEvent
         var eventObject = new Event();
         eventObject.ExternalId = tmEvent.id;
         eventObject.Name = tmEvent.name;
-        eventObject.ArtistName = tmEvent?._embedded.attractions?.First()?.name;
+        eventObject.ArtistName = tmEvent?._embedded?.attractions?.First()?.name;
         eventObject.Genre = ConvertEventGenre(tmEvent.classifications.First());
         eventObject.Venue = ConvertEventVenue(tmEvent._embedded.venues.First());
         eventObject.Start = tmEvent.dates.start.dateTime;

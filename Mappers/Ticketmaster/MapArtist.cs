@@ -10,10 +10,10 @@ public class MapArtist
         var artist = new Artist();
         artist.ExternalId = tmAttraction.id;
         artist.Name = tmAttraction.name;
-        artist.SpotifyLink = tmAttraction.externalLinks.spotify.First().url;
-        artist.FacebookLink = tmAttraction.externalLinks.facebook.First().url;
-        artist.InstagramLink = tmAttraction.externalLinks.instagram.First().url;
-        artist.ArtistHomepage = tmAttraction.externalLinks.homepage.First().url;
+        artist.SpotifyLink = tmAttraction?.externalLinks?.spotify?.First()?.url;
+        artist.FacebookLink = tmAttraction?.externalLinks?.facebook?.First()?.url;
+        artist.InstagramLink = tmAttraction?.externalLinks?.instagram?.First()?.url;
+        artist.ArtistHomepage = tmAttraction?.externalLinks?.homepage?.First()?.url;
         artist.ArtistGenre = ConvertArtistGenre(tmAttraction);
         return artist;
     }
