@@ -164,6 +164,7 @@ class Program
             Console.WriteLine($"Number of valid venues is: {mappedVenues.Count}");
             Console.WriteLine($"Number of non valid venues is: {nonValidVenues.Count}!");
             
+            // search artist
             using (HttpResponseMessage response = await client.GetAsync(url3))
             {
                 response.EnsureSuccessStatusCode();
