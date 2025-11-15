@@ -35,7 +35,7 @@ class Program
             string url = "https://app.ticketmaster.com/discovery/v2/events.json"
                          + "?apikey=" + ticketmasterKey
                          + "&latlong=48.2082,16.3738&countryCode=AT&unit=km&size=199";
-                         //+ "&countryCode=AT&latlong=48.2082,16.3738&unit=km&locale=en"//;
+                         
             using (HttpResponseMessage response = await client.GetAsync(url))
             {
                 response.EnsureSuccessStatusCode();
@@ -105,98 +105,5 @@ class Program
             Console.WriteLine($"Number of non valid events is: {nonValidEvents.Count}!");
             Console.WriteLine($"13th event artist name is {mappedEvents[12].ArtistName}");
         }
-            
     
-    /*
-    public static Event ConvertEvent(DTOs.Ticketmaster.SearchEvents.SearchEvents.Event tmEvent)
-    {
-        var eventObject = new Event();
-        eventObject.ExternalId = tmEvent.id;
-        eventObject.Name = tmEvent.name;
-        eventObject.ArtistName = tmEvent._embedded.attractions.First().name;
-        eventObject.Genre = ConvertEventGenre(tmEvent.classifications.First());
-        eventObject.Venue = ConvertEventVenue(tmEvent._embedded.venues.First());
-        eventObject.Start = tmEvent.dates.start.dateTime;
-        //below properties not yet mapped due to api limitations
-        //event type - no such property in api response that would map to EventType enum
-        //ends - festivals are represented as single objects that appear multiple times with  different start.dateTime
-        //priceMin
-        //priceMax
-        //currency - price and currency is removed from ticketmaster discover api
-        return eventObject;
-    }
-    
-    private static Genre ConvertEventGenre(DTOs.Ticketmaster.SearchEvents.SearchEvents.Classification tmEventClassification)
-    {
-        var genre = new Genre();
-        genre.ExternalId = tmEventClassification.genre.id;
-        genre.Name = tmEventClassification.genre.name;
-        return genre;
-    }
-
-    public static Venue ConvertEventVenue(DTOs.Ticketmaster.SearchEvents.SearchEvents.Venue tmEventLocation)
-    {
-        var eventVenue = new Venue();
-        eventVenue.ExternalId = tmEventLocation.id;
-        eventVenue.Name = tmEventLocation.name;
-        eventVenue.Url = tmEventLocation.url;
-        eventVenue.LocationData = ConvertLocation(tmEventLocation);
-        return eventVenue;
-    }
-    
-    private static Classes.Location ConvertLocation(DTOs.Ticketmaster.SearchEvents.SearchEvents.Venue tmVenue)
-    {
-        var location = new Location();
-        location.Latitude = tmVenue.location.latitude;
-        location.Longitude = tmVenue.location.longitude;
-        location.CountryCode = tmVenue.country.countryCode;
-        location.City = tmVenue.city.name;
-        location.Address = tmVenue.address.line1;
-        location.PostalCode = tmVenue.postalCode;
-        return location;
-    }
-
-    public static Artist ConvertArtist(DTOs.Ticketmaster.SearchAttractions.Attraction tmAttraction)
-    {
-        Artist artist = new Artist();
-        artist.ExternalId = tmAttraction.id;
-        artist.Name = tmAttraction.name;
-        artist.SpotifyLink = tmAttraction.externalLinks.spotify.First().url;
-        artist.FacebookLink = tmAttraction.externalLinks.facebook.First().url;
-        artist.InstagramLink = tmAttraction.externalLinks.instagram.First().url;
-        artist.ArtistHomepage = tmAttraction.externalLinks.homepage.First().url;
-        artist.ArtistGenre = ConvertGenre(tmAttraction);
-        return artist;
-    }
-
-    private static Genre ConvertGenre(DTOs.Ticketmaster.SearchAttractions.Attraction tmClassification)
-    {
-        var genre = new Genre();
-        genre.ExternalId = tmClassification.classifications.First().genre.id;
-        genre.Name = tmClassification.classifications.First().genre.name;
-        return genre;
-    }
-    
-    public static Venue ConvertVenue(DTOs.Ticketmaster.SearchVenues.Venue tmVenue)
-    {
-        Venue venue = new Venue();
-        venue.ExternalId = tmVenue.id;
-        venue.Name = tmVenue.name;
-        venue.Url = tmVenue.url;
-        venue.LocationData = ConvertLocation(tmVenue);
-        return venue;
-    }
-
-    private static Classes.Location ConvertLocation(DTOs.Ticketmaster.SearchVenues.Venue tmVenue)
-    {
-        var location = new Location();
-        location.Latitude = tmVenue.location.latitude;
-        location.Longitude = tmVenue.location.longitude;
-        location.CountryCode = tmVenue.country.countryCode;
-        location.City = tmVenue.city.name;
-        location.Address = tmVenue.address.line1;
-        location.PostalCode = tmVenue.postalCode;
-        return location;
-    }
-  */  
 }
