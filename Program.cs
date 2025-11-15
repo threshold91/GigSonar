@@ -8,10 +8,14 @@ using Newtonsoft.Json;
 using Genre = GigSonar.Classes.Genre;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using Location = GigSonar.Classes.Location;
-using Root = GigSonar.DTOs.Ticketmaster.SearchEvents.SearchEvents.Root;
+using Root1 = GigSonar.DTOs.Ticketmaster.SearchEvents.SearchEvents.Root;
+using Root2 = GigSonar.DTOs.Ticketmaster.SearchVenues.Root;
+using Root3 = GigSonar.DTOs.Ticketmaster.SearchAttractions.Root;
 using Venue = GigSonar.Classes.Venue;
 
 using DtoEvent = GigSonar.DTOs.Ticketmaster.SearchEvents.SearchEvents.Event;
+using DtoVenue = GigSonar.DTOs.Ticketmaster.SearchVenues.Venue;
+using DtoAttraction = GigSonar.DTOs.Ticketmaster.SearchAttractions.Attraction;
 namespace GigSonar;
 
 class Program
@@ -23,6 +27,9 @@ class Program
         //declare lists here so it is visible in both try & catch part
         List<Event> nonValidEvents = new List<Event>();
         List<Event> mappedEvents = new List<Event>();
+
+        List<Venue> mappedVenues = new List<Venue>();
+        List<Venue> nonValidVenues = new List<Venue>();
         
             // Load config from appsettings.json
             var config = new ConfigurationBuilder()
@@ -35,6 +42,10 @@ class Program
             string url1 = "https://app.ticketmaster.com/discovery/v2/events.json"
                          + "?apikey=" + ticketmasterKey
                          + "&size=199";
+            
+            string url2 = "https://app.ticketmaster.com/discovery/v2/venues.json"
+                          + "?apikey=" + ticketmasterKey
+                          + "&size=199";
                          
             using (HttpResponseMessage response = await client.GetAsync(url1))
             {
@@ -91,6 +102,62 @@ class Program
             }
             Console.WriteLine($"Number of valid events is: {mappedEvents.Count}");
             Console.WriteLine($"Number of non valid events is: {nonValidEvents.Count}!");
+            
+            // search venue
+            using (HttpResponseMessage response = await client.GetAsync(url2))
+            {
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                var testTmResponse = JsonSerializer.Deserialize<Root2>(responseBody);
+
+                var json = await response.Content.ReadAsStringAsync();
+                
+                var testRoot = JsonConvert.DeserializeObject<Root2>(json);
+
+                //Get dto venue from api, add them to list
+                List<DtoVenue> dtoVenues = new List<DtoVenue>();
+                if (testRoot != null)
+                {
+                    if (testRoot._embedded != null)
+                    {
+                        foreach (var dtoVenue in testRoot._embedded.venues)
+                        {
+                            if (dtoVenue != null)
+                            {
+                                dtoVenues.Add(dtoVenue);
+                            }
+                        }
+                    }
+                }
+                //
+                
+                //Convert dtoEvents to mappedEvents, add them to list
+                
+                foreach (var dtoVenue in dtoVenues)
+                {
+                    try
+                    {
+                        Venue mappedVenue = MapVenue.ConvertVenue(dtoVenue);
+                        if (mappedVenue != null && mappedVenue.Validate())
+                        {
+                            mappedVenues.Add(mappedVenue);
+                        }
+                        else
+                        {
+                            nonValidVenues.Add(mappedVenue);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        nonValidEvents.Add(null);
+                        continue;
+                    }
+                }
+                
+            }
+            Console.WriteLine($"Number of valid venues is: {mappedVenues.Count}");
+            Console.WriteLine($"Number of non valid venues is: {nonValidVenues.Count}!");
         }
-    
 }
