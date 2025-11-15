@@ -73,8 +73,6 @@ class Program
                         }
                     }
                 }
-                //
-                
                 //Convert dtoEvents to mappedEvents, add them to list
                 
                 foreach (var dtoEvent in dtoEvents)
@@ -104,6 +102,61 @@ class Program
             Console.WriteLine($"Number of non valid events is: {nonValidEvents.Count}!");
             
             // search venue
+            using (HttpResponseMessage response = await client.GetAsync(url2))
+            {
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                var testTmResponse = JsonSerializer.Deserialize<Root2>(responseBody);
+
+                var json = await response.Content.ReadAsStringAsync();
+                
+                var testRoot = JsonConvert.DeserializeObject<Root2>(json);
+
+                //Get dto venue from api, add them to list
+                List<DtoVenue> dtoVenues = new List<DtoVenue>();
+                if (testRoot != null)
+                {
+                    if (testRoot._embedded != null)
+                    {
+                        foreach (var dtoVenue in testRoot._embedded.venues)
+                        {
+                            if (dtoVenue != null)
+                            {
+                                dtoVenues.Add(dtoVenue);
+                            }
+                        }
+                    }
+                }
+                
+                //Convert dtoVenues to mappedVenues, add them to list
+                
+                foreach (var dtoVenue in dtoVenues)
+                {
+                    try
+                    {
+                        Venue mappedVenue = MapVenue.ConvertVenue(dtoVenue);
+                        if (mappedVenue != null && mappedVenue.Validate())
+                        {
+                            mappedVenues.Add(mappedVenue);
+                        }
+                        else
+                        {
+                            nonValidVenues.Add(mappedVenue);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        nonValidEvents.Add(null);
+                        continue;
+                    }
+                }
+                
+            }
+            Console.WriteLine($"Number of valid venues is: {mappedVenues.Count}");
+            Console.WriteLine($"Number of non valid venues is: {nonValidVenues.Count}!");
+            
             using (HttpResponseMessage response = await client.GetAsync(url2))
             {
                 response.EnsureSuccessStatusCode();
