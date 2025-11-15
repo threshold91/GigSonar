@@ -32,11 +32,11 @@ class Program
 
             string ticketmasterKey = config["ApiKeys:Ticketmaster"];
 
-            string url = "https://app.ticketmaster.com/discovery/v2/events.json"
+            string url1 = "https://app.ticketmaster.com/discovery/v2/events.json"
                          + "?apikey=" + ticketmasterKey
-                         + "&latlong=48.2082,16.3738&countryCode=AT&unit=km&size=199";
+                         + "&size=199";
                          
-            using (HttpResponseMessage response = await client.GetAsync(url))
+            using (HttpResponseMessage response = await client.GetAsync(url1))
             {
                 response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
@@ -71,7 +71,6 @@ class Program
                     try
                     {
                         Event mappedEvent = MapEvent.ConvertEvent(dtoEvent);
-                        //mappedEvent.ArtistName = ""; // for testing purposes
                         if (mappedEvent != null && mappedEvent.Validate())
                         {
                             mappedEvents.Add(mappedEvent);
@@ -89,21 +88,9 @@ class Program
                     }
                 }
                 
-                //Event test = MapEvent.ConvertEvent(testTmResponse._embedded.events.First());
-                
-                //var Events = new List<Event>();
-                
-                /*
-                foreach(var e in Events)
-                    if (!e.Validate())
-                        ;
-                   */ 
-                
-                //Console.WriteLine(responseBody);
             }
             Console.WriteLine($"Number of valid events is: {mappedEvents.Count}");
             Console.WriteLine($"Number of non valid events is: {nonValidEvents.Count}!");
-            Console.WriteLine($"13th event artist name is {mappedEvents[12].ArtistName}");
         }
     
 }
