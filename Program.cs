@@ -30,6 +30,9 @@ class Program
 
         List<Venue> mappedVenues = new List<Venue>();
         List<Venue> nonValidVenues = new List<Venue>();
+
+        List<Artist> mappedArtists = new List<Artist>();
+        List<Artist> nonValidArtists = new List<Artist>();
         
             // Load config from appsettings.json
             var config = new ConfigurationBuilder()
@@ -44,6 +47,10 @@ class Program
                          + "&size=199";
             
             string url2 = "https://app.ticketmaster.com/discovery/v2/venues.json"
+                          + "?apikey=" + ticketmasterKey
+                          + "&size=199";
+            
+            string url3 = "https://app.ticketmaster.com/discovery/v2/attractions.json"
                           + "?apikey=" + ticketmasterKey
                           + "&size=199";
                          
@@ -148,7 +155,7 @@ class Program
                     catch (Exception e)
                     {
                         Console.WriteLine(e);
-                        nonValidEvents.Add(null);
+                        nonValidVenues.Add(null);
                         continue;
                     }
                 }
@@ -157,28 +164,28 @@ class Program
             Console.WriteLine($"Number of valid venues is: {mappedVenues.Count}");
             Console.WriteLine($"Number of non valid venues is: {nonValidVenues.Count}!");
             
-            using (HttpResponseMessage response = await client.GetAsync(url2))
+            using (HttpResponseMessage response = await client.GetAsync(url3))
             {
                 response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
 
-                var testTmResponse = JsonSerializer.Deserialize<Root2>(responseBody);
+                var testTmResponse = JsonSerializer.Deserialize<Root3>(responseBody);
 
                 var json = await response.Content.ReadAsStringAsync();
                 
-                var testRoot = JsonConvert.DeserializeObject<Root2>(json);
+                var testRoot = JsonConvert.DeserializeObject<Root3>(json);
 
                 //Get dto venue from api, add them to list
-                List<DtoVenue> dtoVenues = new List<DtoVenue>();
+                List<DtoAttraction> dtoAttractions = new List<DtoAttraction>();
                 if (testRoot != null)
                 {
                     if (testRoot._embedded != null)
                     {
-                        foreach (var dtoVenue in testRoot._embedded.venues)
+                        foreach (var dtoAttraction in testRoot._embedded.attractions)
                         {
-                            if (dtoVenue != null)
+                            if (dtoAttraction != null)
                             {
-                                dtoVenues.Add(dtoVenue);
+                                dtoAttractions.Add(dtoAttraction);
                             }
                         }
                     }
@@ -187,30 +194,30 @@ class Program
                 
                 //Convert dtoEvents to mappedEvents, add them to list
                 
-                foreach (var dtoVenue in dtoVenues)
+                foreach (var dtoAttraction in dtoAttractions)
                 {
                     try
                     {
-                        Venue mappedVenue = MapVenue.ConvertVenue(dtoVenue);
-                        if (mappedVenue != null && mappedVenue.Validate())
+                        Artist mappedArtist = MapArtist.ConvertArtist(dtoAttraction);
+                        if (mappedArtist != null && mappedArtist.Validate())
                         {
-                            mappedVenues.Add(mappedVenue);
+                            mappedArtists.Add(mappedArtist);
                         }
                         else
                         {
-                            nonValidVenues.Add(mappedVenue);
+                            nonValidArtists.Add(mappedArtist);
                         }
                     }
                     catch (Exception e)
                     {
                         Console.WriteLine(e);
-                        nonValidEvents.Add(null);
+                        nonValidArtists.Add(null);
                         continue;
                     }
                 }
                 
             }
-            Console.WriteLine($"Number of valid venues is: {mappedVenues.Count}");
-            Console.WriteLine($"Number of non valid venues is: {nonValidVenues.Count}!");
+            Console.WriteLine($"Number of valid artists is: {mappedArtists.Count}");
+            Console.WriteLine($"Number of non valid artists is: {nonValidArtists.Count}!");
         }
 }
