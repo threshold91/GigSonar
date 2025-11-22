@@ -16,6 +16,10 @@ using Venue = GigSonar.Classes.Venue;
 using DtoEvent = GigSonar.DTOs.Ticketmaster.SearchEvents.SearchEvents.Event;
 using DtoVenue = GigSonar.DTOs.Ticketmaster.SearchVenues.Venue;
 using DtoAttraction = GigSonar.DTOs.Ticketmaster.SearchAttractions.Attraction;
+
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+
 namespace GigSonar;
 
 class Program
