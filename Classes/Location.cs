@@ -2,6 +2,8 @@ namespace GigSonar.Classes;
 
 public class Location
 {
+    private int _id;
+    private string _externalId;
     private string _latitude;
     private string _longitude;
     private string _countryCode;
@@ -23,6 +25,18 @@ public class Location
         }
 
         return true;
+    }
+
+    public int Id
+    {
+        get { return _id; }
+        set { _id = value; }
+    }
+
+    public string ExternalId
+    {
+        get { return _externalId; }
+        set { _externalId = value; }
     }
     
     public string Latitude
