@@ -21,7 +21,7 @@ public class MapVenue
         location.Longitude = tmVenue.location.longitude;
         location.CountryCode = tmVenue.country.countryCode;
         location.City = tmVenue.city.name;
-        location.Address = tmVenue.address.line1;
+        location.Address = tmVenue?.address?.line1;
         location.PostalCode = tmVenue.postalCode;
         return location;
     }
