@@ -1,4 +1,7 @@
-﻿using GigSonar.Classes;
+﻿using GigSonar.Data;
+
+namespace GigSonar;
+using GigSonar.Classes;
 using GigSonar.DTOs.Ticketmaster.SearchAttractions;
 using GigSonar.DTOs.Ticketmaster.SearchEvents;
 using GigSonar.DTOs.Ticketmaster.SearchVenues;
@@ -16,11 +19,13 @@ using Venue = GigSonar.Classes.Venue;
 using DtoEvent = GigSonar.DTOs.Ticketmaster.SearchEvents.SearchEvents.Event;
 using DtoVenue = GigSonar.DTOs.Ticketmaster.SearchVenues.Venue;
 using DtoAttraction = GigSonar.DTOs.Ticketmaster.SearchAttractions.Attraction;
-
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+//using db = GigSonar.Data.GigSonarContext;
 
-namespace GigSonar;
+
+
+
 
 class Program
 {
@@ -230,5 +235,36 @@ class Program
             }
             Console.WriteLine($"Number of valid artists is: {mappedArtists.Count}");
             Console.WriteLine($"Number of non valid artists is: {nonValidArtists.Count}!");
-        }
+            using (var db = new GigSonarContext())
+            {
+                foreach (var venue in mappedVenues)
+                {
+                    // check & prevent duplicates by ExternalId
+                    if (!db.Venues.Any(v => v.ExternalId == venue.ExternalId))
+                    {
+                        db.Venues.Add(venue);
+                    }
+                }
+                
+                foreach (var artist in mappedArtists)
+                {
+                    // check & prevent duplicates by ExternalId
+                    if (!db.Artists.Any(a => a.ExternalId == artist.ExternalId))
+                    {
+                        db.Artists.Add(artist);
+                    }
+                }
+                
+                foreach (var ev in mappedEvents)
+                {
+                    if (!db.Events.Any(e => e.ExternalId == ev.ExternalId))
+                    {
+                        db.Events.Add(ev);
+                    }
+                }
+                
+                db.SaveChanges();
+                Console.WriteLine("Data saved to database.");
+            }
+    }
 }
