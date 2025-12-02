@@ -47,15 +47,21 @@ class Program
             string ticketmasterKey = config["ApiKeys:Ticketmaster"];
 
             string url1 = "https://app.ticketmaster.com/discovery/v2/events.json"
-                         + "?apikey=" + ticketmasterKey
-                         + "&size=199";
+                          + "?apikey=" + ticketmasterKey
+                          + "&countryCode=AT"
+                          + "&latlong=48.2082,16.3738"
+                          + "&size=199";
             
             string url2 = "https://app.ticketmaster.com/discovery/v2/venues.json"
                           + "?apikey=" + ticketmasterKey
+                          + "&countryCode=AT"
+                          + "&latlong=48.2082,16.3738"
                           + "&size=199";
             
             string url3 = "https://app.ticketmaster.com/discovery/v2/attractions.json"
                           + "?apikey=" + ticketmasterKey
+                          + "&countryCode=AT"
+                          + "&latlong=48.2082,16.3738"
                           + "&size=199";
                          
             using (HttpResponseMessage response = await client.GetAsync(url1))
