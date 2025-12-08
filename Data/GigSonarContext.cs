@@ -9,6 +9,7 @@ public class GigSonarContext : DbContext
     public DbSet<Venue> Venues { get; set; } = null!;
     public DbSet<Artist> Artists { get; set; } = null!;
     public DbSet<Location> Locations { get; set; } = null!;
+    public DbSet<Genre> Genres { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
     {
@@ -59,5 +60,16 @@ public class GigSonarContext : DbContext
                 entity.HasKey(e => e.Id);
             }
         );
+        modelBuilder.Entity<Genre>(entity =>
+        {
+            entity.ToTable("Genre");
+            entity.HasKey(g => g.Id);
+            entity.Property(g => g.ExternalId).IsRequired();
+            entity.Property(g => g.Name).IsRequired();
+
+            entity.HasOne(g => g.SubGenre)
+                .WithMany()
+                .HasForeignKey("SubGenreId");
+        });
     }
 }
