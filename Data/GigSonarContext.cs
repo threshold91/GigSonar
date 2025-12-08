@@ -10,11 +10,18 @@ public class GigSonarContext : DbContext
     public DbSet<Artist> Artists { get; set; } = null!;
     public DbSet<Location> Locations { get; set; } = null!;
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
     {
+        var dbPath = Path.Combine(AppContext.BaseDirectory, "GigSonarTestDataDB.db");
+        
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseSqlite("Data Source=GigSonarTestDataDB.db");
+            optionsBuilder
+                .UseSqlite($"Data Source={dbPath}")
+                .LogTo(Console.WriteLine)
+                .EnableDetailedErrors()
+                .EnableSensitiveDataLogging();
+            
         }
     }
 
