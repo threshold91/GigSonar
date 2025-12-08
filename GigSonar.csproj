@@ -35,6 +35,7 @@
       <Folder Include="DTOs\Geocode\Forward\" />
       <Folder Include="DTOs\Geocode\Reverse\" />
       <Folder Include="Mappers\Geocode\" />
+      <Folder Include="Migrations\" />
     </ItemGroup>
 
 </Project>

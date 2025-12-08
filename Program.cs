@@ -255,10 +255,13 @@ class Program
                     }
                 }
                 
+                db.SaveChanges();
+                
                 foreach (var ev in mappedEvents)
                 {
                     if (!db.Events.Any(e => e.ExternalId == ev.ExternalId))
                     {
+                        ev.Venue = db.Venues.First(v => v.ExternalId == ev.Venue.ExternalId);
                         db.Events.Add(ev);
                     }
                 }

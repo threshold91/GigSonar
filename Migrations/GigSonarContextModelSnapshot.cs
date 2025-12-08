@@ -132,7 +132,7 @@ namespace GigSonar.Migrations
 
                     b.HasIndex("SubGenreId");
 
-                    b.ToTable("Genre");
+                    b.ToTable("Genre", (string)null);
                 });
 
             modelBuilder.Entity("GigSonar.Classes.Location", b =>

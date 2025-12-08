@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GigSonar.Migrations
 {
     [DbContext(typeof(GigSonarContext))]
-    [Migration("20251201201614_Initial")]
+    [Migration("20251208181004_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -135,7 +135,7 @@ namespace GigSonar.Migrations
 
                     b.HasIndex("SubGenreId");
 
-                    b.ToTable("Genre");
+                    b.ToTable("Genre", (string)null);
                 });
 
             modelBuilder.Entity("GigSonar.Classes.Location", b =>
