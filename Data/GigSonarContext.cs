@@ -13,16 +13,22 @@ public class GigSonarContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
     {
-        var dbPath = Path.Combine(AppContext.BaseDirectory, "GigSonarTestDataDB.db");
-        
-        if (!optionsBuilder.IsConfigured)
         {
+            if (optionsBuilder.IsConfigured)
+                return;
+
+            // Go from bin/Debug/net9.0 → project root
+            var projectRoot = Path.GetFullPath(
+                Path.Combine(AppContext.BaseDirectory, "..", "..", "..")
+            );
+
+            var dbPath = Path.Combine(projectRoot, "GigSonarTestDataDB.db");
+
             optionsBuilder
                 .UseSqlite($"Data Source={dbPath}")
                 .LogTo(Console.WriteLine)
                 .EnableDetailedErrors()
                 .EnableSensitiveDataLogging();
-            
         }
     }
 

@@ -269,5 +269,6 @@ class Program
                 db.SaveChanges();
                 Console.WriteLine("Data saved to database.");
             }
+            
     }
 }
