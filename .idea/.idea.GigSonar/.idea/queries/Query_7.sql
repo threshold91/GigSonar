@@ -1,0 +1,1 @@
+SELECT * FROM Location LIMIT 5;

@@ -38,7 +38,7 @@ namespace GigSonar.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ExternalId = table.Column<string>(type: "TEXT", nullable: false),
+                    ExternalId = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Latitude = table.Column<string>(type: "TEXT", nullable: false),
                     Longitude = table.Column<string>(type: "TEXT", nullable: false),
                     CountryCode = table.Column<string>(type: "TEXT", nullable: false),

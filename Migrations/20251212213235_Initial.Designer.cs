@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GigSonar.Migrations
 {
     [DbContext(typeof(GigSonarContext))]
-    [Migration("20251209185848_Initial")]
+    [Migration("20251212213235_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -158,6 +158,7 @@ namespace GigSonar.Migrations
 
                     b.Property<string>("ExternalId")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Latitude")

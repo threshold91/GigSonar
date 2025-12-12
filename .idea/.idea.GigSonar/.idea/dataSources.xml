@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="GigSonarTestDataDB" uuid="8d5adc67-d913-4474-acf5-356ba113d882">
+    <data-source source="LOCAL" name="GigSonarTestDataDB" uuid="68ac7f24-3b34-4741-94d2-661231dbbb6f">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
