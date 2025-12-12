@@ -24,6 +24,11 @@ public class Location
             return false;
         }
 
+        if (string.IsNullOrWhiteSpace(_address))
+        {
+            return false;
+        }
+
         return true;
     }
 
