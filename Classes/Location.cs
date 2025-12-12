@@ -32,13 +32,12 @@ public class Location
         get { return _id; }
         set { _id = value; }
     }
-
+   
     public string ExternalId
     {
         get { return _externalId; }
         set { _externalId = value; }
     }
-    
     public string Latitude
     {
         get { return _latitude; }

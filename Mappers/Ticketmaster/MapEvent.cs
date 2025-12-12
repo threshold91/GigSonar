@@ -53,6 +53,7 @@ public class MapEvent
     private static Classes.Location ConvertLocation(DTOs.Ticketmaster.SearchEvents.SearchEvents.Venue tmVenue)
     {
         var location = new Location();
+        location.ExternalId = tmVenue.id;
         location.Latitude = tmVenue.location.latitude;
         location.Longitude = tmVenue.location.longitude;
         location.CountryCode = tmVenue.country.countryCode;

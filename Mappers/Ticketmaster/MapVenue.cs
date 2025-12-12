@@ -17,6 +17,7 @@ public class MapVenue
     private static Classes.Location ConvertLocation(DTOs.Ticketmaster.SearchVenues.Venue tmVenue)
     {
         var location = new Location();
+        location.ExternalId = tmVenue.id;
         location.Latitude = tmVenue.location.latitude;
         location.Longitude = tmVenue.location.longitude;
         location.CountryCode = tmVenue.country.countryCode;
