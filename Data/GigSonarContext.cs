@@ -64,6 +64,7 @@ public class GigSonarContext : DbContext
             {
                 entity.ToTable("Location");
                 entity.HasKey(e => e.Id);
+                entity.Property(e => e.ExternalId).HasMaxLength(100);
             }
         );
         modelBuilder.Entity<Genre>(entity =>
@@ -72,7 +73,6 @@ public class GigSonarContext : DbContext
             entity.HasKey(g => g.Id);
             entity.Property(g => g.ExternalId).IsRequired();
             entity.Property(g => g.Name).IsRequired();
-
             entity.HasOne(g => g.SubGenre)
                 .WithMany()
                 .HasForeignKey("SubGenreId");
