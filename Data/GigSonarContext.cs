@@ -50,6 +50,7 @@ public class GigSonarContext : DbContext
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired();
                 entity.Property(e => e.ExternalId).HasMaxLength(100);
+                entity.Property(e => e.Url).IsRequired(false);  
                 //location relationship
                 entity.HasOne(e => e.LocationData).WithMany().HasForeignKey("LocationId");
             });
