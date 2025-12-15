@@ -42,6 +42,7 @@ public class GigSonarContext : DbContext
                 entity.Property(e => e.ExternalId).HasMaxLength(100);
                 //venue relationship
                 entity.HasOne(e => e.Venue).WithMany().HasForeignKey("VenueId");
+                entity.HasOne(e => e.ArtistId).WithMany().HasForeignKey("ArtistId");
                 });
 
         modelBuilder.Entity<Venue>(entity => 
@@ -87,6 +88,13 @@ public class GigSonarContext : DbContext
                 .HasForeignKey("SubGenreId")
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+        modelBuilder.Entity<Genre>(entity =>
+        {
+            entity.ToTable("Subgenre");
+            entity.HasKey(g => g.Id);
+            entity.Property(g => g.ExternalId).IsRequired();
+            entity.Property(g => g.Name).IsRequired();
         });
     }
 }
