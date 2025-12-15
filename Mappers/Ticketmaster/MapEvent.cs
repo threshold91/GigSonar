@@ -9,6 +9,7 @@ public class MapEvent
         var eventObject = new Event();
         eventObject.ExternalId = tmEvent.id;
         eventObject.Name = tmEvent.name;
+        eventObject.ArtistId = tmEvent?._embedded?.attractions?.First()?.id;
         eventObject.ArtistName = tmEvent?._embedded?.attractions?.First()?.name;
         eventObject.Genre = ConvertEventGenre(tmEvent.classifications.First());
         eventObject.Venue = ConvertEventVenue(tmEvent._embedded.venues.First());
@@ -58,7 +59,7 @@ public class MapEvent
         location.Longitude = tmVenue.location.longitude;
         location.CountryCode = tmVenue.country.countryCode;
         location.City = tmVenue.city.name;
-        location.Address = tmVenue.address.line1;
+        location.Address = tmVenue?.address?.line1;
         location.PostalCode = tmVenue.postalCode;
         return location;
     }
