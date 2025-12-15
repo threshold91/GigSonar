@@ -60,6 +60,14 @@ public class GigSonarContext : DbContext
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired();
                 entity.Property(e => e.ExternalId).HasMaxLength(100);
+                entity.Property(e => e.SpotifyLink)
+                    .IsRequired(false);
+                entity.Property(e => e.FacebookLink)
+                    .IsRequired(false);
+                entity.Property(e => e.InstagramLink)
+                    .IsRequired(false);
+                entity.Property(e => e.ArtistHomepage)
+                    .IsRequired(false);
             });
         modelBuilder.Entity<Location>(entity =>
             {
