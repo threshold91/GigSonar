@@ -89,12 +89,5 @@ public class GigSonarContext : DbContext
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
         });
-        modelBuilder.Entity<Genre>(entity =>
-        {
-            entity.ToTable("Subgenre");
-            entity.HasKey(g => g.Id);
-            entity.Property(g => g.ExternalId).IsRequired();
-            entity.Property(g => g.Name).IsRequired();
-        });
     }
 }

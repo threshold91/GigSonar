@@ -278,7 +278,7 @@ class Program
                 }
                 
                 db.SaveChanges();
-                
+                /*
                 foreach (var ev in mappedEvents)
                 {
                     if (!db.Events.Any(e => e.ExternalId == ev.ExternalId))
@@ -288,7 +288,7 @@ class Program
                 }
                 
                 db.SaveChanges();
-                Console.WriteLine("Data saved to database.");
+                Console.WriteLine("Data saved to database."); */
             }
             
     }
