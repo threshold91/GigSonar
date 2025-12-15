@@ -71,6 +71,11 @@ namespace GigSonar.Migrations
                     b.Property<DateTime>("End")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ExternalArtistId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("ExternalId")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -128,7 +133,7 @@ namespace GigSonar.Migrations
 
                     b.HasIndex("SubGenreId");
 
-                    b.ToTable("Genre", (string)null);
+                    b.ToTable("Subgenre", (string)null);
                 });
 
             modelBuilder.Entity("GigSonar.Classes.Location", b =>

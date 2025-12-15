@@ -40,10 +40,10 @@ public class GigSonarContext : DbContext
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired();
                 entity.Property(e => e.ExternalId).HasMaxLength(100);
+                entity.Property(e => e.ExternalArtistId).HasMaxLength(100);
                 //venue relationship
                 entity.HasOne(e => e.Venue).WithMany().HasForeignKey("VenueId");
-                entity.HasOne(e => e.ArtistId).WithMany().HasForeignKey("ArtistId");
-                });
+            });
 
         modelBuilder.Entity<Venue>(entity => 
             {

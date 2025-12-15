@@ -6,7 +6,7 @@ public class Event
     private string _externalId;
     private string _name;
     private EventType _type;
-    private string _artistId;
+    private string _externalArtistId;
     private string _artistName;
     private Genre _genre;
     private Genre _subGenre;
@@ -68,10 +68,10 @@ public class Event
         set { _genre = value; }
     }
 
-    public string ArtistId
+    public string ExternalArtistId
     {
-        get { return _artistId; }
-        set { _artistId = value; }
+        get { return _externalArtistId; }
+        set { _externalArtistId = value; }
     }
     public string ArtistName
     {
