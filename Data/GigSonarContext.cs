@@ -76,7 +76,9 @@ public class GigSonarContext : DbContext
             entity.Property(g => g.Name).IsRequired();
             entity.HasOne(g => g.SubGenre)
                 .WithMany()
-                .HasForeignKey("SubGenreId");
+                .HasForeignKey("SubGenreId")
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

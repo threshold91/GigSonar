@@ -1,1 +1,1 @@
-SELECT * FROM Location LIMIT 5;
+SELECT * FROM Genre LIMIT 50;
