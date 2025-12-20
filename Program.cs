@@ -266,9 +266,9 @@ class Program
                 foreach (var artist in mappedArtists)
                 {
                     // check & prevent duplicates by ExternalId
-                    if (!genres.Any(g => g.ExternalId == artist.ArtistGenre.ExternalId))
+                    if (!genres.Any(g => g.ExternalId == artist.Genre.ExternalId))
                     {
-                        genres.Add(artist.ArtistGenre);
+                        genres.Add(artist.Genre);
                     }
                     /*
                     // check & prevent duplicates by ExternalId
