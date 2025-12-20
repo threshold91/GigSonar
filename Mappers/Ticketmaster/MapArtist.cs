@@ -23,7 +23,7 @@ public class MapArtist
         var genre = new Genre();
         genre.ExternalId = tmClassification.classifications.First().genre.id;
         genre.Name = tmClassification.classifications.First().genre.name;
-        genre.SubGenre = ConvertArtistSubGenre(tmClassification);
+      //  genre.SubGenre = ConvertArtistSubGenre(tmClassification);
         return genre;
     }
 

@@ -28,7 +28,7 @@ public class MapEvent
         var genre = new Genre();
         genre.ExternalId = tmEventClassification.genre.id;
         genre.Name = tmEventClassification.genre.name;
-        genre.SubGenre = ConvertEventSubGenre(tmEventClassification);
+      //  genre.SubGenre = ConvertEventSubGenre(tmEventClassification);
         return genre;
     }
 

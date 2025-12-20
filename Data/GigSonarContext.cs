@@ -34,7 +34,7 @@ public class GigSonarContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Event>(entity =>
+      /*  modelBuilder.Entity<Event>(entity =>
             {
                 entity.ToTable("Event");
                 entity.HasKey(e => e.Id);
@@ -89,5 +89,5 @@ public class GigSonarContext : DbContext
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
         });
-    }
+   */ }
 }

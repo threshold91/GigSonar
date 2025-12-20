@@ -261,23 +261,24 @@ class Program
                 }
                 
                 db.SaveChanges();
-                
+
+                var genres = db.Genres.ToList();
                 foreach (var artist in mappedArtists)
                 {
                     // check & prevent duplicates by ExternalId
-                    if (!db.Genres.Any(g => g.ExternalId == artist.ArtistGenre.ExternalId))
+                    if (!genres.Any(g => g.ExternalId == artist.ArtistGenre.ExternalId))
                     {
-                        db.Genres.Add(artist.ArtistGenre);
+                        genres.Add(artist.ArtistGenre);
                     }
-                    
+                    /*
                     // check & prevent duplicates by ExternalId
                     if (!db.Artists.Any(a => a.ExternalId == artist.ExternalId))
                     {
                         db.Artists.Add(artist);
-                    }
-                }
-                
+                    } */
+                db.Genres.AddRange(genres);
                 db.SaveChanges();
+                }
                 /*
                 foreach (var ev in mappedEvents)
                 {

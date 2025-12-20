@@ -27,17 +27,19 @@ namespace GigSonar.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ArtistHomepage")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ExternalId")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FacebookLink")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("InstagramLink")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -45,13 +47,14 @@ namespace GigSonar.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SpotifyLink")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ArtistGenreId");
 
-                    b.ToTable("Artist", (string)null);
+                    b.ToTable("Artists");
                 });
 
             modelBuilder.Entity("GigSonar.Classes.Event", b =>
@@ -73,12 +76,10 @@ namespace GigSonar.Migrations
 
                     b.Property<string>("ExternalArtistId")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ExternalId")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("GenreId")
@@ -109,7 +110,7 @@ namespace GigSonar.Migrations
 
                     b.HasIndex("VenueId");
 
-                    b.ToTable("Event", (string)null);
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("GigSonar.Classes.Genre", b =>
@@ -126,14 +127,12 @@ namespace GigSonar.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("SubGenreId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("SubGenreId");
+                    b.HasIndex("ExternalId")
+                        .IsUnique();
 
-                    b.ToTable("Genre", (string)null);
+                    b.ToTable("Genres");
                 });
 
             modelBuilder.Entity("GigSonar.Classes.Location", b =>
@@ -156,7 +155,6 @@ namespace GigSonar.Migrations
 
                     b.Property<string>("ExternalId")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Latitude")
@@ -173,7 +171,7 @@ namespace GigSonar.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Location", (string)null);
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("GigSonar.Classes.Venue", b =>
@@ -184,10 +182,9 @@ namespace GigSonar.Migrations
 
                     b.Property<string>("ExternalId")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("LocationId")
+                    b.Property<int>("LocationDataId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -195,13 +192,14 @@ namespace GigSonar.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Url")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LocationId");
+                    b.HasIndex("LocationDataId");
 
-                    b.ToTable("Venue", (string)null);
+                    b.ToTable("Venues");
                 });
 
             modelBuilder.Entity("GigSonar.Classes.Artist", b =>
@@ -234,21 +232,11 @@ namespace GigSonar.Migrations
                     b.Navigation("Venue");
                 });
 
-            modelBuilder.Entity("GigSonar.Classes.Genre", b =>
-                {
-                    b.HasOne("GigSonar.Classes.Genre", "SubGenre")
-                        .WithMany()
-                        .HasForeignKey("SubGenreId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("SubGenre");
-                });
-
             modelBuilder.Entity("GigSonar.Classes.Venue", b =>
                 {
                     b.HasOne("GigSonar.Classes.Location", "LocationData")
                         .WithMany()
-                        .HasForeignKey("LocationId")
+                        .HasForeignKey("LocationDataId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

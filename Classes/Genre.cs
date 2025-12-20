@@ -1,5 +1,8 @@
-namespace GigSonar.Classes;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.SqlServer.Server;
 
+namespace GigSonar.Classes;
+[Index(nameof(ExternalId), IsUnique = true)]
 public class Genre
 {
     private int _id;
@@ -41,9 +44,9 @@ public class Genre
         set { _name = value; }
     }
 
-    public Genre SubGenre
+    /*public Genre SubGenre
     {
         get { return _subGenre; }
         set { _subGenre = value; }
-    }
+    }*/
 }
