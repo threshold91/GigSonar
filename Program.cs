@@ -55,6 +55,7 @@ class Program
                           + "?apikey=" + ticketmasterKey
                           + "&countryCode=AT"
                           + "&latlong=48.2082,16.3738"
+                          + "&segmentId=KZFzniwnSyZfZ7v7nJ"
                           + "&size=199";
             
             string url2 = "https://app.ticketmaster.com/discovery/v2/venues.json"
@@ -65,8 +66,7 @@ class Program
             
             string url3 = "https://app.ticketmaster.com/discovery/v2/attractions.json"
                           + "?apikey=" + ticketmasterKey
-                          + "&countryCode=AT"
-                          + "&latlong=48.2082,16.3738"
+                          + "&segmentId=KZFzniwnSyZfZ7v7nJ"
                           + "&size=199";
                          
             using (HttpResponseMessage response = await client.GetAsync(url1))
@@ -235,6 +235,7 @@ class Program
             }
             Console.WriteLine($"Number of valid artists is: {mappedArtists.Count}");
             Console.WriteLine($"Number of non valid artists is: {nonValidArtists.Count}!");
+            /*
             using (var db = new GigSonarContext())
             {
                 
@@ -275,7 +276,7 @@ class Program
                     if (!db.Artists.Any(a => a.ExternalId == artist.ExternalId))
                     {
                         db.Artists.Add(artist);
-                    } */
+                    } 
                 db.Genres.AddRange(genres);
                 db.SaveChanges();
                 }
@@ -289,8 +290,8 @@ class Program
                 }
                 
                 db.SaveChanges();
-                Console.WriteLine("Data saved to database."); */
-            }
+                Console.WriteLine("Data saved to database."); 
+            } */
             
     }
 }
