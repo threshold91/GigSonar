@@ -12,6 +12,7 @@ public class MapEvent
         eventObject.ExternalArtistId = tmEvent?._embedded?.attractions?.First()?.id;
         eventObject.ArtistName = tmEvent?._embedded?.attractions?.First()?.name;
         eventObject.Genre = ConvertEventGenre(tmEvent.classifications.First());
+        eventObject.SubGenre = ConvertEventSubGenre(tmEvent.classifications.First());
         eventObject.Venue = ConvertEventVenue(tmEvent._embedded.venues.First());
         eventObject.Start = tmEvent.dates.start.dateTime;
         //below properties not yet mapped due to api limitations
@@ -28,14 +29,13 @@ public class MapEvent
         var genre = new Genre();
         genre.ExternalId = tmEventClassification.genre.id;
         genre.Name = tmEventClassification.genre.name;
-      //  genre.SubGenre = ConvertEventSubGenre(tmEventClassification);
         return genre;
     }
 
-    private static Genre ConvertEventSubGenre(
+    private static SubGenre ConvertEventSubGenre(
         DTOs.Ticketmaster.SearchEvents.SearchEvents.Classification tmEventSubGenre)
     {
-        var subGenre = new Genre();
+        var subGenre = new SubGenre();
         subGenre.ExternalId = tmEventSubGenre.subGenre.id;
         subGenre.Name = tmEventSubGenre.subGenre.name;
         return subGenre;

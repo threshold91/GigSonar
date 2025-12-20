@@ -4,7 +4,7 @@ namespace GigSonar.Classes;
 
 [Index(nameof(ExternalId), IsUnique = true)]
 
-public class Subgenre
+public class SubGenre
 {
     private int _id;
     private string _externalId;

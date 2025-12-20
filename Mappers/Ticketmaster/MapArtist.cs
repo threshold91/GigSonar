@@ -15,7 +15,7 @@ public class MapArtist
         artist.InstagramLink = tmAttraction?.externalLinks?.instagram?.First()?.url;
         artist.ArtistHomepage = tmAttraction?.externalLinks?.homepage?.First()?.url;
         artist.Genre = ConvertArtistGenre(tmAttraction);
-        artist.Subgenre = ConvertArtistSubGenre(tmAttraction);
+        artist.subGenre = ConvertArtistSubGenre(tmAttraction);
         return artist;
     }
 
@@ -27,9 +27,9 @@ public class MapArtist
         return genre;
     }
 
-    private static Subgenre ConvertArtistSubGenre(DTOs.Ticketmaster.SearchAttractions.Attraction tmClassification)
+    private static SubGenre ConvertArtistSubGenre(DTOs.Ticketmaster.SearchAttractions.Attraction tmClassification)
     {
-        var subGenre = new Subgenre();
+        var subGenre = new SubGenre();
         subGenre.ExternalId = tmClassification.classifications.First().subGenre.id;
         subGenre.Name = tmClassification.classifications.First().subGenre.name;
         return subGenre;

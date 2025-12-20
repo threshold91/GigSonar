@@ -6,7 +6,7 @@ public class Artist
     private string _externalId;
     private string _name;
     private Genre _genre;
-    private Subgenre _subgenre;
+    private SubGenre _subGenre;
     private string _spotifyLink;
     private string _facebookLink;
     private string _instagramLink;
@@ -52,10 +52,10 @@ public class Artist
         set { _genre = value; }
     }
 
-    public Subgenre Subgenre
+    public SubGenre subGenre
     {
-        get {return  _subgenre;}
-        set { _subgenre = value; }
+        get {return  _subGenre;}
+        set { _subGenre = value; }
     }
 
     public string SpotifyLink
