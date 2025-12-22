@@ -9,7 +9,7 @@ public class MapVenue
         var venue = new Venue();
         venue.ExternalId = tmVenue.id;
         venue.Name = tmVenue.name;
-        venue.Url = tmVenue.url;
+        venue.Url = tmVenue?.url;
         venue.LocationData = ConvertLocation(tmVenue);
         return venue;
     }

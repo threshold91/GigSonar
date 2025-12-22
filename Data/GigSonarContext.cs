@@ -10,6 +10,7 @@ public class GigSonarContext : DbContext
     public DbSet<Artist> Artists { get; set; } = null!;
     public DbSet<Location> Locations { get; set; } = null!;
     public DbSet<Genre> Genres { get; set; } = null!;
+    public DbSet<SubGenre> SubGenres { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
     {
@@ -44,17 +45,18 @@ public class GigSonarContext : DbContext
                 //venue relationship
                 entity.HasOne(e => e.Venue).WithMany().HasForeignKey("VenueId");
             });
-
+        */
         modelBuilder.Entity<Venue>(entity => 
-            {
+            {/*
                 entity.ToTable("Venue");
                 entity.HasKey(e => e.Id);
-                entity.Property(e => e.Name).IsRequired();
-                entity.Property(e => e.ExternalId).HasMaxLength(100);
+                entity.Property(e => e.Name).IsRequired(); 
+                entity.Property(e => e.ExternalId).HasMaxLength(100); */
                 entity.Property(e => e.Url).IsRequired(false);  
                 //location relationship
-                entity.HasOne(e => e.LocationData).WithMany().HasForeignKey("LocationId");
+                //entity.HasOne(e => e.LocationData).WithMany().HasForeignKey("LocationId");
             });
+        /*
         modelBuilder.Entity<Artist>(entity =>
             {
                 entity.ToTable("Artist");

@@ -235,7 +235,7 @@ class Program
             }
             Console.WriteLine($"Number of valid artists is: {mappedArtists.Count}");
             Console.WriteLine($"Number of non valid artists is: {nonValidArtists.Count}!");
-            /*
+            
             using (var db = new GigSonarContext())
             {
                 
@@ -262,7 +262,7 @@ class Program
                 }
                 
                 db.SaveChanges();
-
+                /*
                 var genres = db.Genres.ToList();
                 foreach (var artist in mappedArtists)
                 {
@@ -271,7 +271,7 @@ class Program
                     {
                         genres.Add(artist.Genre);
                     }
-                    /*
+                    
                     // check & prevent duplicates by ExternalId
                     if (!db.Artists.Any(a => a.ExternalId == artist.ExternalId))
                     {
@@ -280,7 +280,7 @@ class Program
                 db.Genres.AddRange(genres);
                 db.SaveChanges();
                 }
-                /*
+                
                 foreach (var ev in mappedEvents)
                 {
                     if (!db.Events.Any(e => e.ExternalId == ev.ExternalId))
@@ -290,8 +290,8 @@ class Program
                 }
                 
                 db.SaveChanges();
-                Console.WriteLine("Data saved to database."); 
-            } */
+                Console.WriteLine("Data saved to database."); */
+            }
             
     }
 }
