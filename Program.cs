@@ -262,7 +262,7 @@ class Program
                 }
                 
                 db.SaveChanges();
-                /*
+                
                 var genres = db.Genres.ToList();
                 foreach (var artist in mappedArtists)
                 {
@@ -280,7 +280,7 @@ class Program
                 db.Genres.AddRange(genres);
                 db.SaveChanges();
                 }
-                
+                /*
                 foreach (var ev in mappedEvents)
                 {
                     if (!db.Events.Any(e => e.ExternalId == ev.ExternalId))

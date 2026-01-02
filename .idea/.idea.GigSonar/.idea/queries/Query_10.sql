@@ -1,1 +1,1 @@
-SELECT * from Locations LIMIT 199;
+select * from Genres;
