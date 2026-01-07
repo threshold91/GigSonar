@@ -56,13 +56,13 @@ public class GigSonarContext : DbContext
                 //location relationship
                 //entity.HasOne(e => e.LocationData).WithMany().HasForeignKey("LocationId");
             });
-        /*
+        
         modelBuilder.Entity<Artist>(entity =>
             {
-                entity.ToTable("Artist");
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Name).IsRequired();
-                entity.Property(e => e.ExternalId).HasMaxLength(100);
+                //entity.ToTable("Artist");
+                //entity.HasKey(e => e.Id);
+                //entity.Property(e => e.Name).IsRequired();
+                //entity.Property(e => e.ExternalId).HasMaxLength(100);
                 entity.Property(e => e.SpotifyLink)
                     .IsRequired(false);
                 entity.Property(e => e.FacebookLink)
@@ -72,6 +72,7 @@ public class GigSonarContext : DbContext
                 entity.Property(e => e.ArtistHomepage)
                     .IsRequired(false);
             });
+            /*
         modelBuilder.Entity<Location>(entity =>
             {
                 entity.ToTable("Location");
@@ -81,15 +82,9 @@ public class GigSonarContext : DbContext
         );
         modelBuilder.Entity<Genre>(entity =>
         {
-            entity.ToTable("Genre");
+            entity.ToTable("Genres");
             entity.HasKey(g => g.Id);
-            entity.Property(g => g.ExternalId).IsRequired();
-            entity.Property(g => g.Name).IsRequired();
-            entity.HasOne(g => g.SubGenre)
-                .WithMany()
-                .HasForeignKey("SubGenreId")
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Restrict);
-        });
-   */ }
+            entity.Property(g => g.Id).ValueGeneratedOnAdd();
+        }); */
+    }
 }

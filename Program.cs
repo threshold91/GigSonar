@@ -263,23 +263,85 @@ class Program
                 
                 db.SaveChanges();
                 
-                var genres = db.Genres.ToList();
+                var exsitingGenres = db.Genres.ToList();
+                var newGenres = new List<Genre>();
                 foreach (var artist in mappedArtists)
                 {
                     // check & prevent duplicates by ExternalId
-                    if (!genres.Any(g => g.ExternalId == artist.Genre.ExternalId))
+                    if (!exsitingGenres.Any(g => g.ExternalId == artist.Genre.ExternalId))
                     {
-                        genres.Add(artist.Genre);
+                        exsitingGenres.Add(artist.Genre);
+                        newGenres.Add(artist.Genre);
                     }
-                    
+                    /*
                     // check & prevent duplicates by ExternalId
                     if (!db.Artists.Any(a => a.ExternalId == artist.ExternalId))
                     {
                         db.Artists.Add(artist);
                     } 
-                db.Genres.AddRange(genres);
-                db.SaveChanges();
+                    */
                 }
+                
+                db.Genres.AddRange(newGenres);
+                db.SaveChanges();
+                
+                var existingSubGenres = db.SubGenres.ToList();
+                var newSubGenres = new List<Classes.SubGenre>();
+                foreach (var artist in mappedArtists)
+                {
+                    // check & prevent duplicates by ExternalId
+                    if (!existingSubGenres.Any(g => g.ExternalId == artist.subGenre.ExternalId))
+                    {
+                        existingSubGenres.Add(artist.subGenre);
+                        newSubGenres.Add(artist.subGenre);
+                    }
+                }
+                
+                db.SubGenres.AddRange(newSubGenres);
+                db.SaveChanges();
+
+                var exsistingArtists = db.Artists.ToList();
+                var newArtists = new List<Artist>();
+                var genreByExternalId = db.Genres.AsTracking()
+                    .ToDictionary(g => g.ExternalId);
+                var subGenreByExternalId = db.SubGenres.AsTracking()
+                    .ToDictionary(g => g.ExternalId);
+                
+                foreach (var artist in mappedArtists)
+                {
+                    if (!exsistingArtists.Any(a => a.ExternalId == artist.ExternalId))
+                    {
+                        var genreExtId = artist.Genre.ExternalId;
+                        var subGenreExtId = artist.subGenre.ExternalId;
+
+                        if (genreByExternalId.TryGetValue(genreExtId, out var existingGenre))
+                        {
+                            artist.Genre = existingGenre;   // points to existing row
+                        }
+                        else
+                        {
+                            db.Genres.Add(artist.Genre);    // new genre
+                            genreByExternalId[genreExtId] = artist.Genre;
+                        }
+                        
+                        if (subGenreByExternalId.TryGetValue(subGenreExtId, out var existingSubGenre))
+                        {
+                            artist.subGenre = existingSubGenre;   // points to existing row
+                        }
+                        else
+                        {
+                            db.SubGenres.Add(artist.subGenre);    // new subgenre
+                            subGenreByExternalId[subGenreExtId] = artist.subGenre;
+                        }
+                        
+                        exsistingArtists.Add(artist);
+                        newArtists.Add(artist);
+                        //db.Artists.Add(artist);
+                    } 
+                } 
+                
+                db.Artists.AddRange(newArtists);
+                db.SaveChanges();
                 /*
                 foreach (var ev in mappedEvents)
                 {
