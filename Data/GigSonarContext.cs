@@ -33,8 +33,8 @@ public class GigSonarContext : DbContext
         }
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
+    //protected override void OnModelCreating(ModelBuilder modelBuilder)
+    //{
       /*  modelBuilder.Entity<Event>(entity =>
             {
                 entity.ToTable("Event");
@@ -46,16 +46,16 @@ public class GigSonarContext : DbContext
                 entity.HasOne(e => e.Venue).WithMany().HasForeignKey("VenueId");
             });
         */
-        modelBuilder.Entity<Venue>(entity => 
-            {/*
+        //modelBuilder.Entity<Venue>(entity => 
+            /*{
                 entity.ToTable("Venue");
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired(); 
                 entity.Property(e => e.ExternalId).HasMaxLength(100); */
-                entity.Property(e => e.Url).IsRequired(false);  
+                //entity.Property(e => e.Url).IsRequired(false);  
                 //location relationship
                 //entity.HasOne(e => e.LocationData).WithMany().HasForeignKey("LocationId");
-            });
+            //});
         /*
         modelBuilder.Entity<Artist>(entity =>
             {
@@ -86,5 +86,5 @@ public class GigSonarContext : DbContext
             entity.HasKey(g => g.Id);
             entity.Property(g => g.Id).ValueGeneratedOnAdd();
         }); */
-    }
+    //}
 }
