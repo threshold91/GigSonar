@@ -238,29 +238,38 @@ class Program
             
             using (var db = new GigSonarContext())
             {
-                
+                var existingVenues = db.Venues.ToList();
+                var newVenues = new List<Venue>();
+                var locationByExternalId = db.Locations.AsTracking()
+                    .ToDictionary(l => l.ExternalId);
                 foreach (var venue in mappedVenues)
                 {
                     var location = venue.LocationData;
-
+                
                     if (!location.Validate())
                     {
                         Console.WriteLine($"Skipping location {location.ExternalId} – invalid");
                         continue;
                     }
-                    // check & prevent duplicates by ExternalId
-                    if (!db.Locations.Any(v => v.ExternalId == venue.LocationData.ExternalId))
-                    {
-                        db.Locations.Add(venue.LocationData);
-                    }
                     
-                    // check & prevent duplicates by ExternalId
-                    if (!db.Venues.Any(v => v.ExternalId == venue.ExternalId))
+                    if (!existingVenues.Any(v => v.ExternalId == venue.ExternalId))
                     {
-                        db.Venues.Add(venue);
+                        var locationExtId = venue.LocationData.ExternalId;
+
+                        if (locationByExternalId.TryGetValue(locationExtId, out var existingLocation))
+                        {
+                            venue.LocationData = existingLocation; //points to existing row
+                        }
+                        else
+                        {
+                            db.Locations.Add(venue.LocationData); //new location
+                            locationByExternalId[locationExtId] = venue.LocationData;
+                        }
                     }
+                    existingVenues.Add(venue);
+                    newVenues.Add(venue);
                 }
-                
+                db.Venues.AddRange(newVenues);
                 db.SaveChanges();
                 
                 var exsistingArtists = db.Artists.ToList();
