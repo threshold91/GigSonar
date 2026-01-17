@@ -273,13 +273,6 @@ class Program
                         exsitingGenres.Add(artist.Genre);
                         newGenres.Add(artist.Genre);
                     }
-                    /*
-                    // check & prevent duplicates by ExternalId
-                    if (!db.Artists.Any(a => a.ExternalId == artist.ExternalId))
-                    {
-                        db.Artists.Add(artist);
-                    } 
-                    */
                 }
                 
                 db.Genres.AddRange(newGenres);
