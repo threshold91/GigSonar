@@ -45,7 +45,7 @@ public class MapEvent
     {
         var eventVenue = new Venue();
         eventVenue.ExternalId = tmEventLocation.id;
-        eventVenue.Name = tmEventLocation.name;
+        eventVenue.Name = tmEventLocation?.name;
         eventVenue.Url = tmEventLocation.url;
         eventVenue.LocationData = ConvertLocation(tmEventLocation);
         return eventVenue;

@@ -1,4 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 namespace GigSonar.Classes;
+
+[Index(nameof(ExternalId), IsUnique = true)]
 
 public class Location
 {
@@ -8,7 +11,7 @@ public class Location
     private string _longitude;
     private string _countryCode;
     private string _city;
-    private string _address;
+    private string? _address;
     private string _postalCode;
     
     public bool Validate()
@@ -67,7 +70,7 @@ public class Location
         set { _city = value; }
     }
 
-    public string Address
+    public string? Address
     {
         get { return _address; }
         set { _address = value; }

@@ -1,4 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 namespace GigSonar.Classes;
+
+[Index(nameof(ExternalId), IsUnique = true)]
 
 public class Event
 {
@@ -6,16 +9,16 @@ public class Event
     private string _externalId;
     private string _name;
     private EventType _type;
-    private string _externalArtistId;
-    private string _artistName;
+    private string? _externalArtistId;
+    private string? _artistName;
     private Genre _genre;
     private SubGenre? _subGenre;
     private Venue _venue;
     private DateTime _start;
     private DateTime _end;
-    private double _priceMin;
-    private double _priceMax;
-    private string _currency;
+    private double? _priceMin;
+    private double? _priceMax;
+    private string? _currency;
 
     public bool Validate()
     {
@@ -74,12 +77,12 @@ public class Event
         set {_subGenre = value; }
     }
 
-    public string ExternalArtistId
+    public string? ExternalArtistId
     {
         get { return _externalArtistId; }
         set { _externalArtistId = value; }
     }
-    public string ArtistName
+    public string? ArtistName
     {
         get { return _artistName; }
         set { _artistName = value; }
@@ -103,19 +106,19 @@ public class Event
         set { _end = value; }
     }
 
-    public double PriceMin
+    public double? PriceMin
     {
         get { return _priceMin; }
         set { _priceMin = value; }
     }
 
-    public double PriceMax
+    public double? PriceMax
     {
         get { return _priceMax; }
         set { _priceMax = value; }
     }
 
-    public string Currency
+    public string? Currency
     {
         get { return _currency; }
         set { _currency = value; }

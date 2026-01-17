@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.SqlServer.Server;
-
 namespace GigSonar.Classes;
+
 [Index(nameof(ExternalId), IsUnique = true)]
+
 public class Genre
 {
     private int _id;
