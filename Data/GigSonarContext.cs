@@ -56,7 +56,7 @@ public class GigSonarContext : DbContext
                 //location relationship
                 //entity.HasOne(e => e.LocationData).WithMany().HasForeignKey("LocationId");
             });
-        
+        /*
         modelBuilder.Entity<Artist>(entity =>
             {
                 //entity.ToTable("Artist");
@@ -71,7 +71,7 @@ public class GigSonarContext : DbContext
                     .IsRequired(false);
                 entity.Property(e => e.ArtistHomepage)
                     .IsRequired(false);
-            });
+            }); */
             /*
         modelBuilder.Entity<Location>(entity =>
             {

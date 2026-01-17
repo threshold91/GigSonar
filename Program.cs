@@ -263,36 +263,6 @@ class Program
                 
                 db.SaveChanges();
                 
-                var exsitingGenres = db.Genres.ToList();
-                var newGenres = new List<Genre>();
-                foreach (var artist in mappedArtists)
-                {
-                    // check & prevent duplicates by ExternalId
-                    if (!exsitingGenres.Any(g => g.ExternalId == artist.Genre.ExternalId))
-                    {
-                        exsitingGenres.Add(artist.Genre);
-                        newGenres.Add(artist.Genre);
-                    }
-                }
-                
-                db.Genres.AddRange(newGenres);
-                db.SaveChanges();
-                
-                var existingSubGenres = db.SubGenres.ToList();
-                var newSubGenres = new List<Classes.SubGenre>();
-                foreach (var artist in mappedArtists)
-                {
-                    // check & prevent duplicates by ExternalId
-                    if (!existingSubGenres.Any(g => g.ExternalId == artist.subGenre.ExternalId))
-                    {
-                        existingSubGenres.Add(artist.subGenre);
-                        newSubGenres.Add(artist.subGenre);
-                    }
-                }
-                
-                db.SubGenres.AddRange(newSubGenres);
-                db.SaveChanges();
-
                 var exsistingArtists = db.Artists.ToList();
                 var newArtists = new List<Artist>();
                 var genreByExternalId = db.Genres.AsTracking()
