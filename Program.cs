@@ -206,7 +206,6 @@ class Program
                         }
                     }
                 }
-                //
                 
                 //Convert dtoEvents to mappedEvents, add them to list
                 
@@ -242,6 +241,7 @@ class Program
                 var newVenues = new List<Venue>();
                 var locationByExternalId = db.Locations.AsTracking()
                     .ToDictionary(l => l.ExternalId);
+
                 foreach (var venue in mappedVenues)
                 {
                     var location = venue.LocationData;
@@ -265,9 +265,11 @@ class Program
                             db.Locations.Add(venue.LocationData); //new location
                             locationByExternalId[locationExtId] = venue.LocationData;
                         }
+                        
+                        existingVenues.Add(venue);
+                        newVenues.Add(venue);
                     }
-                    existingVenues.Add(venue);
-                    newVenues.Add(venue);
+                    
                 }
                 db.Venues.AddRange(newVenues);
                 db.SaveChanges();
@@ -314,17 +316,58 @@ class Program
                 
                 db.Artists.AddRange(newArtists);
                 db.SaveChanges();
-                /*
+                
+                var existingEvents = db.Events.ToList();
+                var newEvents = new List<Event>();
+                var venueByExternalId = db.Venues.AsTracking()
+                    .ToDictionary(v => v.ExternalId);
+                
                 foreach (var ev in mappedEvents)
                 {
-                    if (!db.Events.Any(e => e.ExternalId == ev.ExternalId))
+                    if (!existingEvents.Any(e => e.ExternalId == ev.ExternalId))
                     {
-                        db.Events.Add(ev);
+                        var genreExtId = ev.Genre.ExternalId;
+                        var subGenreExtId = ev.SubGenre.ExternalId;
+                        var venueExtId = ev.Venue.ExternalId;
+                        
+                        if (genreByExternalId.TryGetValue(genreExtId, out var existingGenre))
+                        {
+                            ev.Genre = existingGenre; // points to existing row
+                        }
+                        else
+                        {
+                            db.Genres.Add(ev.Genre); // new genre
+                            genreByExternalId[genreExtId] = ev.Genre; 
+                        }
+                        
+                        if (subGenreByExternalId.TryGetValue(subGenreExtId, out var existingSubGenre))
+                        {
+                            ev.SubGenre = existingSubGenre; // points to existing row
+                        }
+                        else
+                        {
+                            db.SubGenres.Add(ev.SubGenre); //new subgenre
+                            subGenreByExternalId[subGenreExtId] = ev.SubGenre;
+                        }
+
+                        if (venueByExternalId.TryGetValue(venueExtId, out var existingVenue))
+                        {
+                            ev.Venue = existingVenue; // points to existing row
+                        }
+                        else
+                        {
+                            db.Venues.Add(ev.Venue); //new venue
+                            venueByExternalId[venueExtId] = ev.Venue;
+                        }
+                        
+                        existingEvents.Add(ev);
+                        newEvents.Add(ev);
                     }
                 }
                 
+                db.Events.AddRange(newEvents);
                 db.SaveChanges();
-                Console.WriteLine("Data saved to database."); */
+                Console.WriteLine("Data saved to database."); 
             }
             
     }

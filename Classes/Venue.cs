@@ -1,10 +1,13 @@
+using Microsoft.EntityFrameworkCore;
 namespace GigSonar.Classes;
+
+[Index(nameof(ExternalId), IsUnique = true)]
 
 public class Venue
 {
     private int _id;
     private string _externalId;
-    private string _name;
+    private string? _name;
     private string? _url;
     private Location _LocationData;
     
@@ -41,7 +44,7 @@ public class Venue
         set { _externalId = value; }
     }
 
-    public string Name
+    public string? Name
     {
         get { return _name; }
         set { _name = value; }
