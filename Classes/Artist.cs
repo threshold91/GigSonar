@@ -7,10 +7,10 @@ public class Artist
     private string _name;
     private Genre _genre;
     private SubGenre? _subGenre;
-    private string _spotifyLink;
-    private string _facebookLink;
-    private string _instagramLink;
-    private string _homepage;
+    private string? _spotifyLink;
+    private string? _facebookLink;
+    private string? _instagramLink;
+    private string? _homepage;
     
     public bool Validate()
     {
@@ -58,25 +58,25 @@ public class Artist
         set { _subGenre = value; }
     }
 
-    public string SpotifyLink
+    public string? SpotifyLink
     {
         get { return _spotifyLink; }
         set { _spotifyLink = value; }
     }
 
-    public string FacebookLink
+    public string? FacebookLink
     {
         get { return _facebookLink; }
         set { _facebookLink = value; }
     }
 
-    public string InstagramLink
+    public string? InstagramLink
     {
         get { return _instagramLink; }
         set { _instagramLink = value; }
     }
     
-    public string ArtistHomepage
+    public string? ArtistHomepage
     {
         get { return _homepage; }
         set { _homepage = value; }

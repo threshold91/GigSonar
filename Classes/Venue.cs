@@ -5,7 +5,7 @@ public class Venue
     private int _id;
     private string _externalId;
     private string _name;
-    private string _url;
+    private string? _url;
     private Location _LocationData;
     
     public bool Validate()
@@ -47,7 +47,7 @@ public class Venue
         set { _name = value; }
     }
 
-    public string Url
+    public string? Url
     {
         get { return _url; }
         set { _url = value; }
