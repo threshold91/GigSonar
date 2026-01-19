@@ -9,8 +9,9 @@ public class MapEvent
         var eventObject = new Event();
         eventObject.ExternalId = tmEvent.id;
         eventObject.Name = tmEvent.name;
-        eventObject.ExternalArtistId = tmEvent?._embedded?.attractions?.First()?.id;
-        eventObject.ArtistName = tmEvent?._embedded?.attractions?.First()?.name;
+        //eventObject.ExternalArtistId = tmEvent?._embedded?.attractions?.First()?.id;
+        //eventObject.ArtistName = tmEvent?._embedded?.attractions?.First()?.name;
+        eventObject.Performer = ConvertEventArtist(tmEvent._embedded.attractions.First());
         eventObject.Genre = ConvertEventGenre(tmEvent.classifications.First());
         eventObject.SubGenre = ConvertEventSubGenre(tmEvent.classifications.First());
         eventObject.Venue = ConvertEventVenue(tmEvent._embedded.venues.First());
@@ -63,4 +64,35 @@ public class MapEvent
         location.PostalCode = tmVenue.postalCode;
         return location;
     }
+
+    private static Artist ConvertEventArtist(DTOs.Ticketmaster.SearchEvents.SearchEvents.Attraction tmEventArtist)
+    {
+        var artist = new Artist();
+        artist.ExternalId = tmEventArtist.id;
+        artist.Name = tmEventArtist?.name;
+        artist.Genre = ConvertEventGenre(tmEventArtist.classifications.First());
+        artist.subGenre = ConvertEventSubGenre(tmEventArtist.classifications.First());
+        artist.SpotifyLink = tmEventArtist.externalLinks.spotify.ToString();
+        artist.FacebookLink = tmEventArtist.externalLinks.facebook.ToString();
+        artist.InstagramLink = tmEventArtist.externalLinks.instagram.ToString();
+        artist.ArtistHomepage = tmEventArtist.externalLinks.homepage.ToString();
+        return artist;
+    }
+    
+    private static Genre ConvertEventArtistGenre(DTOs.Ticketmaster.SearchEvents.SearchEvents.Attraction tmEventArtistClassification)
+    {
+        var genre = new Genre();
+        genre.ExternalId = tmEventArtistClassification.classifications.First().genre.id;
+        genre.Name = tmEventArtistClassification.classifications.First().genre.name;
+        return genre;
+    }
+
+    private static SubGenre ConvertEventArtistSubGenre(DTOs.Ticketmaster.SearchEvents.SearchEvents.Attraction tmEventArtistClassification)
+    {
+        var subGenre = new SubGenre();
+        subGenre.ExternalId = tmEventArtistClassification.classifications.First().subGenre.id;
+        subGenre.Name = tmEventArtistClassification.classifications.First().subGenre.name;
+        return subGenre;
+    }
+    
 }
