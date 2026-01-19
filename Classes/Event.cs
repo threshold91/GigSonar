@@ -9,8 +9,9 @@ public class Event
     private string _externalId;
     private string _name;
     private EventType _type;
-    private string? _externalArtistId;
-    private string? _artistName;
+    //private string? _externalArtistId;
+    //private string? _artistName;
+    private Artist? _performer;
     private Genre _genre;
     private SubGenre? _subGenre;
     private Venue _venue;
@@ -22,12 +23,12 @@ public class Event
 
     public bool Validate()
     {
-        
+        /*
         if (string.IsNullOrWhiteSpace(_name) && string.IsNullOrWhiteSpace(_artistName))
         {
             return false;
         }
-
+        */
         if (Venue is null)
         {
             return false;
@@ -76,7 +77,7 @@ public class Event
         get { return _subGenre; }
         set {_subGenre = value; }
     }
-
+    /*
     public string? ExternalArtistId
     {
         get { return _externalArtistId; }
@@ -87,7 +88,12 @@ public class Event
         get { return _artistName; }
         set { _artistName = value; }
     }
-
+    */
+    public Artist? Performer
+    {
+        get { return _performer; }
+        set { _performer = value; }
+    }
     public Venue Venue
     {
         get { return _venue; }
