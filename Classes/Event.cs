@@ -23,12 +23,12 @@ public class Event
 
     public bool Validate()
     {
-        /*
-        if (string.IsNullOrWhiteSpace(_name) && string.IsNullOrWhiteSpace(_artistName))
+        
+        if (Performer is null)
         {
             return false;
         }
-        */
+        
         if (Venue is null)
         {
             return false;
