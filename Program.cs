@@ -158,8 +158,10 @@ class Program
                     try
                     {
                         Venue mappedVenue = MapVenue.ConvertVenue(dtoVenue);
-                        if (mappedVenue != null && mappedVenue.Validate())
+                        
+                        if (mappedVenue != null && mappedVenue.Validate() && mappedVenue.LocationData.Validate())
                         {
+                            mappedVenue.LocationData.PostalCode = Location.SanitizePostalCode(mappedVenue.LocationData.PostalCode);
                             mappedVenues.Add(mappedVenue);
                         }
                         else
