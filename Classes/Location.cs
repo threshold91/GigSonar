@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 namespace GigSonar.Classes;
 
 [Index(nameof(ExternalId), IsUnique = true)]
@@ -32,7 +33,23 @@ public class Location
             return false;
         }
 
+        if (string.IsNullOrWhiteSpace(_postalCode))
+        {
+            return false;
+        }
+
         return true;
+    }
+
+    public static string SanitizePostalCode(string postalCode)
+    {
+        string regex = @"[1-9]\d{3}";
+        if (postalCode != null && Regex.IsMatch(postalCode, regex))
+        {
+            postalCode = Regex.Match(postalCode, regex).Value;
+        }
+        
+        return postalCode;
     }
 
     public int Id
