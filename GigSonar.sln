@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigSonar", "GigSonarBackend\GigSonar.csproj", "{6A4718F2-5E79-40B9-A699-712D0088670A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigSonarBlazor", "GigSonarBlazor\GigSonarBlazor.csproj", "{BEFA222A-CE95-4630-B6C1-DB746BCF2276}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{6A4718F2-5E79-40B9-A699-712D0088670A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A4718F2-5E79-40B9-A699-712D0088670A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A4718F2-5E79-40B9-A699-712D0088670A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEFA222A-CE95-4630-B6C1-DB746BCF2276}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEFA222A-CE95-4630-B6C1-DB746BCF2276}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEFA222A-CE95-4630-B6C1-DB746BCF2276}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEFA222A-CE95-4630-B6C1-DB746BCF2276}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
