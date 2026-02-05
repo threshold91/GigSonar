@@ -1,1 +1,1 @@
-select * from Genres;
+select * from Artists;
