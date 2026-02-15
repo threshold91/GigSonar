@@ -1,4 +1,5 @@
-﻿using GigSonar.Data;
+﻿using System.Diagnostics;
+using GigSonar.Data;
 
 namespace GigSonar;
 using GigSonar.Classes;
@@ -120,7 +121,7 @@ class Program
                 }
                 
             }
-            Console.WriteLine($"Number of valid events is: {mappedEvents.Count}");
+            Debug.WriteLine($"Number of valid events is: {mappedEvents.Count}");
             Console.WriteLine($"Number of non valid events is: {nonValidEvents.Count}!");
             
             // search venue

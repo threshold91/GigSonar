@@ -2,7 +2,7 @@ using GigSonar.Classes;
 
 namespace GigSonar.Mappers.Ticketmaster;
 
-public class MapVenue
+public static class MapVenue
 {
     public static Venue ConvertVenue(DTOs.Ticketmaster.SearchVenues.Venue tmVenue)
     {
