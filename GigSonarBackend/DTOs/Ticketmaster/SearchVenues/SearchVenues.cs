@@ -1,6 +1,6 @@
-namespace GigSonar.DTOs.Ticketmaster.SearchVenues;
-
 using Newtonsoft.Json;
+
+namespace GigSonarBackend.DTOs.Ticketmaster.SearchVenues;
 
 // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
     public class Address

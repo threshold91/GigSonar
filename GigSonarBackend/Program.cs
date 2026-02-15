@@ -1,27 +1,25 @@
 ﻿using System.Diagnostics;
-using GigSonar.Data;
-
-namespace GigSonar;
-using GigSonar.Classes;
-using GigSonar.DTOs.Ticketmaster.SearchAttractions;
-using GigSonar.DTOs.Ticketmaster.SearchEvents;
-using GigSonar.DTOs.Ticketmaster.SearchVenues;
-using GigSonar.Mappers.Ticketmaster;
+using GigSonarBackend.Classes;
+using GigSonarBackend.Data;
+using GigSonarBackend.DTOs.Ticketmaster.SearchAttractions;
+using GigSonarBackend.DTOs.Ticketmaster.SearchEvents;
+using GigSonarBackend.Mappers.Ticketmaster;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using Genre = GigSonar.Classes.Genre;
-using JsonSerializer = System.Text.Json.JsonSerializer;
-using Location = GigSonar.Classes.Location;
-using Root1 = GigSonar.DTOs.Ticketmaster.SearchEvents.SearchEvents.Root;
-using Root2 = GigSonar.DTOs.Ticketmaster.SearchVenues.Root;
-using Root3 = GigSonar.DTOs.Ticketmaster.SearchAttractions.Root;
-using Venue = GigSonar.Classes.Venue;
 
-using DtoEvent = GigSonar.DTOs.Ticketmaster.SearchEvents.SearchEvents.Event;
-using DtoVenue = GigSonar.DTOs.Ticketmaster.SearchVenues.Venue;
-using DtoAttraction = GigSonar.DTOs.Ticketmaster.SearchAttractions.Attraction;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+namespace GigSonarBackend;
+
+using JsonSerializer = System.Text.Json.JsonSerializer;
+using Location = Classes.Location;
+using Root2 = DTOs.Ticketmaster.SearchVenues.Root;
+using Root3 = DTOs.Ticketmaster.SearchAttractions.Root;
+using Venue = Classes.Venue;
+
+using DtoEvent = SearchEvents.Event;
+using DtoVenue = DTOs.Ticketmaster.SearchVenues.Venue;
+using DtoAttraction = Attraction;
+
 //using db = GigSonar.Data.GigSonarContext;
 
 

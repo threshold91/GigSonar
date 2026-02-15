@@ -1,7 +1,7 @@
-using GigSonar.Classes;
-
-namespace GigSonar.Data;
+using GigSonarBackend.Classes;
 using Microsoft.EntityFrameworkCore;
+
+namespace GigSonarBackend.Data;
 
 public class GigSonarContext : DbContext
 {

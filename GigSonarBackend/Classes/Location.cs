@@ -1,6 +1,7 @@
-using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
-namespace GigSonar.Classes;
+using Microsoft.EntityFrameworkCore;
+
+namespace GigSonarBackend.Classes;
 
 [Index(nameof(ExternalId), IsUnique = true)]
 

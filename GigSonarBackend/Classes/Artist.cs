@@ -1,4 +1,4 @@
-namespace GigSonar.Classes;
+namespace GigSonarBackend.Classes;
 
 public class Artist
 {

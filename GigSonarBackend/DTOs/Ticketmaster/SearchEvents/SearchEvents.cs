@@ -1,6 +1,6 @@
-namespace GigSonar.DTOs.Ticketmaster.SearchEvents;
-
 using Newtonsoft.Json;
+
+namespace GigSonarBackend.DTOs.Ticketmaster.SearchEvents;
 
 public class SearchEvents
 {

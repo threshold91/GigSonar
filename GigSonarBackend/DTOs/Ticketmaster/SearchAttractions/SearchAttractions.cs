@@ -1,6 +1,4 @@
-namespace GigSonar.DTOs.Ticketmaster.SearchAttractions;
-
-using Newtonsoft.Json;
+namespace GigSonarBackend.DTOs.Ticketmaster.SearchAttractions;
 
 // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
     public class Attraction

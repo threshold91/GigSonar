@@ -1,6 +1,6 @@
-using GigSonar.Classes;
+using GigSonarBackend.Classes;
 
-namespace GigSonar.Mappers.Ticketmaster;
+namespace GigSonarBackend.Mappers.Ticketmaster;
 
 public class MapEvent
 {

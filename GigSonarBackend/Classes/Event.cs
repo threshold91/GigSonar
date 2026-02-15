@@ -1,5 +1,7 @@
+using GigSonarBackend.Enums;
 using Microsoft.EntityFrameworkCore;
-namespace GigSonar.Classes;
+
+namespace GigSonarBackend.Classes;
 
 [Index(nameof(ExternalId), IsUnique = true)]
 
