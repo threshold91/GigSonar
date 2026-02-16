@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using GigSonarBackend.Classes;
 using GigSonarBackend.Data;
+using GigSonarBackend.Data.Services;
 using GigSonarBackend.DTOs.Ticketmaster.SearchAttractions;
 using GigSonarBackend.DTOs.Ticketmaster.SearchEvents;
 using GigSonarBackend.Mappers.Ticketmaster;
@@ -12,6 +13,7 @@ namespace GigSonarBackend;
 
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using Location = Classes.Location;
+using Root1 = DTOs.Ticketmaster.SearchEvents.SearchEvents.Root;
 using Root2 = DTOs.Ticketmaster.SearchVenues.Root;
 using Root3 = DTOs.Ticketmaster.SearchAttractions.Root;
 using Venue = Classes.Venue;
@@ -67,58 +69,48 @@ class Program
                           + "?apikey=" + ticketmasterKey
                           + "&segmentId=KZFzniwnSyZfZ7v7nJ"
                           + "&size=199";
-                         
-            using (HttpResponseMessage response = await client.GetAsync(url1))
+            
+            var testRoot = await DataService.GetAndDeserialize<DTOs.Ticketmaster.SearchEvents.SearchEvents.Root>(client, url1);
+
+            //Get dto events from api, add them to list
+            List<DtoEvent> dtoEvents = new List<DtoEvent>();
+            if (testRoot != null)
             {
-                response.EnsureSuccessStatusCode();
-                string responseBody = await response.Content.ReadAsStringAsync();
-
-                var testTmResponse = JsonSerializer.Deserialize<SearchEvents.Root>(responseBody);
-
-                var json = await response.Content.ReadAsStringAsync();
-                
-                var testRoot = JsonConvert.DeserializeObject<SearchEvents.Root>(json);
-
-                //Get dto events from api, add them to list
-                List<DtoEvent> dtoEvents = new List<DtoEvent>();
-                if (testRoot != null)
+                if (testRoot._embedded.events != null)
                 {
-                    if (testRoot._embedded != null)
+                    foreach (var dtoEvent in testRoot._embedded.events)
                     {
-                        foreach (var dtoEvent in testRoot._embedded.events)
+                        if (dtoEvent != null)
                         {
-                            if (dtoEvent != null)
-                            {
-                                dtoEvents.Add(dtoEvent);
-                            }
+                            dtoEvents.Add(dtoEvent);
                         }
                     }
                 }
-                //Convert dtoEvents to mappedEvents, add them to list
-                
-                foreach (var dtoEvent in dtoEvents)
-                {
-                    try
-                    {
-                        Event mappedEvent = MapEvent.ConvertEvent(dtoEvent);
-                        if (mappedEvent != null && mappedEvent.Validate())
-                        {
-                            mappedEvents.Add(mappedEvent);
-                        }
-                        else
-                        {
-                            nonValidEvents.Add(mappedEvent);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                        nonValidEvents.Add(null);
-                        continue;
-                    }
-                }
-                
             }
+            //Convert dtoEvents to mappedEvents, add them to list
+            
+            foreach (var dtoEvent in dtoEvents)
+            {
+                try
+                {
+                    Event mappedEvent = MapEvent.ConvertEvent(dtoEvent);
+                    if (mappedEvent != null && mappedEvent.Validate())
+                    {
+                        mappedEvents.Add(mappedEvent);
+                    }
+                    else
+                    {
+                        nonValidEvents.Add(mappedEvent);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    nonValidEvents.Add(null);
+                    continue;
+                }
+            }
+            
             Debug.WriteLine($"Number of valid events is: {mappedEvents.Count}");
             Console.WriteLine($"Number of non valid events is: {nonValidEvents.Count}!");
             
@@ -132,15 +124,15 @@ class Program
 
                 var json = await response.Content.ReadAsStringAsync();
                 
-                var testRoot = JsonConvert.DeserializeObject<Root2>(json);
+                var testRoot2 = JsonConvert.DeserializeObject<Root2>(json);
 
                 //Get dto venue from api, add them to list
                 List<DtoVenue> dtoVenues = new List<DtoVenue>();
                 if (testRoot != null)
                 {
-                    if (testRoot._embedded != null)
+                    if (testRoot2._embedded != null)
                     {
-                        foreach (var dtoVenue in testRoot._embedded.venues)
+                        foreach (var dtoVenue in testRoot2._embedded.venues)
                         {
                             if (dtoVenue != null)
                             {
@@ -190,15 +182,15 @@ class Program
 
                 var json = await response.Content.ReadAsStringAsync();
                 
-                var testRoot = JsonConvert.DeserializeObject<Root3>(json);
+                var testRoot3 = JsonConvert.DeserializeObject<Root3>(json);
 
                 //Get dto venue from api, add them to list
                 List<DtoAttraction> dtoAttractions = new List<DtoAttraction>();
                 if (testRoot != null)
                 {
-                    if (testRoot._embedded != null)
+                    if (testRoot3._embedded != null)
                     {
-                        foreach (var dtoAttraction in testRoot._embedded.attractions)
+                        foreach (var dtoAttraction in testRoot3._embedded.attractions)
                         {
                             if (dtoAttraction != null)
                             {
