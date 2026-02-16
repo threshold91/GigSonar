@@ -166,58 +166,49 @@ class Program
             Console.WriteLine($"Number of non valid venues is: {nonValidVenues.Count}!");
             
             // search artist
-            using (HttpResponseMessage response = await client.GetAsync(url3))
+            var testRoot3 = await DataService.GetAndDeserialize<Root3>(client, url3);
+                
+            //Get dto venue from api, add them to list
+            List<DtoAttraction> dtoAttractions = new List<DtoAttraction>();
+            if (testRoot != null)
             {
-                response.EnsureSuccessStatusCode();
-                string responseBody = await response.Content.ReadAsStringAsync();
-
-                var testTmResponse = JsonSerializer.Deserialize<Root3>(responseBody);
-
-                var json = await response.Content.ReadAsStringAsync();
-                
-                var testRoot3 = JsonConvert.DeserializeObject<Root3>(json);
-                
-                //Get dto venue from api, add them to list
-                List<DtoAttraction> dtoAttractions = new List<DtoAttraction>();
-                if (testRoot != null)
+                if (testRoot3._embedded != null)
                 {
-                    if (testRoot3._embedded != null)
+                    foreach (var dtoAttraction in testRoot3._embedded.attractions)
                     {
-                        foreach (var dtoAttraction in testRoot3._embedded.attractions)
+                        if (dtoAttraction != null)
                         {
-                            if (dtoAttraction != null)
-                            {
-                                dtoAttractions.Add(dtoAttraction);
-                            }
+                            dtoAttractions.Add(dtoAttraction);
                         }
                     }
                 }
-                
-                //Convert dtoEvents to mappedEvents, add them to list
-                
-                foreach (var dtoAttraction in dtoAttractions)
-                {
-                    try
-                    {
-                        Artist mappedArtist = MapArtist.ConvertArtist(dtoAttraction);
-                        if (mappedArtist != null && mappedArtist.Validate())
-                        {
-                            mappedArtists.Add(mappedArtist);
-                        }
-                        else
-                        {
-                            nonValidArtists.Add(mappedArtist);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                        nonValidArtists.Add(null);
-                        continue;
-                    }
-                }
-                
             }
+                
+            //Convert dtoEvents to mappedEvents, add them to list
+                
+            foreach (var dtoAttraction in dtoAttractions)
+            {
+                try
+                {
+                    Artist mappedArtist = MapArtist.ConvertArtist(dtoAttraction);
+                    if (mappedArtist != null && mappedArtist.Validate())
+                    {
+                        mappedArtists.Add(mappedArtist);
+                    }
+                    else
+                    {
+                        nonValidArtists.Add(mappedArtist);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    nonValidArtists.Add(null);
+                    continue;
+                }
+            }
+                
+            
             Console.WriteLine($"Number of valid artists is: {mappedArtists.Count}");
             Console.WriteLine($"Number of non valid artists is: {nonValidArtists.Count}!");
             
