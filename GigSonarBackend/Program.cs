@@ -70,7 +70,9 @@ class Program
                           + "&segmentId=KZFzniwnSyZfZ7v7nJ"
                           + "&size=199";
             
-            var testRoot = await DataService.GetAndDeserialize<DTOs.Ticketmaster.SearchEvents.SearchEvents.Root>(client, url1);
+            //Search Events
+            
+            var testRoot = await DataService.GetAndDeserialize<Root1>(client, url1);
 
             //Get dto events from api, add them to list
             List<DtoEvent> dtoEvents = new List<DtoEvent>();
@@ -115,60 +117,51 @@ class Program
             Console.WriteLine($"Number of non valid events is: {nonValidEvents.Count}!");
             
             // search venue
-            using (HttpResponseMessage response = await client.GetAsync(url2))
+            
+            var testRoot2 = await DataService.GetAndDeserialize<Root2>(client, url2);
+            //Get dto venue from api, add them to list
+            List<DtoVenue> dtoVenues = new List<DtoVenue>();
+            if (testRoot != null)
             {
-                response.EnsureSuccessStatusCode();
-                string responseBody = await response.Content.ReadAsStringAsync();
-
-                var testTmResponse = JsonSerializer.Deserialize<Root2>(responseBody);
-
-                var json = await response.Content.ReadAsStringAsync();
-                
-                var testRoot2 = JsonConvert.DeserializeObject<Root2>(json);
-
-                //Get dto venue from api, add them to list
-                List<DtoVenue> dtoVenues = new List<DtoVenue>();
-                if (testRoot != null)
+                if (testRoot2._embedded != null)
                 {
-                    if (testRoot2._embedded != null)
+                    foreach (var dtoVenue in testRoot2._embedded.venues)
                     {
-                        foreach (var dtoVenue in testRoot2._embedded.venues)
+                        if (dtoVenue != null)
                         {
-                            if (dtoVenue != null)
-                            {
-                                dtoVenues.Add(dtoVenue);
-                            }
+                            dtoVenues.Add(dtoVenue);
                         }
                     }
                 }
-                
-                //Convert dtoVenues to mappedVenues, add them to list
-                
-                foreach (var dtoVenue in dtoVenues)
-                {
-                    try
-                    {
-                        Venue mappedVenue = MapVenue.ConvertVenue(dtoVenue);
-                        
-                        if (mappedVenue != null && mappedVenue.Validate() && mappedVenue.LocationData.Validate())
-                        {
-                            mappedVenue.LocationData.PostalCode = Location.SanitizePostalCode(mappedVenue.LocationData.PostalCode);
-                            mappedVenues.Add(mappedVenue);
-                        }
-                        else
-                        {
-                            nonValidVenues.Add(mappedVenue);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                        nonValidVenues.Add(null);
-                        continue;
-                    }
-                }
-                
             }
+                
+            //Convert dtoVenues to mappedVenues, add them to list
+                
+            foreach (var dtoVenue in dtoVenues)
+            {
+                try
+                {
+                    Venue mappedVenue = MapVenue.ConvertVenue(dtoVenue);
+                        
+                    if (mappedVenue != null && mappedVenue.Validate() && mappedVenue.LocationData.Validate())
+                    {
+                        mappedVenue.LocationData.PostalCode = Location.SanitizePostalCode(mappedVenue.LocationData.PostalCode);
+                        mappedVenues.Add(mappedVenue);
+                    }
+                    else
+                    {
+                        nonValidVenues.Add(mappedVenue);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    nonValidVenues.Add(null);
+                    continue;
+                }
+            }
+                
+            
             Console.WriteLine($"Number of valid venues is: {mappedVenues.Count}");
             Console.WriteLine($"Number of non valid venues is: {nonValidVenues.Count}!");
             
@@ -183,7 +176,7 @@ class Program
                 var json = await response.Content.ReadAsStringAsync();
                 
                 var testRoot3 = JsonConvert.DeserializeObject<Root3>(json);
-
+                
                 //Get dto venue from api, add them to list
                 List<DtoAttraction> dtoAttractions = new List<DtoAttraction>();
                 if (testRoot != null)
