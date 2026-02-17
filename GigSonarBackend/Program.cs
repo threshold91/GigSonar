@@ -72,15 +72,15 @@ class Program
             
             //Search Events
             
-            var testRoot = await DataService.GetAndDeserialize<Root1>(client, url1);
+            var testRoot1 = await DataService.GetAndDeserialize<Root1>(client, url1);
 
             //Get dto events from api, add them to list
             List<DtoEvent> dtoEvents = new List<DtoEvent>();
-            if (testRoot != null)
+            if (testRoot1 != null)
             {
-                if (testRoot._embedded.events != null)
+                if (testRoot1._embedded.events != null)
                 {
-                    foreach (var dtoEvent in testRoot._embedded.events)
+                    foreach (var dtoEvent in testRoot1._embedded.events)
                     {
                         if (dtoEvent != null)
                         {
@@ -121,7 +121,7 @@ class Program
             var testRoot2 = await DataService.GetAndDeserialize<Root2>(client, url2);
             //Get dto venue from api, add them to list
             List<DtoVenue> dtoVenues = new List<DtoVenue>();
-            if (testRoot != null)
+            if (testRoot2 != null)
             {
                 if (testRoot2._embedded != null)
                 {
@@ -170,7 +170,7 @@ class Program
                 
             //Get dto venue from api, add them to list
             List<DtoAttraction> dtoAttractions = new List<DtoAttraction>();
-            if (testRoot != null)
+            if (testRoot3 != null)
             {
                 if (testRoot3._embedded != null)
                 {
