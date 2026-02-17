@@ -73,12 +73,12 @@ class Program
             //Search Events
             
             var testRoot1 = await DataService.GetAndDeserialize<Root1>(client, url1);
-
+            
             //Get dto events from api, add them to list
             List<DtoEvent> dtoEvents = new List<DtoEvent>();
             if (testRoot1 != null)
             {
-                if (testRoot1._embedded.events != null)
+                if (testRoot1._embedded != null)
                 {
                     foreach (var dtoEvent in testRoot1._embedded.events)
                     {
@@ -117,8 +117,8 @@ class Program
             Console.WriteLine($"Number of non valid events is: {nonValidEvents.Count}!");
             
             // search venue
-            
             var testRoot2 = await DataService.GetAndDeserialize<Root2>(client, url2);
+            
             //Get dto venue from api, add them to list
             List<DtoVenue> dtoVenues = new List<DtoVenue>();
             if (testRoot2 != null)
@@ -167,7 +167,7 @@ class Program
             
             // search artist
             var testRoot3 = await DataService.GetAndDeserialize<Root3>(client, url3);
-                
+            
             //Get dto venue from api, add them to list
             List<DtoAttraction> dtoAttractions = new List<DtoAttraction>();
             if (testRoot3 != null)
