@@ -71,26 +71,12 @@ class Program
                           + "&size=199";
             
             //Search Events
-            
             var testRoot1 = await DataService.GetAndDeserialize<Root1>(client, url1);
             
             //Get dto events from api, add them to list
-            List<DtoEvent> dtoEvents = new List<DtoEvent>();
-            if (testRoot1 != null)
-            {
-                if (testRoot1._embedded != null)
-                {
-                    foreach (var dtoEvent in testRoot1._embedded.events)
-                    {
-                        if (dtoEvent != null)
-                        {
-                            dtoEvents.Add(dtoEvent);
-                        }
-                    }
-                }
-            }
-            //Convert dtoEvents to mappedEvents, add them to list
+            var dtoEvents = DataService.ExtractEvents(testRoot1);
             
+            //Convert dtoEvents to mappedEvents, add them to list
             foreach (var dtoEvent in dtoEvents)
             {
                 try
