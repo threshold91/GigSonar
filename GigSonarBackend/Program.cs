@@ -17,12 +17,6 @@ using Root1 = DTOs.Ticketmaster.SearchEvents.SearchEvents.Root;
 using Root2 = DTOs.Ticketmaster.SearchVenues.Root;
 using Root3 = DTOs.Ticketmaster.SearchAttractions.Root;
 using Venue = Classes.Venue;
-using DtoAttraction = Attraction;
-
-//using db = GigSonar.Data.GigSonarContext;
-
-
-
 
 
 class Program
@@ -138,21 +132,8 @@ class Program
             var testRoot3 = await DataService.GetAndDeserialize<Root3>(client, url3);
             
             //Get dto venue from api, add them to list
-            List<DtoAttraction> dtoAttractions = new List<DtoAttraction>();
-            if (testRoot3 != null)
-            {
-                if (testRoot3._embedded != null)
-                {
-                    foreach (var dtoAttraction in testRoot3._embedded.attractions)
-                    {
-                        if (dtoAttraction != null)
-                        {
-                            dtoAttractions.Add(dtoAttraction);
-                        }
-                    }
-                }
-            }
-                
+            var dtoAttractions = DataService.ExtractAttractions(testRoot3);
+            
             //Convert dtoEvents to mappedEvents, add them to list
                 
             foreach (var dtoAttraction in dtoAttractions)

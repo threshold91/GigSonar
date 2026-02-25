@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using DtoEvent = GigSonarBackend.DTOs.Ticketmaster.SearchEvents.SearchEvents.Event;
 using DtoVenue = GigSonarBackend.DTOs.Ticketmaster.SearchVenues.Venue;
-
+using DtoAttraction = GigSonarBackend.DTOs.Ticketmaster.SearchAttractions.Attraction;
 
 using Newtonsoft.Json;
 using Root = GigSonarBackend.DTOs.Ticketmaster.SearchVenues.Root;
@@ -83,6 +83,26 @@ public class DataService
         {
             if(dtoVenue != null)
                 result.Add(dtoVenue);
+        }
+        
+        return result;
+    }
+
+    public static List<DtoAttraction> ExtractAttractions(DTOs.Ticketmaster.SearchAttractions.Root root)
+    {
+        List<DtoAttraction> result = new List<DtoAttraction>();
+        
+        if(root == null)
+            return result;
+        if(root._embedded == null)
+            return result;
+        if(root._embedded.attractions == null)
+            return result;
+
+        foreach (var dtoAttraction in root._embedded.attractions)
+        {
+            if(dtoAttraction != null)
+                result.Add(dtoAttraction);
         }
         
         return result;
