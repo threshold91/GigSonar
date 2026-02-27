@@ -18,6 +18,7 @@ namespace GigSonarBackend.Data.Services;
 
 public class DataService
 {
+    //Deserialization
     public static async Task<T> GetAndDeserialize<T>(HttpClient httpClient, string url)
     {
         using (HttpResponseMessage response = await httpClient.GetAsync(url))
@@ -47,7 +48,7 @@ public class DataService
         
         return result;
     }
-
+    //Dto's extraction
     public static List<DtoEvent> ExtractEvents(SearchEvents.Root root)
     {
         List<DtoEvent> result = new List<DtoEvent>();
@@ -106,5 +107,33 @@ public class DataService
         }
         
         return result;
+    }
+    
+    //Dto's mapping and validation
+    public static List<Event> MapAndValidateEvents(List<DtoEvent> dtoEvents)
+    {
+        List<Event> validEvents = new List<Event>();
+
+        if (dtoEvents == null)
+            return validEvents;
+        
+        foreach (var dtoEvent in dtoEvents)
+        {
+            try
+            {
+                Event mappedEvent = MapEvent.ConvertEvent(dtoEvent);
+                if (mappedEvent != null && mappedEvent.Validate())
+                {
+                    validEvents.Add(mappedEvent);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                continue;
+            }
+        }
+        
+        return validEvents;
     }
 }

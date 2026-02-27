@@ -27,7 +27,7 @@ class Program
     {
         //declare lists here so it is visible in both try & catch part
         List<Event> nonValidEvents = new List<Event>();
-        List<Event> mappedEvents = new List<Event>();
+        //List<Event> mappedEvents = new List<Event>();
 
         List<Venue> mappedVenues = new List<Venue>();
         List<Venue> nonValidVenues = new List<Venue>();
@@ -68,6 +68,8 @@ class Program
             var dtoEvents = DataService.ExtractEvents(testRoot1);
             
             //Convert dtoEvents to mappedEvents, add them to list
+            List<Event> mappedEvents = DataService.MapAndValidateEvents(dtoEvents);
+            /*
             foreach (var dtoEvent in dtoEvents)
             {
                 try
@@ -88,7 +90,7 @@ class Program
                     nonValidEvents.Add(null);
                     continue;
                 }
-            }
+            }*/
             
             Debug.WriteLine($"Number of valid events is: {mappedEvents.Count}");
             Console.WriteLine($"Number of non valid events is: {nonValidEvents.Count}!");
@@ -250,6 +252,7 @@ class Program
                     .ToDictionary(v => v.ExternalId);
                 var artistByExternalId = db.Artists.AsTracking()
                     .ToDictionary(a => a.ExternalId);
+                
                 foreach (var ev in mappedEvents)
                 {
                     if (!existingEvents.Any(e => e.ExternalId == ev.ExternalId))
