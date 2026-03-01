@@ -111,6 +111,8 @@ public class DataService
     }
     
     //Dto's mapping and validation
+    
+    //Map and validate events
     public static List<Event> MapAndValidateEvents(List<DtoEvent> dtoEvents)
     {
         List<Event> validEvents = new List<Event>();
@@ -142,7 +144,8 @@ public class DataService
         
         return validEvents;
     }
-
+    
+    //Map and validate venues
     public static List<Venue> MapAndValidateVenues(List<DtoVenue> dtoVenues)
     {
         List<Venue> validVenues = new List<Venue>();
@@ -177,4 +180,35 @@ public class DataService
         
         return  validVenues;
     }
+    
+    //Map and validate attractions
+    public static List<Artist> MapAndValidateArtists(List<DtoAttraction> dtoAttractions)
+    {
+        List<Artist> validArtists = new List<Artist>();
+        List<Artist> nonValidArtists = new List<Artist>();
+        
+        foreach (var dtoAttraction in dtoAttractions)
+        {
+            try
+            {
+                Artist mappedArtist = MapArtist.ConvertArtist(dtoAttraction);
+                if (mappedArtist != null && mappedArtist.Validate())
+                {
+                    validArtists.Add(mappedArtist);
+                }
+                else
+                {
+                    nonValidArtists.Add(mappedArtist);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                nonValidArtists.Add(null);
+                continue;
+            }
+        }
+        
+        return validArtists;
+    } 
 }

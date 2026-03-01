@@ -32,7 +32,7 @@ class Program
         //List<Venue> mappedVenues = new List<Venue>();
         List<Venue> nonValidVenues = new List<Venue>();
 
-        List<Artist> mappedArtists = new List<Artist>();
+        //List<Artist> mappedArtists = new List<Artist>();
         List<Artist> nonValidArtists = new List<Artist>();
         
             // Load config from appsettings.json
@@ -138,8 +138,9 @@ class Program
             //Get dto venue from api, add them to list
             var dtoAttractions = DataService.ExtractAttractions(testRoot3);
             
-            //Convert dtoEvents to mappedEvents, add them to list
-                
+            //Convert dtoAttractions to mappedArtists, add them to list
+            var mappedArtists = DataService.MapAndValidateArtists(dtoAttractions);
+            /*
             foreach (var dtoAttraction in dtoAttractions)
             {
                 try
@@ -160,8 +161,7 @@ class Program
                     nonValidArtists.Add(null);
                     continue;
                 }
-            }
-                
+            }*/
             
             Console.WriteLine($"Number of valid artists is: {mappedArtists.Count}");
             Console.WriteLine($"Number of non valid artists is: {nonValidArtists.Count}!");
