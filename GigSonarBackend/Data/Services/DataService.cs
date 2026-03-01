@@ -306,4 +306,97 @@ public class DataService
             db.SaveChanges();
         }
     }
+    
+    //Save Events to db
+    public static void SaveNewEvents(List<Event> mappedEvents)
+    {
+        using (var db = new GigSonarContext())
+        {
+            var existingEvents = db.Events.ToList();
+                var newEvents = new List<Event>();
+                var venueByExternalId = db.Venues.AsTracking()
+                    .ToDictionary(v => v.ExternalId);
+                var artistByExternalId = db.Artists.AsTracking()
+                    .ToDictionary(a => a.ExternalId);
+                
+                foreach (var ev in mappedEvents)
+                {
+                    if (!existingEvents.Any(e => e.ExternalId == ev.ExternalId))
+                    {
+                        var genreExtId = ev.Genre.ExternalId;
+                        var subGenreExtId = ev.SubGenre.ExternalId;
+                        var venueExtId = ev.Venue.ExternalId;
+                        var artistExtId = ev.Performer.ExternalId;
+                        var eventArtistGenreExtId = ev.Performer.Genre.ExternalId;
+                        var eventArtistSubGenreExtId = ev.Performer.subGenre.ExternalId;
+                        var genreByExternalId = db.Genres.AsTracking()
+                            .ToDictionary(g => g.ExternalId);
+                        var subGenreByExternalId = db.SubGenres.AsTracking()
+                            .ToDictionary(g => g.ExternalId);
+                        
+                        if (genreByExternalId.TryGetValue(genreExtId, out var existingGenre))
+                        {
+                            ev.Genre = existingGenre; // points to existing row
+                        }
+                        else
+                        {
+                            db.Genres.Add(ev.Genre); // new genre
+                            genreByExternalId[genreExtId] = ev.Genre; 
+                        }
+                        
+                        if (subGenreByExternalId.TryGetValue(subGenreExtId, out var existingSubGenre))
+                        {
+                            ev.SubGenre = existingSubGenre; // points to existing row
+                        }
+                        else
+                        {
+                            db.SubGenres.Add(ev.SubGenre); //new subgenre
+                            subGenreByExternalId[subGenreExtId] = ev.SubGenre;
+                        }
+
+                        if (venueByExternalId.TryGetValue(venueExtId, out var existingVenue))
+                        {
+                            ev.Venue = existingVenue; // points to existing row
+                        }
+                        else
+                        {
+                            db.Venues.Add(ev.Venue); //new venue
+                            venueByExternalId[venueExtId] = ev.Venue;
+                        }
+
+                        if (genreByExternalId.TryGetValue(eventArtistGenreExtId, out var duplicateGenre))
+                        {
+                            ev.Performer.Genre = duplicateGenre;    // points to existing row
+                        }
+                        else
+                        {
+                            genreByExternalId[eventArtistGenreExtId] = ev.Performer.Genre;  // new Genre
+                        }
+
+                        if (subGenreByExternalId.TryGetValue(eventArtistSubGenreExtId, out var duplicateSubGenre))
+                        {
+                            ev.Performer.subGenre = duplicateSubGenre;  // points to existing row
+                        }
+                        else
+                        {
+                            subGenreByExternalId[eventArtistSubGenreExtId] = ev.Performer.subGenre; // new subGenre
+                        }
+
+                        if (artistByExternalId.TryGetValue(artistExtId, out var exsistingArtist))
+                        {
+                            ev.Performer = exsistingArtist; // points to existing row
+                        }
+                        else
+                        {
+                            artistByExternalId[artistExtId] = ev.Performer; // new artist
+                        }
+                        existingEvents.Add(ev);
+                        newEvents.Add(ev);
+                    }
+                }
+                
+                db.Events.AddRange(newEvents);
+                db.SaveChanges();
+        }
+    }
 }

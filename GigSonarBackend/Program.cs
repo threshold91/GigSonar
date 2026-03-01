@@ -168,9 +168,11 @@ class Program
             
             DataService.SaveNewVenues(mappedVenues);
             DataService.SaveNewArtists(mappedArtists);
+            DataService.SaveNewEvents(mappedEvents);
+            /*
             using (var db = new GigSonarContext())
             {
-                /*
+                
                 var existingVenues = db.Venues.ToList();
                 var newVenues = new List<Venue>();
                 var locationByExternalId = db.Locations.AsTracking()
@@ -248,7 +250,7 @@ class Program
                 } 
                 
                 db.Artists.AddRange(newArtists);
-                db.SaveChanges();*/
+                db.SaveChanges();
                 
                 var existingEvents = db.Events.ToList();
                 var newEvents = new List<Event>();
@@ -336,7 +338,7 @@ class Program
                 db.Events.AddRange(newEvents);
                 db.SaveChanges();
                 Console.WriteLine("Data saved to database."); 
-            }
+            }*/
             
     }
 }
