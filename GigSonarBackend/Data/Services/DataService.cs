@@ -114,7 +114,7 @@ public class DataService
     public static List<Event> MapAndValidateEvents(List<DtoEvent> dtoEvents)
     {
         List<Event> validEvents = new List<Event>();
-
+        List<Event> nonValidEvents = new List<Event>();
         if(dtoEvents == null)
             return validEvents;
         
@@ -127,10 +127,15 @@ public class DataService
                 {
                     validEvents.Add(mappedEvent);
                 }
+                else
+                {
+                    nonValidEvents.Add(mappedEvent);
+                }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
+                nonValidEvents.Add(null);
                 continue;
             }
         }
@@ -141,6 +146,7 @@ public class DataService
     public static List<Venue> MapAndValidateVenues(List<DtoVenue> dtoVenues)
     {
         List<Venue> validVenues = new List<Venue>();
+        List<Venue> nonValidVenues = new List<Venue>();
 
         if (dtoVenues == null)
             return validVenues;
@@ -156,10 +162,15 @@ public class DataService
                     mappedVenue.LocationData.PostalCode = GigSonarBackend.Classes.Location.SanitizePostalCode(mappedVenue.LocationData.PostalCode);
                     validVenues.Add(mappedVenue);
                 }
+                else
+                {
+                    nonValidVenues.Add(mappedVenue);
+                }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
+                nonValidVenues.Add(null);
                 continue;
             }
         }
