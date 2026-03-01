@@ -166,8 +166,10 @@ class Program
             Console.WriteLine($"Number of valid artists is: {mappedArtists.Count}");
             Console.WriteLine($"Number of non valid artists is: {nonValidArtists.Count}!");
             
+            DataService.SaveNewVenues(mappedVenues);
             using (var db = new GigSonarContext())
             {
+                /*
                 var existingVenues = db.Venues.ToList();
                 var newVenues = new List<Venue>();
                 var locationByExternalId = db.Locations.AsTracking()
@@ -203,7 +205,7 @@ class Program
                     
                 }
                 db.Venues.AddRange(newVenues);
-                db.SaveChanges();
+                db.SaveChanges();*/
                 
                 var exsistingArtists = db.Artists.ToList();
                 var newArtists = new List<Artist>();

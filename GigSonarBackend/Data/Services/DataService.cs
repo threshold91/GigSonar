@@ -210,5 +210,51 @@ public class DataService
         }
         
         return validArtists;
-    } 
+    }
+    
+    //Save items to db
+    
+    //Save Venues to db
+    public static void SaveNewVenues(List<Venue> mappedVenues)
+    {
+        using (var db = new GigSonarContext())
+        {
+            var existingVenues = db.Venues.ToList();
+            var newVenues = new List<Venue>();
+            var locationByExternalId = db.Locations.AsTracking()
+                .ToDictionary(l => l.ExternalId);
+
+            foreach (var venue in mappedVenues)
+            {
+                var location = venue.LocationData;
+                
+                if (!location.Validate())
+                {
+                    Console.WriteLine($"Skipping location {location.ExternalId} – invalid");
+                    continue;
+                }
+                    
+                if (!existingVenues.Any(v => v.ExternalId == venue.ExternalId))
+                {
+                    var locationExtId = venue.LocationData.ExternalId;
+
+                    if (locationByExternalId.TryGetValue(locationExtId, out var existingLocation))
+                    {
+                        venue.LocationData = existingLocation; //points to existing row
+                    }
+                    else
+                    {
+                        db.Locations.Add(venue.LocationData); //new location
+                        locationByExternalId[locationExtId] = venue.LocationData;
+                    }
+                        
+                    existingVenues.Add(venue);
+                    newVenues.Add(venue);
+                }
+                    
+            }
+            db.Venues.AddRange(newVenues);
+            db.SaveChanges();
+        }
+    }
 }
