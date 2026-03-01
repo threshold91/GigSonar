@@ -29,7 +29,7 @@ class Program
         List<Event> nonValidEvents = new List<Event>();
         //List<Event> mappedEvents = new List<Event>();
 
-        List<Venue> mappedVenues = new List<Venue>();
+        //List<Venue> mappedVenues = new List<Venue>();
         List<Venue> nonValidVenues = new List<Venue>();
 
         List<Artist> mappedArtists = new List<Artist>();
@@ -102,6 +102,8 @@ class Program
             var dtoVenues = DataService.ExtractVenues(testRoot2);
             
             //Convert dtoVenues to mappedVenues, add them to list
+            List<Venue> mappedVenues = DataService.MapAndValidateVenues(dtoVenues);
+            /*
             foreach (var dtoVenue in dtoVenues)
             {
                 try
@@ -124,7 +126,7 @@ class Program
                     nonValidVenues.Add(null);
                     continue;
                 }
-            }
+            }*/
                 
             
             Console.WriteLine($"Number of valid venues is: {mappedVenues.Count}");

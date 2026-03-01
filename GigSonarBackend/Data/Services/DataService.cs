@@ -13,6 +13,7 @@ using DtoAttraction = GigSonarBackend.DTOs.Ticketmaster.SearchAttractions.Attrac
 
 using Newtonsoft.Json;
 using Root = GigSonarBackend.DTOs.Ticketmaster.SearchVenues.Root;
+using Venue = GigSonarBackend.Classes.Venue;
 
 namespace GigSonarBackend.Data.Services;
 
@@ -114,7 +115,7 @@ public class DataService
     {
         List<Event> validEvents = new List<Event>();
 
-        if (dtoEvents == null)
+        if(dtoEvents == null)
             return validEvents;
         
         foreach (var dtoEvent in dtoEvents)
@@ -135,5 +136,34 @@ public class DataService
         }
         
         return validEvents;
+    }
+
+    public static List<Venue> MapAndValidateVenues(List<DtoVenue> dtoVenues)
+    {
+        List<Venue> validVenues = new List<Venue>();
+
+        if (dtoVenues == null)
+            return validVenues;
+        
+        foreach (var dtoVenue in dtoVenues)
+        {
+            try
+            {
+                Venue mappedVenue = MapVenue.ConvertVenue(dtoVenue);
+                        
+                if (mappedVenue != null && mappedVenue.Validate() && mappedVenue.LocationData.Validate())
+                {
+                    mappedVenue.LocationData.PostalCode = GigSonarBackend.Classes.Location.SanitizePostalCode(mappedVenue.LocationData.PostalCode);
+                    validVenues.Add(mappedVenue);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                continue;
+            }
+        }
+        
+        return  validVenues;
     }
 }
