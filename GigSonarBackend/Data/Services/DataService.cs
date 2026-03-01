@@ -257,4 +257,53 @@ public class DataService
             db.SaveChanges();
         }
     }
+    
+    //Save Artists to db
+    public static void SaveNewArtists(List<Artist> mappedArtists)
+    {
+        using (var db = new GigSonarContext())
+        {
+            var exsistingArtists = db.Artists.ToList();
+            var newArtists = new List<Artist>();
+            var genreByExternalId = db.Genres.AsTracking()
+                .ToDictionary(g => g.ExternalId);
+            var subGenreByExternalId = db.SubGenres.AsTracking()
+                .ToDictionary(g => g.ExternalId);
+                
+            foreach (var artist in mappedArtists)
+            {
+                if (!exsistingArtists.Any(a => a.ExternalId == artist.ExternalId))
+                {
+                    var genreExtId = artist.Genre.ExternalId;
+                    var subGenreExtId = artist.subGenre.ExternalId;
+
+                    if (genreByExternalId.TryGetValue(genreExtId, out var existingGenre))
+                    {
+                        artist.Genre = existingGenre;   // points to existing row
+                    }
+                    else
+                    {
+                        db.Genres.Add(artist.Genre);    // new genre
+                        genreByExternalId[genreExtId] = artist.Genre;
+                    }
+                        
+                    if (subGenreByExternalId.TryGetValue(subGenreExtId, out var existingSubGenre))
+                    {
+                        artist.subGenre = existingSubGenre;   // points to existing row
+                    }
+                    else
+                    {
+                        db.SubGenres.Add(artist.subGenre);    // new subgenre
+                        subGenreByExternalId[subGenreExtId] = artist.subGenre;
+                    }
+                        
+                    exsistingArtists.Add(artist);
+                    newArtists.Add(artist);
+                } 
+            } 
+                
+            db.Artists.AddRange(newArtists);
+            db.SaveChanges();
+        }
+    }
 }

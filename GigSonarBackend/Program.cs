@@ -167,6 +167,7 @@ class Program
             Console.WriteLine($"Number of non valid artists is: {nonValidArtists.Count}!");
             
             DataService.SaveNewVenues(mappedVenues);
+            DataService.SaveNewArtists(mappedArtists);
             using (var db = new GigSonarContext())
             {
                 /*
@@ -205,7 +206,7 @@ class Program
                     
                 }
                 db.Venues.AddRange(newVenues);
-                db.SaveChanges();*/
+                db.SaveChanges();
                 
                 var exsistingArtists = db.Artists.ToList();
                 var newArtists = new List<Artist>();
@@ -243,12 +244,11 @@ class Program
                         
                         exsistingArtists.Add(artist);
                         newArtists.Add(artist);
-                        //db.Artists.Add(artist);
                     } 
                 } 
                 
                 db.Artists.AddRange(newArtists);
-                db.SaveChanges();
+                db.SaveChanges();*/
                 
                 var existingEvents = db.Events.ToList();
                 var newEvents = new List<Event>();
@@ -267,6 +267,10 @@ class Program
                         var artistExtId = ev.Performer.ExternalId;
                         var eventArtistGenreExtId = ev.Performer.Genre.ExternalId;
                         var eventArtistSubGenreExtId = ev.Performer.subGenre.ExternalId;
+                        var genreByExternalId = db.Genres.AsTracking()
+                            .ToDictionary(g => g.ExternalId);
+                        var subGenreByExternalId = db.SubGenres.AsTracking()
+                            .ToDictionary(g => g.ExternalId);
                         
                         if (genreByExternalId.TryGetValue(genreExtId, out var existingGenre))
                         {
