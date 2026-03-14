@@ -24,14 +24,16 @@ class Program
                 .Build();
 
             string ticketmasterKey = config["ApiKeys:Ticketmaster"];
-
+            /*
             string url1 = "https://app.ticketmaster.com/discovery/v2/events.json"
                           + "?apikey=" + ticketmasterKey
                           + "&countryCode=AT"
                           + "&latlong=48.2082,16.3738"
                           + "&segmentId=KZFzniwnSyZfZ7v7nJ"
                           + "&size=199";
-            
+            */
+            DataService dataService = new DataService();
+            string url1 = dataService.BuildTicketmasterUrl("events");
             string url2 = "https://app.ticketmaster.com/discovery/v2/venues.json"
                           + "?apikey=" + ticketmasterKey
                           + "&countryCode=AT"

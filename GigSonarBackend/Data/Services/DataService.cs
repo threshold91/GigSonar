@@ -19,6 +19,89 @@ namespace GigSonarBackend.Data.Services;
 
 public class DataService
 {
+    //URL builder - dictionaries
+    private readonly string baseTicketmasterUrl = "https://app.ticketmaster.com/discovery/v2";
+    
+    private readonly Dictionary<string, string> ticketmasterEndpoints = new Dictionary<string, string>
+    {
+        { "events", "events.json" },
+        { "venues", "venues.json" },
+        { "artists", "attractions.json" }
+    };
+
+    private readonly Dictionary<string, Dictionary<string, string>> defaultTicketmasterParams = new
+        Dictionary<string, Dictionary<string, string>>
+        {
+            {
+                "events",
+                new Dictionary<string, string>
+                {
+                    { "city", "Vienna" },
+                    { "countryCode", "AT" },
+                    { "segmentId", "KZFzniwnSyZfZ7v7nJ" },
+                    { "size", "199" }
+                }
+            },
+            {
+                "venues",
+                new Dictionary<string, string>
+                {
+                    { "city", "Vienna" },
+                    { "countryCode", "AT" },
+                    { "size", "199" }
+                }
+            },
+            {
+                "artists",
+                new Dictionary<string, string>
+                {
+                    { "segmentId", "KZFzniwnSyZfZ7v7nJ" },
+                    { "size", "199" }
+                }
+            }
+        };
+    
+    //URL builder - method
+    public string BuildTicketmasterUrl(string searchType, string keyword = null)
+    {
+        // Load config from appsettings.json
+        var config = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("Configurations/appsettings.json", optional: false, reloadOnChange: true)
+            .Build();
+
+        string ticketmasterKey = config["ApiKeys:Ticketmaster"];
+        Dictionary<string, string> finalParameters = new Dictionary<string, string>();
+        
+        finalParameters.Add("apikey", ticketmasterKey);
+
+        foreach (KeyValuePair<string, string> param in defaultTicketmasterParams[searchType])
+        {
+            finalParameters[param.Key] = param.Value;
+        }
+        
+        //Optional keyword param
+        if (!string.IsNullOrEmpty(keyword))
+            finalParameters["keyword"] = keyword;
+
+        string queryString = "";
+        bool isFirstParameter = true;
+
+        foreach (KeyValuePair<string, string> param in finalParameters)
+        {
+            if (!isFirstParameter)
+                queryString = queryString + "&";
+            
+            queryString = queryString + param.Key + "=" + param.Value;
+            
+            isFirstParameter = false;
+        }
+
+        string url = baseTicketmasterUrl + "/" + ticketmasterEndpoints[searchType] + "?" + queryString;
+        
+        return url;
+    }
+    
     //Deserialization
     public static async Task<T> GetAndDeserialize<T>(HttpClient httpClient, string url)
     {
