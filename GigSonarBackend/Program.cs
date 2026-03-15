@@ -34,17 +34,21 @@ class Program
             */
             DataService dataService = new DataService();
             string url1 = dataService.BuildTicketmasterUrl("events");
+            string url2 = dataService.BuildTicketmasterUrl("venues");
+            string url3 = dataService.BuildTicketmasterUrl("artists","Children of bodom");
+            /*
             string url2 = "https://app.ticketmaster.com/discovery/v2/venues.json"
                           + "?apikey=" + ticketmasterKey
                           + "&countryCode=AT"
                           + "&latlong=48.2082,16.3738"
                           + "&size=199";
-            
+            */
+            /*
             string url3 = "https://app.ticketmaster.com/discovery/v2/attractions.json"
                           + "?apikey=" + ticketmasterKey
                           + "&segmentId=KZFzniwnSyZfZ7v7nJ"
                           + "&size=199";
-            
+            */
             //Search Events
             var testRoot1 = await DataService.GetAndDeserialize<Root1>(client, url1);
             
