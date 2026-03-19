@@ -102,6 +102,37 @@ public class DataService
         return url;
     }
     
+    //Search Methods
+    public List<Event> SearchEvents(string keyword)
+    {
+        if (string.IsNullOrWhiteSpace(keyword))
+            return new List<Event>();
+        
+        keyword = keyword.Trim().ToLower();
+
+        using (var db = new GigSonarContext())
+        {
+            List<Event> allEvents = db.Events.ToList();
+            List<Event> matchedEvents = new List<Event>();
+
+            foreach (Event ev in allEvents)
+            {
+                if (ev.Name != null)
+                {
+                    string eventName = ev.Name.ToLower();
+                    if (eventName.ToLower().Contains(keyword))
+                        matchedEvents.Add(ev);
+                }
+            }
+            
+            var sorted = from e in matchedEvents
+                orderby e.Name
+                    select e;
+            
+            return sorted.ToList();
+        }
+    }
+    
     //Deserialization
     public static async Task<T> GetAndDeserialize<T>(HttpClient httpClient, string url)
     {

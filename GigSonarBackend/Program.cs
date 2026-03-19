@@ -36,7 +36,9 @@ class Program
             string url1 = dataService.BuildTicketmasterUrl("events");
             string url2 = dataService.BuildTicketmasterUrl("venues");
             string url3 = dataService.BuildTicketmasterUrl("artists","Children of bodom");
-            /*
+
+            var searchedEvents = dataService.SearchEvents("park");
+            /* 
             string url2 = "https://app.ticketmaster.com/discovery/v2/venues.json"
                           + "?apikey=" + ticketmasterKey
                           + "&countryCode=AT"
@@ -85,5 +87,7 @@ class Program
             DataService.SaveNewVenues(mappedVenues);
             DataService.SaveNewArtists(mappedArtists);
             DataService.SaveNewEvents(mappedEvents);
+            
+            
     }
 }
