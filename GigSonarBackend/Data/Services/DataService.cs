@@ -162,6 +162,36 @@ public class DataService
             return sorted.ToList();
         }
     }
+
+    public List<Artist> SearchArtists(string keyword)
+    {
+        if (string.IsNullOrWhiteSpace(keyword))
+            return new List<Artist>();
+        
+        keyword = keyword.Trim().ToLower();
+
+        using (var db = new GigSonarContext())
+        {
+            List<Artist> allArtists = db.Artists.ToList();
+            List<Artist> matchedArtists = new List<Artist>();
+
+            foreach (Artist artist in allArtists)
+            {
+                if (artist.Name != null)
+                {
+                    string artistName = artist.Name.ToLower();
+                    if (artistName.ToLower().Contains(keyword))
+                        matchedArtists.Add(artist);
+                }
+            }
+            
+            var sorted = from artist in matchedArtists
+                orderby artist.Name
+                    select artist;
+            
+            return sorted.ToList();
+        }
+    }
     
     //Deserialization
     public static async Task<T> GetAndDeserialize<T>(HttpClient httpClient, string url)
