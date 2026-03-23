@@ -132,6 +132,36 @@ public class DataService
             return sorted.ToList();
         }
     }
+
+    public List<Venue> SearchVenues(string keyword)
+    {
+        if (string.IsNullOrWhiteSpace(keyword))
+            return new List<Venue>();
+        
+        keyword = keyword.Trim().ToLower();
+
+        using (var db = new GigSonarContext())
+        {
+            List<Venue> allVenues = db.Venues.ToList();
+            List<Venue> matchedVenues = new List<Venue>();
+
+            foreach (Venue venue in allVenues)
+            {
+                if (venue.Name != null)
+                {
+                    string venueName = venue.Name.ToLower();
+                    if (venueName.ToLower().Contains(keyword))
+                        matchedVenues.Add(venue);
+                }
+            }
+            
+            var sorted = from venue in matchedVenues
+                orderby venue.Name
+                    select venue;
+            
+            return sorted.ToList();
+        }
+    }
     
     //Deserialization
     public static async Task<T> GetAndDeserialize<T>(HttpClient httpClient, string url)
