@@ -25,4 +25,8 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\GigSonarBackend\GigSonar.csproj" />
+    </ItemGroup>
+
 </Project>
