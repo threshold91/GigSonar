@@ -1,9 +1,11 @@
 using GigSonarBackend.Classes;
+using GigSonarBackend.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GigSonarBackend.Data;
 
-public class GigSonarContext : DbContext
+public class GigSonarContext : IdentityDbContext<ApplicationUser>
 {
     public DbSet<Event> Events { get; set; } = null!;
     public DbSet<Venue> Venues { get; set; } = null!;
@@ -14,23 +16,28 @@ public class GigSonarContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
     {
-        {
-            if (optionsBuilder.IsConfigured)
-                return;
+        if (optionsBuilder.IsConfigured)
+            return;
 
-            // Go from bin/Debug/net9.0 → project root
-            var projectRoot = Path.GetFullPath(
-                Path.Combine(AppContext.BaseDirectory, "..", "..", "..")
-            );
+        // Go from bin/Debug/net9.0 → project root
+        var projectRoot = Path.GetFullPath(
+            Path.Combine(AppContext.BaseDirectory, "..", "..", "..")
+        );
 
-            var dbPath = Path.Combine(projectRoot, "GigSonarTestDataDB.db");
+        var dbPath = Path.Combine(projectRoot, "GigSonarTestDataDB.db");
 
-            optionsBuilder
-                .UseSqlite($"Data Source={dbPath}")
-                .LogTo(Console.WriteLine)
-                .EnableDetailedErrors()
-                .EnableSensitiveDataLogging();
-        }
+        optionsBuilder
+            .UseSqlite($"Data Source={dbPath}")
+            .LogTo(Console.WriteLine)
+            .EnableDetailedErrors()
+            .EnableSensitiveDataLogging();
+    }
+    
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        // entity configurations
     }
 
     //protected override void OnModelCreating(ModelBuilder modelBuilder)
