@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Identity;
-using GigSonarBlazor.Data;
+using GigSonarBackend.Identity;
 
 namespace GigSonarBlazor.Components.Account;
 
