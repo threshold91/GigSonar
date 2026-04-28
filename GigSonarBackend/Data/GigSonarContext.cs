@@ -7,6 +7,10 @@ namespace GigSonarBackend.Data;
 
 public class GigSonarContext : IdentityDbContext<ApplicationUser>
 {
+    public GigSonarContext(DbContextOptions<GigSonarContext> options)
+        : base(options)
+    {
+    }
     public DbSet<Event> Events { get; set; } = null!;
     public DbSet<Venue> Venues { get; set; } = null!;
     public DbSet<Artist> Artists { get; set; } = null!;
@@ -33,65 +37,4 @@ public class GigSonarContext : IdentityDbContext<ApplicationUser>
             .EnableSensitiveDataLogging();
     }
     
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        base.OnModelCreating(builder);
-
-        // entity configurations
-    }
-
-    //protected override void OnModelCreating(ModelBuilder modelBuilder)
-    //{
-      /*  modelBuilder.Entity<Event>(entity =>
-            {
-                entity.ToTable("Event");
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Name).IsRequired();
-                entity.Property(e => e.ExternalId).HasMaxLength(100);
-                entity.Property(e => e.ExternalArtistId).HasMaxLength(100);
-                //venue relationship
-                entity.HasOne(e => e.Venue).WithMany().HasForeignKey("VenueId");
-            });
-        */
-        //modelBuilder.Entity<Venue>(entity => 
-            /*{
-                entity.ToTable("Venue");
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Name).IsRequired(); 
-                entity.Property(e => e.ExternalId).HasMaxLength(100); */
-                //entity.Property(e => e.Url).IsRequired(false);  
-                //location relationship
-                //entity.HasOne(e => e.LocationData).WithMany().HasForeignKey("LocationId");
-            //});
-        /*
-        modelBuilder.Entity<Artist>(entity =>
-            {
-                //entity.ToTable("Artist");
-                //entity.HasKey(e => e.Id);
-                //entity.Property(e => e.Name).IsRequired();
-                //entity.Property(e => e.ExternalId).HasMaxLength(100);
-                entity.Property(e => e.SpotifyLink)
-                    .IsRequired(false);
-                entity.Property(e => e.FacebookLink)
-                    .IsRequired(false);
-                entity.Property(e => e.InstagramLink)
-                    .IsRequired(false);
-                entity.Property(e => e.ArtistHomepage)
-                    .IsRequired(false);
-            }); */
-            /*
-        modelBuilder.Entity<Location>(entity =>
-            {
-                entity.ToTable("Location");
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.ExternalId).HasMaxLength(100);
-            }
-        );
-        modelBuilder.Entity<Genre>(entity =>
-        {
-            entity.ToTable("Genres");
-            entity.HasKey(g => g.Id);
-            entity.Property(g => g.Id).ValueGeneratedOnAdd();
-        }); */
-    //}
 }

@@ -61,6 +61,21 @@ public class DataService
             }
         };
     
+    private static GigSonarContext CreateDbContext()
+    {
+        var projectRoot = Path.GetFullPath(
+            Path.Combine(AppContext.BaseDirectory, "..", "..", "..")
+        );
+
+        var dbPath = Path.Combine(projectRoot, "GigSonarTestDataDB.db");
+
+        var options = new DbContextOptionsBuilder<GigSonarContext>()
+            .UseSqlite($"Data Source={dbPath}")
+            .Options;
+
+        return new GigSonarContext(options);
+    }
+    
     //URL builder - method
     public string BuildTicketmasterUrl(string searchType, string keyword = null)
     {
@@ -110,7 +125,7 @@ public class DataService
         
         keyword = keyword.Trim().ToLower();
 
-        using (var db = new GigSonarContext())
+        using (var db = CreateDbContext())
         {
             List<Event> allEvents = db.Events.ToList();
             List<Event> matchedEvents = new List<Event>();
@@ -140,7 +155,7 @@ public class DataService
         
         keyword = keyword.Trim().ToLower();
 
-        using (var db = new GigSonarContext())
+        using (var db = CreateDbContext())
         {
             List<Venue> allVenues = db.Venues.ToList();
             List<Venue> matchedVenues = new List<Venue>();
@@ -170,7 +185,7 @@ public class DataService
         
         keyword = keyword.Trim().ToLower();
 
-        using (var db = new GigSonarContext())
+        using (var db = CreateDbContext())
         {
             List<Artist> allArtists = db.Artists.ToList();
             List<Artist> matchedArtists = new List<Artist>();
@@ -391,7 +406,7 @@ public class DataService
     //Save Venues to db
     public static void SaveNewVenues(List<Venue> mappedVenues)
     {
-        using (var db = new GigSonarContext())
+        using (var db = CreateDbContext())
         {
             var existingVenues = db.Venues.ToList();
             var newVenues = new List<Venue>();
@@ -435,7 +450,7 @@ public class DataService
     //Save Artists to db
     public static void SaveNewArtists(List<Artist> mappedArtists)
     {
-        using (var db = new GigSonarContext())
+        using (var db = CreateDbContext())
         {
             var exsistingArtists = db.Artists.ToList();
             var newArtists = new List<Artist>();
@@ -484,7 +499,7 @@ public class DataService
     //Save Events to db
     public static void SaveNewEvents(List<Event> mappedEvents)
     {
-        using (var db = new GigSonarContext())
+        using (var db = CreateDbContext())
         {
             var existingEvents = db.Events.ToList();
                 var newEvents = new List<Event>();
