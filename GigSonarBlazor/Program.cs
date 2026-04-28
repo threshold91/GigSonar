@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using GigSonarBlazor.Components;
 using GigSonarBlazor.Components.Account;
-using GigSonarBlazor.Data;
+using GigSonarBackend.Data;
+using GigSonarBackend.Identity;
 
 namespace GigSonarBlazor;
 
@@ -31,12 +32,12 @@ public class Program
 
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                                throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        builder.Services.AddDbContext<GigSonarContext>(options =>
             options.UseSqlite(connectionString));
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-        builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            .AddEntityFrameworkStores<ApplicationDbContext>()
+        builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            .AddEntityFrameworkStores<GigSonarContext>()
             .AddSignInManager()
             .AddDefaultTokenProviders();
 
@@ -57,6 +58,9 @@ public class Program
         }
 
         app.UseHttpsRedirection();
+        
+        app.UseAuthentication();
+        app.UseAuthorization();
 
         app.UseAntiforgery();
 
