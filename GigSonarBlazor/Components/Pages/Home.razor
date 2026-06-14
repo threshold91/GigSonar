@@ -1,4 +1,5 @@
 ﻿@page "/"
+@inject IConfiguration Configuration
 
 <PageTitle>Gig Sonar</PageTitle>
 
@@ -74,24 +75,24 @@
                                 <h5 class="mb-1 text-dark">
                                     Nearby events
                                 </h5>
-
+                                @*
                                 <small class="text-muted">
                                     Google Maps integration will be added later
                                 </small>
                             </div>
+*@
+                                <button class="btn btn-outline-primary btn-sm"
+                                        type="button">
+                                    Use my location
+                                </button>
 
-                            <button class="btn btn-outline-primary btn-sm"
-                                    type="button">
-                                Use my location
-                            </button>
-
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="card-body p-0">
-                        <div class="bg-light d-flex align-items-center justify-content-center text-center"
-                             style="height: 420px;">
-
+                        <div class="card-body p-0">
+                            <div class="bg-light d-flex align-items-center justify-content-center text-center"
+                                 style="height: 420px;">
+                                @*
                             <div class="px-4">
                                 <div class="display-6 mb-3">
                                     🗺️
@@ -105,8 +106,15 @@
                                     Later this will show the user's current location
                                     and nearby event pins.
                                 </p>
+                                *@
                             </div>
-
+                            <GoogleMap ApiKey="@GoogleMapsApiKey"
+                                       Center="@MapCenter"
+                                       Height="420"
+                                       Width="100"
+                                       WidthUnit="Unit.Percentage"
+                                       Zoom="12"
+                                       Markers="@MapMarkers" />
                         </div>
                     </div>
                     
@@ -117,3 +125,34 @@
         </div>
     </div>
 </div>
+
+@code {
+    private string GoogleMapsApiKey = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        GoogleMapsApiKey = Configuration["ApiKeys:GoogleMaps"] ?? string.Empty;
+    }
+
+    private GoogleMapCenter MapCenter = new(48.2082, 16.3738); // Vienna
+
+    private IEnumerable<GoogleMapMarker> MapMarkers = new List<GoogleMapMarker>
+    {
+        @*
+        new GoogleMapMarker(48.2082, 16.3738)
+        {
+            Title = "Vienna city center"
+        },
+
+        new GoogleMapMarker(48.1976, 16.3597)
+        {
+            Title = "Example event near Karlsplatz"
+        },
+
+        new GoogleMapMarker(48.2197, 16.3950)
+        {
+            Title = "Example event near Prater"
+        }
+        *@
+    };
+}

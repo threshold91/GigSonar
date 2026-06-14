@@ -13,6 +13,16 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        
+        builder.Configuration.AddJsonFile(
+            Path.Combine(
+                builder.Environment.ContentRootPath,
+                "..",
+                "GigSonar",
+                "Configurations",
+                "appsettings.json"),
+            optional: true,
+            reloadOnChange: true);
 
         // Add services to the container.
         builder.Services.AddRazorComponents()
