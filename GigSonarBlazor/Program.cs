@@ -18,12 +18,15 @@ public class Program
             Path.Combine(
                 builder.Environment.ContentRootPath,
                 "..",
-                "GigSonar",
+                "GigSonarBackend",
                 "Configurations",
                 "appsettings.json"),
             optional: true,
             reloadOnChange: true);
-
+        var googleMapsKeyLoaded =
+            !string.IsNullOrWhiteSpace(builder.Configuration["ApiKeys:GoogleMaps"]);
+        Console.WriteLine($"Google Maps key loaded: {googleMapsKeyLoaded}");
+        
         // Add services to the container.
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
