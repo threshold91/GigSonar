@@ -165,4 +165,30 @@
     }
 
     private string? LocationErrorMessage;
+    
+    private async Task UseMyLocationAsync()
+    {
+        try
+        {
+            LocationErrorMessage = null;
+
+            var location = await JSRuntime.InvokeAsync<BrowserLocation>(
+                "gigSonarLocation.getCurrentPosition");
+
+            MapCenter = new GoogleMapCenter(location.Latitude, location.Longitude);
+
+            MapMarkers = new List<GoogleMapMarker>
+            {
+                new GoogleMapMarker()
+                {
+                    Position = new GoogleMapMarkerPosition(location.Latitude, location.Longitude),
+                    Title = "Your location"
+                }
+            };
+        }
+        catch (JSException ex)
+        {
+            LocationErrorMessage = ex.Message;
+        }
+    }
 }
