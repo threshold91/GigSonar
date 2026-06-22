@@ -84,7 +84,8 @@
                             </div>
 *@
                                 <button class="btn btn-outline-primary btn-sm"
-                                        type="button">
+                                        type="button"
+                                        @onclick="UseMyLocationAsync">
                                     Use my location
                                 </button>
 
@@ -136,26 +137,15 @@
         GoogleMapsApiKey = Configuration["ApiKeys:GoogleMaps"] ?? string.Empty;
     }
 
-    private GoogleMapCenter MapCenter = new(48.2082, 16.3738); // Vienna
+    private GoogleMapCenter MapCenter = new(48.2082, 16.3738);
 
-    private IEnumerable<GoogleMapMarker> MapMarkers = new List<GoogleMapMarker>
+    private List<GoogleMapMarker> MapMarkers = new()
     {
-        @*
-        new GoogleMapMarker(48.2082, 16.3738)
+        new GoogleMapMarker()
         {
+            Position = new GoogleMapMarkerPosition(48.2082, 16.3738),
             Title = "Vienna city center"
-        },
-
-        new GoogleMapMarker(48.1976, 16.3597)
-        {
-            Title = "Example event near Karlsplatz"
-        },
-
-        new GoogleMapMarker(48.2197, 16.3950)
-        {
-            Title = "Example event near Prater"
         }
-        *@
     };
     
     private sealed class BrowserLocation
