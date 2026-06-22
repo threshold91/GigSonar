@@ -1,5 +1,7 @@
 ﻿@page "/"
 @inject IConfiguration Configuration
+@inject IJSRuntime JSRuntime
+@using Microsoft.JSInterop
 
 <PageTitle>Gig Sonar</PageTitle>
 
@@ -155,4 +157,12 @@
         }
         *@
     };
+    
+    private sealed class BrowserLocation
+    {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+    }
+
+    private string? LocationErrorMessage;
 }
