@@ -2,6 +2,7 @@
 @inject IConfiguration Configuration
 @inject IJSRuntime JSRuntime
 @using Microsoft.JSInterop
+@rendermode InteractiveServer
 
 <PageTitle>Gig Sonar</PageTitle>
 
@@ -85,7 +86,8 @@
 *@
                                 <button class="btn btn-outline-primary btn-sm"
                                         type="button"
-                                        @onclick="UseMyLocationAsync">
+                                        @onclick="UseMyLocationAsync"
+                                        >
                                     Use my location
                                 </button>
 
@@ -95,13 +97,27 @@
                         <div class="card-body p-0">
                             <div class="bg-light d-flex align-items-center justify-content-center text-center"
                                  style="height: 420px;">
-                                <GoogleMap ApiKey="@GoogleMapsApiKey"
+                                <GoogleMap @key="MapCenter"
+                                           ApiKey="@GoogleMapsApiKey"
                                            Center="@MapCenter"
                                            Height="420"
                                            Width="100"
                                            WidthUnit="Unit.Percentage"
                                            Zoom="12"
                                            Markers="@MapMarkers" />
+                                @if (!string.IsNullOrWhiteSpace(LocationStatusMessage))
+                                {
+                                    <div class="alert alert-info m-3">
+                                        @LocationStatusMessage
+                                    </div>
+                                }
+
+                                @if (!string.IsNullOrWhiteSpace(LocationErrorMessage))
+                                {
+                                    <div class="alert alert-warning m-3">
+                                        @LocationErrorMessage
+                                    </div>
+                                }
                                 @*
                             <div class="px-4">
                                 <div class="display-6 mb-3">
@@ -155,15 +171,18 @@
     }
 
     private string? LocationErrorMessage;
-    
+    private string? LocationStatusMessage;
+
     private async Task UseMyLocationAsync()
     {
         try
         {
             LocationErrorMessage = null;
+            LocationStatusMessage = "Trying to get your location...";
 
-            var location = await JSRuntime.InvokeAsync<BrowserLocation>(
-                "gigSonarLocation.getCurrentPosition");
+            var location = await JSRuntime.InvokeAsync<BrowserLocation>("getUserLocation");
+
+            LocationStatusMessage = $"Location found: {location.Latitude}, {location.Longitude}";
 
             MapCenter = new GoogleMapCenter(location.Latitude, location.Longitude);
 
@@ -176,8 +195,9 @@
                 }
             };
         }
-        catch (JSException ex)
+        catch (Exception ex)
         {
+            LocationStatusMessage = null;
             LocationErrorMessage = ex.Message;
         }
     }
