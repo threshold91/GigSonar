@@ -22,9 +22,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\..\..\.nuget\packages\bootstrap\5.3.8\contentFiles\any\any\wwwroot\js\geolocation.js">
-        <Link>wwwroot\js\geolocation.js</Link>
-      </Content>
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
