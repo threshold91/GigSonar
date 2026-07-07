@@ -1,4 +1,5 @@
 
+using System.Diagnostics;
 using GigSonarBackend.Classes;
 using GigSonarBackend.Data;
 using GigSonarBackend.DTOs.Ticketmaster.SearchAttractions;
@@ -14,6 +15,10 @@ using DtoAttraction = GigSonarBackend.DTOs.Ticketmaster.SearchAttractions.Attrac
 using Newtonsoft.Json;
 using Root = GigSonarBackend.DTOs.Ticketmaster.SearchVenues.Root;
 using Venue = GigSonarBackend.Classes.Venue;
+
+using Root1 = GigSonarBackend.DTOs.Ticketmaster.SearchEvents.SearchEvents.Root;
+using Root2 = GigSonarBackend.DTOs.Ticketmaster.SearchVenues.Root;
+using Root3 = GigSonarBackend.DTOs.Ticketmaster.SearchAttractions.Root;
 
 namespace GigSonarBackend.Data.Services;
 
@@ -165,6 +170,26 @@ public class DataService
         }
     }
     
+    //Search events from API
+    private async Task<List<Event>> SearchEventsFromApi(string keyword)
+    {
+        string url = BuildTicketmasterUrl("events", keyword);
+
+        using (HttpClient client = new HttpClient())
+        {
+            Root1 root = await GetAndDeserialize<Root1>(client, url);
+            
+            var dtoEvents = ExtractEvents(root);
+            
+            List<Event> mappedEvents = MapAndValidateEvents(dtoEvents);
+            
+            Debug.WriteLine($"Number of valid events is: {mappedEvents.Count}");
+            
+            SaveNewEvents(mappedEvents);
+            
+            return mappedEvents;
+        }
+    }
     
     public List<Venue> SearchVenues(string keyword)
     {
