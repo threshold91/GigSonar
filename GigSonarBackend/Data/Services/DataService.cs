@@ -118,13 +118,30 @@ public class DataService
     }
     
     //Search Methods
-    public List<Event> SearchEvents(string keyword)
+    
+    //Search Events - caller
+    public async Task<List<Event>> SearchEvents(string keyword)
     {
         if (string.IsNullOrWhiteSpace(keyword))
             return new List<Event>();
         
         keyword = keyword.Trim().ToLower();
+        
+        List<Event> databaseResults = await SearchEventsInDatabase(keyword);
 
+        if (databaseResults.Count > 0)
+        {
+            return databaseResults;
+        }
+
+        List<Event> apiResults = await SearchEventsFromApi(keyword);
+
+        return apiResults;
+    }
+    //Search Events from DB
+    private async Task<List<Event>> SearchEventsInDatabase(string keyword)
+    {
+        keyword = keyword.Trim().ToLower();
         using (var db = CreateDbContext())
         {
             List<Event> allEvents = db.Events.ToList();
@@ -142,12 +159,13 @@ public class DataService
             
             var sorted = from e in matchedEvents
                 orderby e.Name
-                    select e;
+                select e;
             
             return sorted.ToList();
         }
     }
-
+    
+    
     public List<Venue> SearchVenues(string keyword)
     {
         if (string.IsNullOrWhiteSpace(keyword))
