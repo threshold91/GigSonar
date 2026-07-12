@@ -37,7 +37,7 @@ class Program
             string url2 = dataService.BuildTicketmasterUrl("venues");
             string url3 = dataService.BuildTicketmasterUrl("artists","Children of bodom");
 
-            var searchedEvents = dataService.SearchEvents("park");
+            //var searchedEvents = dataService.SearchEvents("park");
             /* 
             string url2 = "https://app.ticketmaster.com/discovery/v2/venues.json"
                           + "?apikey=" + ticketmasterKey
@@ -52,15 +52,24 @@ class Program
                           + "&size=199";
             */
             //Search Events
-            var testRoot1 = await DataService.GetAndDeserialize<Root1>(client, url1);
+            //var testRoot1 = await DataService.GetAndDeserialize<Root1>(client, url1);
             
             //Get dto events from api, add them to list
-            var dtoEvents = DataService.ExtractEvents(testRoot1);
+            //var dtoEvents = DataService.ExtractEvents(testRoot1);
             
             //Convert dtoEvents to mappedEvents, add them to list
-            List<Event> mappedEvents = DataService.MapAndValidateEvents(dtoEvents);
+            //List<Event> mappedEvents = DataService.MapAndValidateEvents(dtoEvents);
             
-            Debug.WriteLine($"Number of valid events is: {mappedEvents.Count}");
+           //Debug.WriteLine($"Number of valid events is: {mappedEvents.Count}");
+           
+           List<Event> searchResults = await dataService.SearchEvents("thirty");
+
+           Console.WriteLine($"Found {searchResults.Count} events.");
+
+           foreach (Event ev in searchResults)
+           {
+               Console.WriteLine(ev.Name);
+           }
             
             // search venue
             var testRoot2 = await DataService.GetAndDeserialize<Root2>(client, url2);
@@ -86,7 +95,7 @@ class Program
             
             DataService.SaveNewVenues(mappedVenues);
             DataService.SaveNewArtists(mappedArtists);
-            DataService.SaveNewEvents(mappedEvents);
+            //DataService.SaveNewEvents(mappedEvents);
             
             
     }
