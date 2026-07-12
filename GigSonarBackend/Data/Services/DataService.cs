@@ -191,6 +191,25 @@ public class DataService
         }
     }
     
+    //Load initial events
+    public async Task<List<Event>> LoadInitialEventsFromApi()
+    {
+        string url = BuildTicketmasterUrl("events");
+
+        using (HttpClient client = new HttpClient())
+        {
+            Root1 root = await GetAndDeserialize<Root1>(client, url);
+            
+            var dtoEvents = ExtractEvents(root);
+            
+            List<Event> mappedEvents = MapAndValidateEvents(dtoEvents);
+            
+            SaveNewEvents(mappedEvents);
+            
+            return mappedEvents;
+        }
+    }
+    
     public List<Venue> SearchVenues(string keyword)
     {
         if (string.IsNullOrWhiteSpace(keyword))
