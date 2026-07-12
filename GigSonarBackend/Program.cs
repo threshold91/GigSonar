@@ -24,33 +24,12 @@ class Program
                 .Build();
 
             string ticketmasterKey = config["ApiKeys:Ticketmaster"];
-            /*
-            string url1 = "https://app.ticketmaster.com/discovery/v2/events.json"
-                          + "?apikey=" + ticketmasterKey
-                          + "&countryCode=AT"
-                          + "&latlong=48.2082,16.3738"
-                          + "&segmentId=KZFzniwnSyZfZ7v7nJ"
-                          + "&size=199";
-            */
+            
             DataService dataService = new DataService();
             string url1 = dataService.BuildTicketmasterUrl("events");
             string url2 = dataService.BuildTicketmasterUrl("venues");
             string url3 = dataService.BuildTicketmasterUrl("artists","Children of bodom");
-
-            //var searchedEvents = dataService.SearchEvents("park");
-            /* 
-            string url2 = "https://app.ticketmaster.com/discovery/v2/venues.json"
-                          + "?apikey=" + ticketmasterKey
-                          + "&countryCode=AT"
-                          + "&latlong=48.2082,16.3738"
-                          + "&size=199";
-            */
-            /*
-            string url3 = "https://app.ticketmaster.com/discovery/v2/attractions.json"
-                          + "?apikey=" + ticketmasterKey
-                          + "&segmentId=KZFzniwnSyZfZ7v7nJ"
-                          + "&size=199";
-            */
+            
             //Search Events
             //var testRoot1 = await DataService.GetAndDeserialize<Root1>(client, url1);
             
@@ -60,16 +39,14 @@ class Program
             //Convert dtoEvents to mappedEvents, add them to list
             //List<Event> mappedEvents = DataService.MapAndValidateEvents(dtoEvents);
             
-           //Debug.WriteLine($"Number of valid events is: {mappedEvents.Count}");
-           
-           List<Event> searchResults = await dataService.SearchEvents("thirty");
+            List<Event> searchResults = await dataService.SearchEvents("children");
 
-           Console.WriteLine($"Found {searchResults.Count} events.");
+            Console.WriteLine($"Found {searchResults.Count} events.");
 
-           foreach (Event ev in searchResults)
-           {
-               Console.WriteLine(ev.Name);
-           }
+            foreach (Event ev in searchResults)
+            {
+                Console.WriteLine(ev.Name);
+            }
             
             // search venue
             var testRoot2 = await DataService.GetAndDeserialize<Root2>(client, url2);
@@ -96,7 +73,6 @@ class Program
             DataService.SaveNewVenues(mappedVenues);
             DataService.SaveNewArtists(mappedArtists);
             //DataService.SaveNewEvents(mappedEvents);
-            
-            
+        
     }
 }
