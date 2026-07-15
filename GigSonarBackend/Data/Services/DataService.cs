@@ -280,7 +280,7 @@ public class DataService
         }
     }
     
-    //Sear Artists - caller
+    //Search Artists - caller
     public async Task<List<Artist>> SearchArtists(string keyword)
     {
         if (string.IsNullOrWhiteSpace(keyword))
@@ -299,6 +299,8 @@ public class DataService
 
         return apiResults;
     }
+    
+    //Search Artists in Database
     private async Task<List<Artist>> SearchArtistsInDatabase(string keyword)
     {
         keyword = keyword.Trim().ToLower();
@@ -323,6 +325,29 @@ public class DataService
                     select artist;
             
             return sorted.ToList();
+        }
+    }
+    
+    //Search Artists from API
+    private async Task<List<Artist>> SearchArtistsFromApi(string keyword)
+    {
+        string url = BuildTicketmasterUrl("artists", keyword);
+
+        using (HttpClient client = new HttpClient())
+        {
+            Root3 root = await GetAndDeserialize<Root3>(client, url);
+            
+            var dtoAttractions = ExtractAttractions(root);
+            
+            List<Artist> mappedArtists =
+                MapAndValidateArtists(dtoAttractions);
+            
+            Console.WriteLine(
+                $"Number of valid artists is: {mappedArtists.Count}");
+            
+            SaveNewArtists(mappedArtists);
+            
+            return mappedArtists;
         }
     }
     
