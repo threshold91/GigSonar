@@ -122,8 +122,8 @@ public class DataService
         return url;
     }
     
-    //Search Methods
-    //------------------------------------------------------------------------------------------------------------------
+    //Search Methods----------------------------------------------------------------------------------------------------
+    
     //Search Events - caller
     public async Task<List<Event>> SearchEvents(string keyword)
     {
@@ -259,6 +259,27 @@ public class DataService
     }
     
     //Search Venues from API
+    private async Task<List<Venue>> SearchVenuesFromApi(string keyword)
+    {
+        string url = BuildTicketmasterUrl("venues", keyword);
+        using (HttpClient client = new HttpClient())
+        {
+            Root2 root = await GetAndDeserialize<Root2>(client, url);
+            
+            var dtoVenues = ExtractVenues(root);
+
+            List<Venue> mappedVenues =
+                MapAndValidateVenues(dtoVenues);
+
+            Console.WriteLine(
+                $"Number of valid venues is: {mappedVenues.Count}");
+
+            SaveNewVenues(mappedVenues);
+
+            return mappedVenues;
+        }
+    }
+    
     public List<Artist> SearchArtists(string keyword)
     {
         if (string.IsNullOrWhiteSpace(keyword))
@@ -289,7 +310,7 @@ public class DataService
         }
     }
     
-    //Deserialization
+    //Deserialization---------------------------------------------------------------------------------------------------
     public static async Task<T> GetAndDeserialize<T>(HttpClient httpClient, string url)
     {
         using (HttpResponseMessage response = await httpClient.GetAsync(url))
@@ -319,7 +340,7 @@ public class DataService
         
         return result;
     }
-    //Dto's extraction
+    //Dto's extraction--------------------------------------------------------------------------------------------------
     public static List<DtoEvent> ExtractEvents(SearchEvents.Root root)
     {
         List<DtoEvent> result = new List<DtoEvent>();
@@ -380,7 +401,7 @@ public class DataService
         return result;
     }
     
-    //Dto's mapping and validation
+    //Dto's mapping and validation--------------------------------------------------------------------------------------
     
     //Map and validate events
     public static List<Event> MapAndValidateEvents(List<DtoEvent> dtoEvents)
@@ -482,7 +503,7 @@ public class DataService
         return validArtists;
     }
     
-    //Save items to db
+    //Save items to db--------------------------------------------------------------------------------------------------
     
     //Save Venues to db
     public static void SaveNewVenues(List<Venue> mappedVenues)
