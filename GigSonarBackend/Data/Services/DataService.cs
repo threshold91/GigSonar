@@ -280,11 +280,27 @@ public class DataService
         }
     }
     
-    public List<Artist> SearchArtists(string keyword)
+    //Sear Artists - caller
+    public async Task<List<Artist>> SearchArtists(string keyword)
     {
         if (string.IsNullOrWhiteSpace(keyword))
             return new List<Artist>();
         
+        keyword = keyword.Trim().ToLower();
+        
+        List<Artist> databaseResults = await SearchArtistsInDatabase(keyword);
+
+        if (databaseResults.Count > 0)
+        {
+            return databaseResults;
+        }
+
+        List<Artist> apiResults = await SearchArtistsFromApi(keyword);
+
+        return apiResults;
+    }
+    private async Task<List<Artist>> SearchArtistsInDatabase(string keyword)
+    {
         keyword = keyword.Trim().ToLower();
 
         using (var db = CreateDbContext())
