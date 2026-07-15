@@ -149,7 +149,7 @@ public class DataService
         keyword = keyword.Trim().ToLower();
         using (var db = CreateDbContext())
         {
-            List<Event> allEvents = db.Events.ToList();
+            List<Event> allEvents = await db.Events.ToListAsync();
             List<Event> matchedEvents = new List<Event>();
 
             foreach (Event ev in allEvents)
@@ -237,7 +237,7 @@ public class DataService
 
         using (var db = CreateDbContext())
         {
-            List<Venue> allVenues = db.Venues.ToList();
+            List<Venue> allVenues = await db.Venues.ToListAsync();
             List<Venue> matchedVenues = new List<Venue>();
 
             foreach (Venue venue in allVenues)
@@ -307,7 +307,7 @@ public class DataService
 
         using (var db = CreateDbContext())
         {
-            List<Artist> allArtists = db.Artists.ToList();
+            List<Artist> allArtists = await db.Artists.ToListAsync();
             List<Artist> matchedArtists = new List<Artist>();
 
             foreach (Artist artist in allArtists)
@@ -324,7 +324,7 @@ public class DataService
                 orderby artist.Name
                     select artist;
             
-            return sorted.ToList();
+            return  sorted.ToList();
         }
     }
     
