@@ -123,7 +123,7 @@ public class DataService
     }
     
     //Search Methods
-    
+    //------------------------------------------------------------------------------------------------------------------
     //Search Events - caller
     public async Task<List<Event>> SearchEvents(string keyword)
     {
@@ -170,7 +170,7 @@ public class DataService
         }
     }
     
-    //Search events from API
+    //Search Events from API
     private async Task<List<Event>> SearchEventsFromApi(string keyword)
     {
         string url = BuildTicketmasterUrl("events", keyword);
@@ -191,7 +191,7 @@ public class DataService
         }
     }
     
-    //Load initial events
+    //Load initial Events
     public async Task<List<Event>> LoadInitialEventsFromApi()
     {
         string url = BuildTicketmasterUrl("events");
@@ -210,11 +210,29 @@ public class DataService
         }
     }
     
-    public List<Venue> SearchVenues(string keyword)
+    //Search Venues - caller
+    public async Task<List<Venue>> SearchVenues(string keyword)
     {
         if (string.IsNullOrWhiteSpace(keyword))
             return new List<Venue>();
         
+        keyword = keyword.Trim().ToLower();
+        
+        List<Venue> databaseResults = await SearchVenuesInDatabase(keyword);
+
+        if (databaseResults.Count > 0)
+        {
+            return databaseResults;
+        }
+
+        List<Venue> apiResults = await SearchVenuesFromApi(keyword);
+
+        return apiResults;
+    }
+    
+    //Search Venues from DB
+    private async Task<List<Venue>> SearchVenuesInDatabase(string keyword)
+    {
         keyword = keyword.Trim().ToLower();
 
         using (var db = CreateDbContext())
@@ -234,12 +252,13 @@ public class DataService
             
             var sorted = from venue in matchedVenues
                 orderby venue.Name
-                    select venue;
+                select venue;
             
             return sorted.ToList();
         }
     }
-
+    
+    //Search Venues from API
     public List<Artist> SearchArtists(string keyword)
     {
         if (string.IsNullOrWhiteSpace(keyword))
