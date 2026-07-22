@@ -644,12 +644,12 @@ public class DataService
     {
         using (var db = CreateDbContext())
         {
-            var existingEvents = db.Events.ToList();
+            var existingEvents = await db.Events.ToListAsync();
                 var newEvents = new List<Event>();
-                var venueByExternalId = db.Venues.AsTracking()
-                    .ToDictionary(v => v.ExternalId);
-                var artistByExternalId = db.Artists.AsTracking()
-                    .ToDictionary(a => a.ExternalId);
+                var venueByExternalId = await db.Venues.AsTracking()
+                    .ToDictionaryAsync(v => v.ExternalId);
+                var artistByExternalId = await db.Artists.AsTracking()
+                    .ToDictionaryAsync(a => a.ExternalId);
                 
                 foreach (var ev in mappedEvents)
                 {
@@ -661,10 +661,10 @@ public class DataService
                         var artistExtId = ev.Performer.ExternalId;
                         var eventArtistGenreExtId = ev.Performer.Genre.ExternalId;
                         var eventArtistSubGenreExtId = ev.Performer.subGenre.ExternalId;
-                        var genreByExternalId = db.Genres.AsTracking()
-                            .ToDictionary(g => g.ExternalId);
-                        var subGenreByExternalId = db.SubGenres.AsTracking()
-                            .ToDictionary(g => g.ExternalId);
+                        var genreByExternalId = await db.Genres.AsTracking()
+                            .ToDictionaryAsync(g => g.ExternalId);
+                        var subGenreByExternalId =await db.SubGenres.AsTracking()
+                            .ToDictionaryAsync(g => g.ExternalId);
                         
                         if (genreByExternalId.TryGetValue(genreExtId, out var existingGenre))
                         {
