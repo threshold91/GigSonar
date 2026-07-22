@@ -595,12 +595,12 @@ public class DataService
     {
         using (var db = CreateDbContext())
         {
-            var exsistingArtists = db.Artists.ToList();
+            var exsistingArtists = await db.Artists.ToListAsync();
             var newArtists = new List<Artist>();
-            var genreByExternalId = db.Genres.AsTracking()
-                .ToDictionary(g => g.ExternalId);
-            var subGenreByExternalId = db.SubGenres.AsTracking()
-                .ToDictionary(g => g.ExternalId);
+            var genreByExternalId = await db.Genres.AsTracking()
+                .ToDictionaryAsync(g => g.ExternalId);
+            var subGenreByExternalId = await db.SubGenres.AsTracking()
+                .ToDictionaryAsync(g => g.ExternalId);
                 
             foreach (var artist in mappedArtists)
             {
