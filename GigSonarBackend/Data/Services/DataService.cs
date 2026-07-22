@@ -715,9 +715,9 @@ public class DataService
                             subGenreByExternalId[eventArtistSubGenreExtId] = ev.Performer.subGenre; // new subGenre
                         }
 
-                        if (artistByExternalId.TryGetValue(artistExtId, out var exsistingArtist))
+                        if (artistByExternalId.TryGetValue(artistExtId, out var existingArtist))
                         {
-                            ev.Performer = exsistingArtist; // points to existing row
+                            ev.Performer = existingArtist; // points to existing row
                         }
                         else
                         {
