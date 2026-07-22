@@ -547,14 +547,14 @@ public class DataService
     //Save items to db--------------------------------------------------------------------------------------------------
     
     //Save Venues to db
-    public static void SaveNewVenues(List<Venue> mappedVenues)
+    public async Task SaveNewVenues(List<Venue> mappedVenues)
     {
         using (var db = CreateDbContext())
         {
-            var existingVenues = db.Venues.ToList();
+            var existingVenues = await db.Venues.ToListAsync();
             var newVenues = new List<Venue>();
-            var locationByExternalId = db.Locations.AsTracking()
-                .ToDictionary(l => l.ExternalId);
+            var locationByExternalId = await db.Locations.AsTracking()
+                .ToDictionaryAsync(l => l.ExternalId);
 
             foreach (var venue in mappedVenues)
             {
@@ -586,12 +586,12 @@ public class DataService
                     
             }
             db.Venues.AddRange(newVenues);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
     }
     
     //Save Artists to db
-    public static void SaveNewArtists(List<Artist> mappedArtists)
+    public async Task SaveNewArtists(List<Artist> mappedArtists)
     {
         using (var db = CreateDbContext())
         {
@@ -635,12 +635,12 @@ public class DataService
             } 
                 
             db.Artists.AddRange(newArtists);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
     }
     
     //Save Events to db
-    public static void SaveNewEvents(List<Event> mappedEvents)
+    public async Task SaveNewEvents(List<Event> mappedEvents)
     {
         using (var db = CreateDbContext())
         {
@@ -728,7 +728,7 @@ public class DataService
                 }
                 
                 db.Events.AddRange(newEvents);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
         }
     }
 }
