@@ -650,6 +650,10 @@ public class DataService
                     .ToDictionaryAsync(v => v.ExternalId);
                 var artistByExternalId = await db.Artists.AsTracking()
                     .ToDictionaryAsync(a => a.ExternalId);
+                var genreByExternalId = await db.Genres.AsTracking()
+                    .ToDictionaryAsync(g => g.ExternalId);
+                var subGenreByExternalId =await db.SubGenres.AsTracking()
+                    .ToDictionaryAsync(g => g.ExternalId);
                 
                 foreach (var ev in mappedEvents)
                 {
@@ -661,10 +665,7 @@ public class DataService
                         var artistExtId = ev.Performer.ExternalId;
                         var eventArtistGenreExtId = ev.Performer.Genre.ExternalId;
                         var eventArtistSubGenreExtId = ev.Performer.subGenre.ExternalId;
-                        var genreByExternalId = await db.Genres.AsTracking()
-                            .ToDictionaryAsync(g => g.ExternalId);
-                        var subGenreByExternalId =await db.SubGenres.AsTracking()
-                            .ToDictionaryAsync(g => g.ExternalId);
+                        
                         
                         if (genreByExternalId.TryGetValue(genreExtId, out var existingGenre))
                         {
