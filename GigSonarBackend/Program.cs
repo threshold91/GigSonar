@@ -111,5 +111,35 @@ class Program
         await dataService.SaveNewEvents(mappedEvents);
 
         Console.WriteLine("Saving completed.");
+
+        GeneralSearchResult results =
+            await dataService.SearchAll("metallica");
+
+        Console.WriteLine(
+            $"Found {results.TotalCount} total results.");
+
+        Console.WriteLine();
+        Console.WriteLine($"Events ({results.Events.Count}):");
+
+        foreach (Event ev in results.Events)
+        {
+            Console.WriteLine(ev.Name);
+        }
+
+        Console.WriteLine();
+        Console.WriteLine($"Venues ({results.Venues.Count}):");
+
+        foreach (Venue venue in results.Venues)
+        {
+            Console.WriteLine(venue.Name);
+        }
+
+        Console.WriteLine();
+        Console.WriteLine($"Artists ({results.Artists.Count}):");
+
+        foreach (Artist artist in results.Artists)
+        {
+            Console.WriteLine(artist.Name);
+        }
     }
 }
