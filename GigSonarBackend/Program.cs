@@ -13,81 +13,133 @@ using Venue = Classes.Venue;
 
 class Program
 {
-    static readonly HttpClient client = new HttpClient();
-    
+    private static readonly HttpClient Client = new();
+
     static async Task Main()
     {
-            // Load config from appsettings.json
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("Configurations/appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
+        var config = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile(
+                "Configurations/appsettings.json",
+                optional: false,
+                reloadOnChange: true)
+            .Build();
 
-            string ticketmasterKey = config["ApiKeys:Ticketmaster"];
-            /*
-            string url1 = "https://app.ticketmaster.com/discovery/v2/events.json"
-                          + "?apikey=" + ticketmasterKey
-                          + "&countryCode=AT"
-                          + "&latlong=48.2082,16.3738"
-                          + "&segmentId=KZFzniwnSyZfZ7v7nJ"
-                          + "&size=199";
-            */
-            DataService dataService = new DataService();
-            string url1 = dataService.BuildTicketmasterUrl("events");
-            string url2 = dataService.BuildTicketmasterUrl("venues");
-            string url3 = dataService.BuildTicketmasterUrl("artists","Children of bodom");
+        string? ticketmasterKey = config["ApiKeys:Ticketmaster"];
 
-            var searchedEvents = dataService.SearchEvents("park");
-            /* 
-            string url2 = "https://app.ticketmaster.com/discovery/v2/venues.json"
-                          + "?apikey=" + ticketmasterKey
-                          + "&countryCode=AT"
-                          + "&latlong=48.2082,16.3738"
-                          + "&size=199";
-            */
-            /*
-            string url3 = "https://app.ticketmaster.com/discovery/v2/attractions.json"
-                          + "?apikey=" + ticketmasterKey
-                          + "&segmentId=KZFzniwnSyZfZ7v7nJ"
-                          + "&size=199";
-            */
-            //Search Events
-            var testRoot1 = await DataService.GetAndDeserialize<Root1>(client, url1);
-            
-            //Get dto events from api, add them to list
-            var dtoEvents = DataService.ExtractEvents(testRoot1);
-            
-            //Convert dtoEvents to mappedEvents, add them to list
-            List<Event> mappedEvents = DataService.MapAndValidateEvents(dtoEvents);
-            
-            Debug.WriteLine($"Number of valid events is: {mappedEvents.Count}");
-            
-            // search venue
-            var testRoot2 = await DataService.GetAndDeserialize<Root2>(client, url2);
-            
-            //Get dto venue from api, add them to list
-            var dtoVenues = DataService.ExtractVenues(testRoot2);
-            
-            //Convert dtoVenues to mappedVenues, add them to list
-            List<Venue> mappedVenues = DataService.MapAndValidateVenues(dtoVenues);
-            
-            Console.WriteLine($"Number of valid venues is: {mappedVenues.Count}");
-            
-            // search artist
-            var testRoot3 = await DataService.GetAndDeserialize<Root3>(client, url3);
-            
-            //Get dto venue from api, add them to list
-            var dtoAttractions = DataService.ExtractAttractions(testRoot3);
-            
-            //Convert dtoAttractions to mappedArtists, add them to list
-            var mappedArtists = DataService.MapAndValidateArtists(dtoAttractions);
-            
-            Console.WriteLine($"Number of valid artists is: {mappedArtists.Count}");
-            
-            DataService.SaveNewVenues(mappedVenues);
-            DataService.SaveNewArtists(mappedArtists);
-            DataService.SaveNewEvents(mappedEvents);
-            
-            
+        if (string.IsNullOrWhiteSpace(ticketmasterKey))
+        {
+            throw new InvalidOperationException(
+                "Ticketmaster API key was not found.");
+        }
+
+        var dataService = new DataService();
+
+        string eventsUrl =
+            dataService.BuildTicketmasterUrl("events");
+
+        string venuesUrl =
+            dataService.BuildTicketmasterUrl("venues");
+
+        string artistsUrl =
+            dataService.BuildTicketmasterUrl(
+                "artists",
+                "Children of Bodom");
+
+        // Test the new SearchEvents implementation
+        List<Event> searchResults =
+            await dataService.SearchEvents("children");
+
+        Console.WriteLine(
+            $"Found {searchResults.Count} events.");
+
+        foreach (Event ev in searchResults)
+        {
+            Console.WriteLine(ev.Name);
+        }
+
+        // Events
+        var eventRoot =
+            await DataService.GetAndDeserialize<Root1>(
+                Client,
+                eventsUrl);
+
+        var dtoEvents =
+            DataService.ExtractEvents(eventRoot);
+
+        List<Event> mappedEvents =
+            DataService.MapAndValidateEvents(dtoEvents);
+
+        Console.WriteLine(
+            $"Number of valid events: {mappedEvents.Count}");
+
+        // Venues
+        var venueRoot =
+            await DataService.GetAndDeserialize<Root2>(
+                Client,
+                venuesUrl);
+
+        var dtoVenues =
+            DataService.ExtractVenues(venueRoot);
+
+        List<Venue> mappedVenues =
+            DataService.MapAndValidateVenues(dtoVenues);
+
+        Console.WriteLine(
+            $"Number of valid venues: {mappedVenues.Count}");
+
+        // Artists
+        var artistRoot =
+            await DataService.GetAndDeserialize<Root3>(
+                Client,
+                artistsUrl);
+
+        var dtoAttractions =
+            DataService.ExtractAttractions(artistRoot);
+
+        List<Artist> mappedArtists =
+            DataService.MapAndValidateArtists(dtoAttractions);
+
+        Console.WriteLine(
+            $"Number of valid artists: {mappedArtists.Count}");
+
+        // Save referenced entities first
+        await dataService.SaveNewVenues(mappedVenues);
+        await dataService.SaveNewArtists(mappedArtists);
+
+        // Save events after venues and artists
+        await dataService.SaveNewEvents(mappedEvents);
+
+        Console.WriteLine("Saving completed.");
+
+        GeneralSearchResult results =
+            await dataService.SearchAll("metallica");
+
+        Console.WriteLine(
+            $"Found {results.TotalCount} total results.");
+
+        Console.WriteLine();
+        Console.WriteLine($"Events ({results.Events.Count}):");
+
+        foreach (Event ev in results.Events)
+        {
+            Console.WriteLine(ev.Name);
+        }
+
+        Console.WriteLine();
+        Console.WriteLine($"Venues ({results.Venues.Count}):");
+
+        foreach (Venue venue in results.Venues)
+        {
+            Console.WriteLine(venue.Name);
+        }
+
+        Console.WriteLine();
+        Console.WriteLine($"Artists ({results.Artists.Count}):");
+
+        foreach (Artist artist in results.Artists)
+        {
+            Console.WriteLine(artist.Name);
+        }
     }
 }

@@ -1,4 +1,5 @@
 
+using System.Diagnostics;
 using GigSonarBackend.Classes;
 using GigSonarBackend.Data;
 using GigSonarBackend.DTOs.Ticketmaster.SearchAttractions;
@@ -14,6 +15,10 @@ using DtoAttraction = GigSonarBackend.DTOs.Ticketmaster.SearchAttractions.Attrac
 using Newtonsoft.Json;
 using Root = GigSonarBackend.DTOs.Ticketmaster.SearchVenues.Root;
 using Venue = GigSonarBackend.Classes.Venue;
+
+using Root1 = GigSonarBackend.DTOs.Ticketmaster.SearchEvents.SearchEvents.Root;
+using Root2 = GigSonarBackend.DTOs.Ticketmaster.SearchVenues.Root;
+using Root3 = GigSonarBackend.DTOs.Ticketmaster.SearchAttractions.Root;
 
 namespace GigSonarBackend.Data.Services;
 
@@ -117,17 +122,59 @@ public class DataService
         return url;
     }
     
-    //Search Methods
-    public List<Event> SearchEvents(string keyword)
+    //Search Methods----------------------------------------------------------------------------------------------------
+    
+    //Search aggregator
+    public async Task<GeneralSearchResult> SearchAll(string keyword)
+    {
+        GeneralSearchResult result = new GeneralSearchResult();
+
+        if (!string.IsNullOrEmpty(keyword))
+        {
+            return result;
+        }
+        
+        keyword = keyword.Trim().ToLower();
+        
+        Task<List<Event>> eventSearchTask = SearchEvents(keyword);
+        Task<List<Venue>> venueSearchTask = SearchVenues(keyword);
+        Task<List<Artist>> artistSearchTask = SearchArtists(keyword);
+        
+        await Task.WhenAll(eventSearchTask, venueSearchTask, artistSearchTask);
+        
+        result.Events = await eventSearchTask;
+        result.Venues = await venueSearchTask;
+        result.Artists = await artistSearchTask;
+        
+        return result;
+    }
+    
+    //Search Events - caller
+    public async Task<List<Event>> SearchEvents(string keyword)
     {
         if (string.IsNullOrWhiteSpace(keyword))
             return new List<Event>();
         
         keyword = keyword.Trim().ToLower();
+        
+        List<Event> databaseResults = await SearchEventsInDatabase(keyword);
 
+        if (databaseResults.Count > 0)
+        {
+            return databaseResults;
+        }
+
+        List<Event> apiResults = await SearchEventsFromApi(keyword);
+
+        return apiResults;
+    }
+    //Search Events from DB
+    private async Task<List<Event>> SearchEventsInDatabase(string keyword)
+    {
+        keyword = keyword.Trim().ToLower();
         using (var db = CreateDbContext())
         {
-            List<Event> allEvents = db.Events.ToList();
+            List<Event> allEvents = await db.Events.ToListAsync();
             List<Event> matchedEvents = new List<Event>();
 
             foreach (Event ev in allEvents)
@@ -142,22 +189,80 @@ public class DataService
             
             var sorted = from e in matchedEvents
                 orderby e.Name
-                    select e;
+                select e;
             
             return sorted.ToList();
         }
     }
+    
+    //Search Events from API
+    private async Task<List<Event>> SearchEventsFromApi(string keyword)
+    {
+        string url = BuildTicketmasterUrl("events", keyword);
 
-    public List<Venue> SearchVenues(string keyword)
+        using (HttpClient client = new HttpClient())
+        {
+            Root1 root = await GetAndDeserialize<Root1>(client, url);
+            
+            var dtoEvents = ExtractEvents(root);
+            
+            List<Event> mappedEvents = MapAndValidateEvents(dtoEvents);
+            
+            Debug.WriteLine($"Number of valid events is: {mappedEvents.Count}");
+            
+            SaveNewEvents(mappedEvents);
+            
+            return mappedEvents;
+        }
+    }
+    
+    //Load initial Events
+    public async Task<List<Event>> LoadInitialEventsFromApi()
+    {
+        string url = BuildTicketmasterUrl("events");
+
+        using (HttpClient client = new HttpClient())
+        {
+            Root1 root = await GetAndDeserialize<Root1>(client, url);
+            
+            var dtoEvents = ExtractEvents(root);
+            
+            List<Event> mappedEvents = MapAndValidateEvents(dtoEvents);
+            
+            SaveNewEvents(mappedEvents);
+            
+            return mappedEvents;
+        }
+    }
+    
+    //Search Venues - caller
+    public async Task<List<Venue>> SearchVenues(string keyword)
     {
         if (string.IsNullOrWhiteSpace(keyword))
             return new List<Venue>();
         
         keyword = keyword.Trim().ToLower();
+        
+        List<Venue> databaseResults = await SearchVenuesInDatabase(keyword);
+
+        if (databaseResults.Count > 0)
+        {
+            return databaseResults;
+        }
+
+        List<Venue> apiResults = await SearchVenuesFromApi(keyword);
+
+        return apiResults;
+    }
+    
+    //Search Venues from DB
+    private async Task<List<Venue>> SearchVenuesInDatabase(string keyword)
+    {
+        keyword = keyword.Trim().ToLower();
 
         using (var db = CreateDbContext())
         {
-            List<Venue> allVenues = db.Venues.ToList();
+            List<Venue> allVenues = await db.Venues.ToListAsync();
             List<Venue> matchedVenues = new List<Venue>();
 
             foreach (Venue venue in allVenues)
@@ -172,22 +277,62 @@ public class DataService
             
             var sorted = from venue in matchedVenues
                 orderby venue.Name
-                    select venue;
+                select venue;
             
             return sorted.ToList();
         }
     }
+    
+    //Search Venues from API
+    private async Task<List<Venue>> SearchVenuesFromApi(string keyword)
+    {
+        string url = BuildTicketmasterUrl("venues", keyword);
+        using (HttpClient client = new HttpClient())
+        {
+            Root2 root = await GetAndDeserialize<Root2>(client, url);
+            
+            var dtoVenues = ExtractVenues(root);
 
-    public List<Artist> SearchArtists(string keyword)
+            List<Venue> mappedVenues =
+                MapAndValidateVenues(dtoVenues);
+
+            Console.WriteLine(
+                $"Number of valid venues is: {mappedVenues.Count}");
+
+            SaveNewVenues(mappedVenues);
+
+            return mappedVenues;
+        }
+    }
+    
+    //Search Artists - caller
+    public async Task<List<Artist>> SearchArtists(string keyword)
     {
         if (string.IsNullOrWhiteSpace(keyword))
             return new List<Artist>();
         
         keyword = keyword.Trim().ToLower();
+        
+        List<Artist> databaseResults = await SearchArtistsInDatabase(keyword);
+
+        if (databaseResults.Count > 0)
+        {
+            return databaseResults;
+        }
+
+        List<Artist> apiResults = await SearchArtistsFromApi(keyword);
+
+        return apiResults;
+    }
+    
+    //Search Artists in Database
+    private async Task<List<Artist>> SearchArtistsInDatabase(string keyword)
+    {
+        keyword = keyword.Trim().ToLower();
 
         using (var db = CreateDbContext())
         {
-            List<Artist> allArtists = db.Artists.ToList();
+            List<Artist> allArtists = await db.Artists.ToListAsync();
             List<Artist> matchedArtists = new List<Artist>();
 
             foreach (Artist artist in allArtists)
@@ -204,11 +349,34 @@ public class DataService
                 orderby artist.Name
                     select artist;
             
-            return sorted.ToList();
+            return  sorted.ToList();
         }
     }
     
-    //Deserialization
+    //Search Artists from API
+    private async Task<List<Artist>> SearchArtistsFromApi(string keyword)
+    {
+        string url = BuildTicketmasterUrl("artists", keyword);
+
+        using (HttpClient client = new HttpClient())
+        {
+            Root3 root = await GetAndDeserialize<Root3>(client, url);
+            
+            var dtoAttractions = ExtractAttractions(root);
+            
+            List<Artist> mappedArtists =
+                MapAndValidateArtists(dtoAttractions);
+            
+            Console.WriteLine(
+                $"Number of valid artists is: {mappedArtists.Count}");
+            
+            SaveNewArtists(mappedArtists);
+            
+            return mappedArtists;
+        }
+    }
+    
+    //Deserialization---------------------------------------------------------------------------------------------------
     public static async Task<T> GetAndDeserialize<T>(HttpClient httpClient, string url)
     {
         using (HttpResponseMessage response = await httpClient.GetAsync(url))
@@ -238,7 +406,7 @@ public class DataService
         
         return result;
     }
-    //Dto's extraction
+    //Dto's extraction--------------------------------------------------------------------------------------------------
     public static List<DtoEvent> ExtractEvents(SearchEvents.Root root)
     {
         List<DtoEvent> result = new List<DtoEvent>();
@@ -299,7 +467,7 @@ public class DataService
         return result;
     }
     
-    //Dto's mapping and validation
+    //Dto's mapping and validation--------------------------------------------------------------------------------------
     
     //Map and validate events
     public static List<Event> MapAndValidateEvents(List<DtoEvent> dtoEvents)
@@ -401,17 +569,17 @@ public class DataService
         return validArtists;
     }
     
-    //Save items to db
+    //Save items to db--------------------------------------------------------------------------------------------------
     
     //Save Venues to db
-    public static void SaveNewVenues(List<Venue> mappedVenues)
+    public async Task SaveNewVenues(List<Venue> mappedVenues)
     {
         using (var db = CreateDbContext())
         {
-            var existingVenues = db.Venues.ToList();
+            var existingVenues = await db.Venues.ToListAsync();
             var newVenues = new List<Venue>();
-            var locationByExternalId = db.Locations.AsTracking()
-                .ToDictionary(l => l.ExternalId);
+            var locationByExternalId = await db.Locations.AsTracking()
+                .ToDictionaryAsync(l => l.ExternalId);
 
             foreach (var venue in mappedVenues)
             {
@@ -443,21 +611,21 @@ public class DataService
                     
             }
             db.Venues.AddRange(newVenues);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
     }
     
     //Save Artists to db
-    public static void SaveNewArtists(List<Artist> mappedArtists)
+    public async Task SaveNewArtists(List<Artist> mappedArtists)
     {
         using (var db = CreateDbContext())
         {
-            var exsistingArtists = db.Artists.ToList();
+            var exsistingArtists = await db.Artists.ToListAsync();
             var newArtists = new List<Artist>();
-            var genreByExternalId = db.Genres.AsTracking()
-                .ToDictionary(g => g.ExternalId);
-            var subGenreByExternalId = db.SubGenres.AsTracking()
-                .ToDictionary(g => g.ExternalId);
+            var genreByExternalId = await db.Genres.AsTracking()
+                .ToDictionaryAsync(g => g.ExternalId);
+            var subGenreByExternalId = await db.SubGenres.AsTracking()
+                .ToDictionaryAsync(g => g.ExternalId);
                 
             foreach (var artist in mappedArtists)
             {
@@ -492,21 +660,25 @@ public class DataService
             } 
                 
             db.Artists.AddRange(newArtists);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
     }
     
     //Save Events to db
-    public static void SaveNewEvents(List<Event> mappedEvents)
+    public async Task SaveNewEvents(List<Event> mappedEvents)
     {
         using (var db = CreateDbContext())
         {
-            var existingEvents = db.Events.ToList();
+            var existingEvents = await db.Events.ToListAsync();
                 var newEvents = new List<Event>();
-                var venueByExternalId = db.Venues.AsTracking()
-                    .ToDictionary(v => v.ExternalId);
-                var artistByExternalId = db.Artists.AsTracking()
-                    .ToDictionary(a => a.ExternalId);
+                var venueByExternalId = await db.Venues.AsTracking()
+                    .ToDictionaryAsync(v => v.ExternalId);
+                var artistByExternalId = await db.Artists.AsTracking()
+                    .ToDictionaryAsync(a => a.ExternalId);
+                var genreByExternalId = await db.Genres.AsTracking()
+                    .ToDictionaryAsync(g => g.ExternalId);
+                var subGenreByExternalId =await db.SubGenres.AsTracking()
+                    .ToDictionaryAsync(g => g.ExternalId);
                 
                 foreach (var ev in mappedEvents)
                 {
@@ -518,10 +690,7 @@ public class DataService
                         var artistExtId = ev.Performer.ExternalId;
                         var eventArtistGenreExtId = ev.Performer.Genre.ExternalId;
                         var eventArtistSubGenreExtId = ev.Performer.subGenre.ExternalId;
-                        var genreByExternalId = db.Genres.AsTracking()
-                            .ToDictionary(g => g.ExternalId);
-                        var subGenreByExternalId = db.SubGenres.AsTracking()
-                            .ToDictionary(g => g.ExternalId);
+                        
                         
                         if (genreByExternalId.TryGetValue(genreExtId, out var existingGenre))
                         {
@@ -571,9 +740,9 @@ public class DataService
                             subGenreByExternalId[eventArtistSubGenreExtId] = ev.Performer.subGenre; // new subGenre
                         }
 
-                        if (artistByExternalId.TryGetValue(artistExtId, out var exsistingArtist))
+                        if (artistByExternalId.TryGetValue(artistExtId, out var existingArtist))
                         {
-                            ev.Performer = exsistingArtist; // points to existing row
+                            ev.Performer = existingArtist; // points to existing row
                         }
                         else
                         {
@@ -585,7 +754,7 @@ public class DataService
                 }
                 
                 db.Events.AddRange(newEvents);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
         }
     }
 }
