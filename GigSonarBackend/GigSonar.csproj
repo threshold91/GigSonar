@@ -40,6 +40,7 @@
       <Folder Include="DTOs\Geocode\Reverse\" />
       <Folder Include="Mappers\Geocode\" />
       <Folder Include="Migrations\" />
+      <Folder Include="Services\Search\" />
     </ItemGroup>
 
 </Project>

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <base href="/"/>
     <link rel="stylesheet" href="@Assets["lib/bootstrap/dist/css/bootstrap.min.css"]"/>
+    <link href="_content/Blazor.Bootstrap/blazor.bootstrap.css" rel="stylesheet" />
     <link rel="stylesheet" href="@Assets["app.css"]"/>
     <link rel="stylesheet" href="@Assets["GigSonarBlazor.styles.css"]"/>
     <ImportMap/>
@@ -15,6 +16,36 @@
 
 <body>
 <Routes @rendermode="PageRenderMode"/>
+<script src="_content/Blazor.Bootstrap/blazor.bootstrap.js"></script>
+<!--script src="js/geolocation.js"></!--script-->
+<script src="@Assets["js/geolocation.js"]"></script>
+<!--script>
+    window.getUserLocation = function () {
+        return new Promise((resolve, reject) => {
+            if (!navigator.geolocation) {
+                reject("Geolocation is not supported by this browser.");
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    resolve({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    });
+                },
+                error => {
+                    reject(error.message);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+            );
+        });
+    };
+</script-->
 <script src="_framework/blazor.web.js"></script>
 </body>
 

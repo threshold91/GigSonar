@@ -13,7 +13,20 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
+        
+        builder.Configuration.AddJsonFile(
+            Path.Combine(
+                builder.Environment.ContentRootPath,
+                "..",
+                "GigSonarBackend",
+                "Configurations",
+                "appsettings.json"),
+            optional: true,
+            reloadOnChange: true);
+        var googleMapsKeyLoaded =
+            !string.IsNullOrWhiteSpace(builder.Configuration["ApiKeys:GoogleMaps"]);
+        Console.WriteLine($"Google Maps key loaded: {googleMapsKeyLoaded}");
+        
         // Add services to the container.
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
@@ -58,12 +71,12 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-        
+        app.UseStaticFiles();
         app.UseAuthentication();
         app.UseAuthorization();
 
         app.UseAntiforgery();
-
+        
         app.MapStaticAssets();
         app.MapRazorComponents<App>()
             .AddInteractiveServerRenderMode();
