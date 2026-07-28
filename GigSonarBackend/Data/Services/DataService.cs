@@ -124,6 +124,31 @@ public class DataService
     
     //Search Methods----------------------------------------------------------------------------------------------------
     
+    //Search aggregator
+    public async Task<GeneralSearchResult> SearchAll(string keyword)
+    {
+        GeneralSearchResult result = new GeneralSearchResult();
+
+        if (!string.IsNullOrEmpty(keyword))
+        {
+            return result;
+        }
+        
+        keyword = keyword.Trim().ToLower();
+        
+        Task<List<Event>> eventSearchTask = SearchEvents(keyword);
+        Task<List<Venue>> venueSearchTask = SearchVenues(keyword);
+        Task<List<Artist>> artistSearchTask = SearchArtists(keyword);
+        
+        await Task.WhenAll(eventSearchTask, venueSearchTask, artistSearchTask);
+        
+        result.Events = await eventSearchTask;
+        result.Venues = await venueSearchTask;
+        result.Artists = await artistSearchTask;
+        
+        return result;
+    }
+    
     //Search Events - caller
     public async Task<List<Event>> SearchEvents(string keyword)
     {
