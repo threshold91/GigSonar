@@ -129,7 +129,7 @@ public class DataService
     {
         GeneralSearchResult result = new GeneralSearchResult();
 
-        if (!string.IsNullOrEmpty(keyword))
+        if (string.IsNullOrEmpty(keyword))
         {
             return result;
         }

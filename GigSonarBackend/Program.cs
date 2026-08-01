@@ -34,7 +34,7 @@ class Program
         }
 
         var dataService = new DataService();
-
+        /*
         string eventsUrl =
             dataService.BuildTicketmasterUrl("events");
 
@@ -49,7 +49,7 @@ class Program
         // Test the new SearchEvents implementation
         List<Event> searchResults =
             await dataService.SearchEvents("children");
-
+        
         Console.WriteLine(
             $"Found {searchResults.Count} events.");
 
@@ -111,7 +111,7 @@ class Program
         await dataService.SaveNewEvents(mappedEvents);
 
         Console.WriteLine("Saving completed.");
-
+        */
         GeneralSearchResult results =
             await dataService.SearchAll("metallica");
 
