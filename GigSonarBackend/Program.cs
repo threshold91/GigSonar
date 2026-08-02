@@ -113,7 +113,7 @@ class Program
         Console.WriteLine("Saving completed.");
         */
         GeneralSearchResult results =
-            await dataService.SearchAll("metallica");
+            await dataService.SearchAll("Sabaton");
 
         Console.WriteLine(
             $"Found {results.TotalCount} total results.");
