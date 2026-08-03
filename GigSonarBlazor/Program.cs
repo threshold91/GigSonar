@@ -20,7 +20,7 @@ public class Program
                 "..",
                 "GigSonarBackend",
                 "Configurations",
-                "appsettings.json"),
+                "appSettings.json"),
             optional: true,
             reloadOnChange: true);
         var googleMapsKeyLoaded =

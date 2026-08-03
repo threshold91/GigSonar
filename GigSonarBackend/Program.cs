@@ -20,7 +20,7 @@ class Program
         var config = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile(
-                "Configurations/appsettings.json",
+                "Configurations/appSettings.json",
                 optional: false,
                 reloadOnChange: true)
             .Build();

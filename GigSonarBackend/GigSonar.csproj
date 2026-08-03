@@ -30,7 +30,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Configurations\appsettings.json">
+      <None Update="Configurations\appSettings.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
@@ -40,7 +40,6 @@
       <Folder Include="DTOs\Geocode\Reverse\" />
       <Folder Include="Mappers\Geocode\" />
       <Folder Include="Migrations\" />
-      <Folder Include="Services\Search\" />
     </ItemGroup>
 
 </Project>
