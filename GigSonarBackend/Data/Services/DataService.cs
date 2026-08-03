@@ -210,7 +210,7 @@ public class DataService
             
             Debug.WriteLine($"Number of valid events is: {mappedEvents.Count}");
             
-            SaveNewEvents(mappedEvents);
+            await SaveNewEvents(mappedEvents);
             
             return mappedEvents;
         }
@@ -229,7 +229,7 @@ public class DataService
             
             List<Event> mappedEvents = MapAndValidateEvents(dtoEvents);
             
-            SaveNewEvents(mappedEvents);
+            await SaveNewEvents(mappedEvents);
             
             return mappedEvents;
         }
@@ -299,7 +299,7 @@ public class DataService
             Console.WriteLine(
                 $"Number of valid venues is: {mappedVenues.Count}");
 
-            SaveNewVenues(mappedVenues);
+            await SaveNewVenues(mappedVenues);
 
             return mappedVenues;
         }
@@ -370,7 +370,7 @@ public class DataService
             Console.WriteLine(
                 $"Number of valid artists is: {mappedArtists.Count}");
             
-            SaveNewArtists(mappedArtists);
+            await SaveNewArtists(mappedArtists);
             
             return mappedArtists;
         }
