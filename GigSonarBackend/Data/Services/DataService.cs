@@ -24,6 +24,13 @@ namespace GigSonarBackend.Data.Services;
 
 public class DataService
 {
+    private readonly IConfiguration _configuration;
+
+    public DataService(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+    
     //URL builder - dictionaries
     private readonly string baseTicketmasterUrl = "https://app.ticketmaster.com/discovery/v2";
     
@@ -118,12 +125,10 @@ public class DataService
     public string BuildTicketmasterUrl(string searchType, string keyword = null)
     {
         // Load config from appsettings.json
-        var config = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("Configurations/appsettings.json", optional: false, reloadOnChange: true)
-            .Build();
-
-        string ticketmasterKey = config["ApiKeys:Ticketmaster"];
+        string ticketmasterKey =
+            _configuration["ApiKeys:Ticketmaster"]
+            ?? throw new InvalidOperationException(
+                "Ticketmaster API key was not configured.");
         Dictionary<string, string> finalParameters = new Dictionary<string, string>();
         
         finalParameters.Add("apikey", ticketmasterKey);

@@ -33,7 +33,7 @@ class Program
                 "Ticketmaster API key was not found.");
         }
 
-        var dataService = new DataService();
+        var dataService = new DataService(config);
         /*
         string eventsUrl =
             dataService.BuildTicketmasterUrl("events");
