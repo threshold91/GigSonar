@@ -118,6 +118,22 @@
                         </div>
                     }
                     
+                    @if (SearchResults.Venues.Count > 0)
+                    {
+                        <h5 class="mt-3">Venues</h5>
+
+                        <div class="list-group mb-3">
+                            @foreach (var item in SearchResults.Venues)
+                            {
+                                <div class="list-group-item">
+                                    @item.Name
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    
+                    
                 </div>    
             }
 
