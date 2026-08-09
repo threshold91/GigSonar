@@ -77,6 +77,15 @@
                 </div>
 
             </div>
+            
+            <!--Display the results -->
+            @if (!string.IsNullOrWhiteSpace(SearchError))
+            {
+                <div class="alert alert-danger mt-4">
+                    @SearchError
+                </div>
+            }
+
 
             <!-- Right side: Map preview -->
             <div class="col-lg-6">
