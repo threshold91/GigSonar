@@ -1,8 +1,13 @@
 ﻿@page "/"
+
+@using GigSonarBackend.Classes
+@using GigSonarBackend.Data.Services
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
+
 @inject IConfiguration Configuration
 @inject IJSRuntime JSRuntime
 @inject GigSonarBackend.Data.Services.DataService DataService
-@using Microsoft.JSInterop
 @rendermode InteractiveServer
 
 <PageTitle>Gig Sonar</PageTitle>
