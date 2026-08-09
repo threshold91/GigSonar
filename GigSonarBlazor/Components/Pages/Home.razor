@@ -40,7 +40,8 @@
                             What are you looking for?
                         </label>
 
-                        <form @onsubmit="SearchAsync">
+                        <form @onsubmit="SearchAsync" 
+                              @onsubmit:preventDefault="true">
                             <div class="input-group mb-3">
                                 <input class="form-control form-control-lg"
                                        placeholder="Search events, venues or artists..."
