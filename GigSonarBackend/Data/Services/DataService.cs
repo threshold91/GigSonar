@@ -68,11 +68,44 @@ public class DataService
     
     private static GigSonarContext CreateDbContext()
     {
-        var projectRoot = Path.GetFullPath(
-            Path.Combine(AppContext.BaseDirectory, "..", "..", "..")
-        );
+        DirectoryInfo? directory =
+            new DirectoryInfo(Directory.GetCurrentDirectory());
 
-        var dbPath = Path.Combine(projectRoot, "GigSonarTestDataDB.db");
+        string? dbPath = null;
+
+        while (directory is not null)
+        {
+            var candidate = Path.Combine(
+                directory.FullName,
+                "GigSonarBackend",
+                "GigSonarTestDataDB.db");
+
+            if (File.Exists(candidate))
+            {
+                dbPath = candidate;
+                break;
+            }
+
+            // Handles starting with GigSonarBackend as the working directory.
+            candidate = Path.Combine(
+                directory.FullName,
+                "GigSonarTestDataDB.db");
+
+            if (directory.Name == "GigSonarBackend" &&
+                File.Exists(candidate))
+            {
+                dbPath = candidate;
+                break;
+            }
+
+            directory = directory.Parent;
+        }
+
+        if (dbPath is null)
+        {
+            throw new FileNotFoundException(
+                "Could not locate GigSonarBackend/GigSonarTestDataDB.db.");
+        }
 
         var options = new DbContextOptionsBuilder<GigSonarContext>()
             .UseSqlite($"Data Source={dbPath}")
