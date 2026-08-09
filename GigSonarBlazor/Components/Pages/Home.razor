@@ -40,15 +40,21 @@
                             What are you looking for?
                         </label>
 
-                        <div class="input-group mb-3">
-                            <input class="form-control form-control-lg"
-                                   placeholder="Search events, venues or artists..." />
+                        <form @onsubmit="SearchAsync">
+                            <div class="input-group mb-3">
+                                <input class="form-control form-control-lg"
+                                       placeholder="Search events, venues or artists..."
+                                       @bind="SearchText"
+                                       @bind:event="oninput"
+                                       disabled="@IsSearching" />
 
-                            <button class="btn btn-primary btn-lg"
-                                    type="button">
-                                Search
-                            </button>
-                        </div>
+                                <button class="btn btn-primary btn-lg"
+                                        type="submit"
+                                        disabled="@(IsSearching || string.IsNullOrWhiteSpace(SearchText))">
+                                    @(IsSearching ? "Searching..." : "Search")
+                                </button>
+                            </div>
+                        </form>
 
                         <div class="d-flex gap-2 flex-wrap">
                             <button class="btn btn-outline-primary btn-sm"
@@ -152,6 +158,33 @@
 </div>
 
 @code {
+    private string SearchText = string.Empty;
+    private bool IsSearching;
+    private string? SearchError;
+    private GeneralSearchResult? SearchResult;
+
+    private async Task SearchAsync()
+    {
+        if (string.IsNullOrWhiteSpace(SearchText) || IsSearching)
+            return;
+        
+        IsSearching = true;
+        SearchError = null;
+
+        try
+        {
+            SearchResult = await DataService.SearchAll(SearchText.Trim());
+        }
+        catch (Exception ex)
+        {
+            SearchError = $"Search failed: {ex.Message}";
+        }
+        finally
+        {
+            IsSearching = false;
+        }
+    }
+
     private string GoogleMapsApiKey = string.Empty;
 
     protected override void OnInitialized()
